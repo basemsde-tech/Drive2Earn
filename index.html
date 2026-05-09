@@ -2,9 +2,10 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-title" content="Drive2Earn">
     <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Taxi_Icon.svg/512px-Taxi_Icon.svg.png">
     <meta name="mobile-web-app-capable" content="yes">
@@ -195,17 +196,17 @@
             --toggle-label: #94a3b8;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; -webkit-font-smoothing: antialiased; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+        button, a, input, select, textarea { touch-action: manipulation; }
         html { scroll-behavior: smooth; }
 
         body {
             background: var(--bg);
             background-image: var(--bg-mesh);
-            background-attachment: fixed;
             color: var(--primary);
             padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 16px + env(safe-area-inset-bottom)), 90px) 14px;
             display: flex; justify-content: center;
-            overscroll-behavior: none;
+            overscroll-behavior: none; -webkit-overflow-scrolling: touch;
             transition: background 0.4s ease, color 0.32s ease;
             min-height: 100dvh;
         }
@@ -235,8 +236,9 @@
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--tab-border);
             border-radius: 100px;
-            padding: 6px 8px;
-            gap: 2px;
+            padding: 6px 6px;
+            gap: 1px;
+            max-width: calc(100vw - 24px);
             box-shadow:
                 0 8px 32px rgba(0,0,0,0.18),
                 0 2px 8px rgba(0,0,0,0.10),
@@ -277,7 +279,7 @@
             cursor: pointer; transition: color 0.22s ease; position: relative; z-index: 1;
             -webkit-tap-highlight-color: transparent;
             letter-spacing: 0.5px; text-transform: uppercase;
-            border-radius: 100px;
+            border-radius: 100px; touch-action: manipulation;
         }
         .tab-btn.active { color: var(--primary); }
         .tab-icon {
@@ -345,8 +347,9 @@
             margin-bottom: 18px; margin-top: 6px; padding: 0 2px;
         }
         .app-header h1 {
-            font-size: 30px; font-weight: 800; color: var(--primary);
+            font-size: clamp(22px, 6vw, 30px); font-weight: 800; color: var(--primary);
             letter-spacing: -0.8px; line-height: 1; transition: color 0.28s ease;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .app-header h1 span { color: var(--green); }
 
@@ -393,7 +396,7 @@
             backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-card-border);
             border-radius: 24px; padding: 16px;
-            min-width: 260px; z-index: 500;
+            min-width: 240px; max-width: min(300px, calc(100vw - 32px)); z-index: 500;
             box-shadow: 0 16px 48px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.08) inset;
             display: none; flex-direction: column; gap: 12px;
             animation: islandPanelIn 0.28s cubic-bezier(0.22,1,0.36,1);
@@ -488,6 +491,7 @@
             box-shadow: 0 -8px 40px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.1) inset;
             transform: translateY(40px); transition: transform 0.32s cubic-bezier(0.22,1,0.36,1);
             border: 1px solid var(--glass-card-border); border-bottom: none;
+            padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px));
         }
         .modal-overlay.show .modal-box { transform: translateY(0); }
         .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; }
@@ -505,6 +509,8 @@
             color: var(--primary); font-weight: 600; transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
+        select option { background: var(--surface-solid, #fff); color: #0c1929; }
+        [data-theme="dark"] select option { background: #111827; color: #e8f0ff; }
         select {
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
             background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 11px auto; padding-right: 38px;
@@ -522,6 +528,7 @@
             cursor: pointer; text-align: center; width: 100%; margin-bottom: 10px;
             -webkit-tap-highlight-color: transparent; transition: all 0.15s ease;
             letter-spacing: 0.2px; display: flex; align-items: center; justify-content: center; gap: 8px;
+            touch-action: manipulation;
         }
         .btn:active { transform: scale(0.97); opacity: 0.88; }
         .btn-add {
@@ -661,7 +668,7 @@
             padding: 14px; border-radius: 12px;
             font-size: 13px; color: var(--primary); margin-bottom: 14px;
             white-space: pre-wrap; font-weight: 500; line-height: 1.6;
-            font-family: 'SF Mono', 'Fira Code', monospace; max-height: 200px; overflow-y: auto;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace; max-height: 200px; overflow-y: auto;
             transition: var(--transition-theme);
         }
 
@@ -870,11 +877,12 @@
         .date-display-row { position: relative; }
         .date-display-btn {
             width: 100%; padding: 13px 15px; font-size: 16px; font-weight: 700;
-            border: 2px solid transparent; border-radius: var(--radius-sm);
+            border: 1.5px solid var(--glass-card-border); border-radius: var(--radius-sm);
             background: var(--input-bg); color: var(--primary);
             display: flex; align-items: center; justify-content: space-between;
             cursor: pointer; -webkit-tap-highlight-color: transparent;
-            transition: all 0.18s ease; text-align: left;
+            transition: all 0.18s ease; text-align: left; min-height: 50px;
+            touch-action: manipulation;
         }
         .date-display-btn:active { opacity: 0.8; transform: scale(0.98); }
         .date-display-btn:focus { outline: none; border-color: var(--blue); background: var(--surface); box-shadow: 0 0 0 4px rgba(37,99,235,0.12); }
@@ -882,7 +890,7 @@
 
         /* ── RECEIPTS PAGE ── */
         .receipt-archive-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 4px;
         }
         .receipt-card {
             background: var(--surface2); border: 1.5px solid var(--border);
@@ -970,8 +978,8 @@
 
         /* Calendar grid */
         .sched-cal-grid {
-            display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;
-            margin-bottom: 8px;
+            display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px;
+            margin-bottom: 8px; width: 100%;
         }
         .sched-cal-header {
             text-align: center; font-size: 10px; font-weight: 700;
@@ -993,7 +1001,7 @@
         .sched-cal-day.has-earning { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.3); }
         .sched-cal-day.working.has-earning { background: rgba(16,185,129,0.18); border-color: var(--green); }
         .sched-cal-day-num {
-            font-size: 13px; font-weight: 700; color: var(--primary); line-height: 1;
+            font-size: clamp(10px, 3vw, 13px); font-weight: 700; color: var(--primary); line-height: 1;
         }
         .sched-cal-day.today .sched-cal-day-num { color: var(--blue); }
         .sched-cal-day.working .sched-cal-day-num { color: var(--green); font-weight: 800; }
@@ -1087,10 +1095,12 @@
         /* ── SCHEDULE DAY POPOVER ── */
         .sched-popover {
             position: fixed; z-index: 3000;
-            background: var(--surface); border: 1px solid var(--border);
+            background: var(--glass-card);
+            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-card-border);
             border-radius: 16px; padding: 12px 14px 14px;
-            box-shadow: 0 12px 40px rgba(0,0,0,0.22);
-            min-width: 180px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.28), 0 0 0 1px rgba(255,255,255,0.08) inset;
+            min-width: 170px; max-width: calc(100vw - 32px);
             animation: popoverIn 0.2s cubic-bezier(0.34,1.56,0.64,1);
             transform-origin: top center;
         }
@@ -1228,6 +1238,55 @@
             50% { box-shadow: var(--glass-card-shadow), 0 0 0 8px rgba(79,142,247,0.2); }
         }
 
+
+        /* ════════════════════════════════════════
+           RESPONSIVE — TABLET & DESKTOP
+        ════════════════════════════════════════ */
+        @media (min-width: 600px) {
+            body {
+                padding-left: 24px; padding-right: 24px;
+            }
+            .app { max-width: 560px; }
+            .tab-bar-inner { padding: 6px 16px; gap: 6px; }
+            .tab-btn { width: 72px; }
+            .tab-btn-center { width: 76px; }
+        }
+
+        @media (min-width: 900px) {
+            body { padding-top: 32px; padding-left: 0; padding-right: 0; }
+            .app { max-width: 640px; }
+            /* Desktop tab bar — wider pill */
+            .tab-bar-inner { padding: 8px 24px; gap: 8px; }
+            .tab-btn { width: 88px; height: 52px; font-size: 10px; }
+            .tab-btn-center { width: 88px; }
+            .tab-center-pill { width: 56px; height: 56px; font-size: 26px; }
+            /* Larger cards on desktop */
+            .card { padding: 22px 24px; }
+            /* Inputs */
+            input[type="number"], input[type="text"], input[type="date"], select {
+                font-size: 15px;
+            }
+            /* Island panel — prevent overflow on desktop */
+            .island-panel { min-width: 300px; }
+            /* Wider modal */
+            .modal-box { max-width: 520px; }
+        }
+
+        /* Landscape phone fix */
+        @media (max-height: 500px) and (orientation: landscape) {
+            body { padding-top: max(8px, env(safe-area-inset-top)); }
+            .app-header { margin-bottom: 10px; margin-top: 2px; }
+            .tab-btn { height: 40px; }
+            .tab-btn-center { height: 48px; }
+            .tab-center-pill { width: 40px; height: 40px; font-size: 20px; margin-top: -4px; }
+            :root { --tab-h: 60px; }
+        }
+
+        /* ── EMPTY STATE ── */
+        .empty-state {
+            text-align: center; color: var(--muted); padding: 28px 0;
+            font-size: 13px; font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -1825,19 +1884,18 @@
 
             <!-- Sync status -->
             <div class="card" style="margin-bottom:14px;">
-                <h2>☁️ Sync Status</h2>
-                <div id="syncStatus" style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--green-soft);border:1px solid var(--green-mid);border-radius:12px;">
-                    <span style="font-size:18px;">🔄</span>
-                    <div>
-                        <div style="font-size:13px;font-weight:700;color:var(--green);">Live Sync Active</div>
-                        <div id="lastSyncTime" style="font-size:11px;color:var(--muted);margin-top:2px;">—</div>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                    <h2 style="margin-bottom:0;">☁️ Sync</h2>
+                    <div style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--green);">
+                        <span id="syncDot" style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;animation:syncPulse 2s ease-in-out infinite;"></span>
+                        Live
                     </div>
                 </div>
-                <div style="margin-top:12px;display:flex;gap:8px;">
-                    <button class="btn btn-submit" onclick="pushAllData()" style="margin-bottom:0;flex:1;font-size:13px;">⬆ Push All Data</button>
-                    <button class="btn btn-copy" onclick="pullAllData()" style="margin-bottom:0;flex:1;font-size:13px;">⬇ Pull from Cloud</button>
+                <div id="lastSyncTime" style="font-size:11px;color:var(--muted);margin-bottom:12px;font-weight:500;">Waiting for sync…</div>
+                <div class="btn-pair">
+                    <button class="btn btn-submit" onclick="pushAllData()" style="margin-bottom:0;font-size:13px;">⬆ Push All</button>
+                    <button class="btn btn-copy" onclick="pullAllData()" style="margin-bottom:0;font-size:13px;">⬇ Pull</button>
                 </div>
-                <div style="font-size:11px;color:var(--muted);margin-top:8px;text-align:center;font-weight:500;">Data auto-syncs whenever you save a shift or update records</div>
             </div>
 
             <!-- Data overview -->
@@ -1929,16 +1987,18 @@ function moveTabSlider(btn) {
     const slider = document.getElementById('tabSlider');
     const inner  = document.getElementById('tabBarInner');
     if (!slider || !inner) return;
-    // For center button, hide slider (it has its own pill)
     if (btn.classList.contains('tab-btn-center')) {
-        slider.style.opacity = '0';
-        return;
+        slider.style.opacity = '0'; return;
     }
     slider.style.opacity = '1';
-    const innerRect = inner.getBoundingClientRect();
-    const btnRect   = btn.getBoundingClientRect();
-    slider.style.left  = (btnRect.left - innerRect.left) + 'px';
-    slider.style.width = btnRect.width + 'px';
+    // Retry if layout not ready yet
+    requestAnimationFrame(() => {
+        const innerRect = inner.getBoundingClientRect();
+        const btnRect   = btn.getBoundingClientRect();
+        if (btnRect.width === 0) return; // not rendered yet
+        slider.style.left  = (btnRect.left - innerRect.left) + 'px';
+        slider.style.width = btnRect.width + 'px';
+    });
 }
 
 function initTabSlider() {
@@ -2123,7 +2183,7 @@ async function shareWeeklyWhatsApp() {
     const endStr = end.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     const message = `Taxi Income Report\nPeriod: ${startStr} to ${endStr}\nTotal Amount: $${total}`;
     try {
-        const canvas = await html2canvas(document.getElementById('captureArea'), { scale: 2, backgroundColor: '#ffffff' });
+        const canvas = await html2canvas(document.getElementById('captureArea'), { useCORS: true, allowTaint: false, scale: window.devicePixelRatio || 2, logging: false, scale: 2, backgroundColor: '#ffffff' });
         canvas.toBlob(async (blob) => {
             const file = new File([blob], 'Weekly_Report.png', { type: 'image/png' });
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -3072,15 +3132,28 @@ async function shareAndThenSave() {
     haptic('success');
     if (!validateTrips()) return;
     if (!validateReceipts()) return;
-    const text = hiddenCopy.value;
+    const text = document.getElementById('hiddenCopy').value;
     let shareData = { text, title: 'Shift Report' };
-    const ef = eosReceiptFile.files[0] || dataURLtoFile(eosPreviewContainer.dataset.fileData, eosFileText.textContent || 'EOS_Receipt.jpg');
-    if (ef) shareData.files = [ef];
-    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
-        try { await navigator.share(shareData); } catch(e) { return; }
-    } else {
-        window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
-    }
+    try {
+        const fileData = eosPreviewContainer.dataset.fileData;
+        const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
+        let ef = null;
+        if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
+            ef = eosReceiptFile.files[0];
+        } else if (fileData) { ef = dataURLtoFile(fileData, fileName); }
+        if (ef) shareData.files = [ef];
+        if (navigator.share) {
+            try {
+                const canShare = !navigator.canShare || navigator.canShare(shareData);
+                await navigator.share(canShare ? shareData : { text, title: 'Shift Report' });
+            } catch(e) {
+                if (e.name === 'AbortError') return; // user cancelled
+                window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+            }
+        } else {
+            window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+        }
+    } catch(e) { console.warn('Share error:', e); }
     document.getElementById('afterSaveModal').classList.add('show');
 }
 
@@ -3494,7 +3567,7 @@ function setShiftDate(preset) {
 
 function openDatePicker() {
     const el = document.getElementById('shiftDate');
-    try { el.showPicker(); } catch(e) { el.click(); }
+    try { if (el.showPicker) { el.showPicker(); } else { el.click(); } } catch(e) { el.click(); }
 }
 
 function updateDateQuickBtns(ds) {
@@ -3606,6 +3679,14 @@ function updateDataOverview() {
 }
 
 /* ── FIREBASE CONFIG ── */
+function resetFirebaseConfig() {
+    localStorage.removeItem('d2e_firebase_config');
+    window._firebaseReady = false;
+    window._currentUser = null;
+    showProfileSection();
+    showToast('Config cleared — paste your config again');
+}
+
 function saveFirebaseConfig() {
     const raw = document.getElementById('fbConfigInput').value.trim();
     try {
@@ -3692,39 +3773,95 @@ async function updateDisplayName() {
 }
 
 /* ── SYNC ENGINE ── */
-let _syncDebounce = {};
-let _lastSyncTs = null;
+/* =====================================================================
+   INSTANT SYNC ENGINE — push immediately, listen in real-time
+===================================================================== */
+let _syncDebounce  = {};
+let _lastSyncTs    = null;
+let _localWriteTs  = {}; // track local writes to ignore echo
+let _unsubFns      = []; // store unsub functions
 
+// Push to Firestore immediately (no debounce for critical saves)
 async function pushToCloud(key, data) {
     if (!window._currentUser || !window._fbDb) return;
     const uid = window._currentUser.uid;
+    const ts  = Date.now();
+    _localWriteTs[key] = ts; // mark so onSnapshot ignores this echo
     try {
         await window._fbSetDoc(
             window._fbDoc(window._fbDb, 'users', uid, 'data', key),
-            { value: typeof data === 'string' ? data : JSON.stringify(data), updatedAt: Date.now() }
+            { value: typeof data === 'string' ? data : JSON.stringify(data), updatedAt: ts, device: _deviceId }
         );
         _lastSyncTs = new Date();
-        const el = document.getElementById('lastSyncTime');
-        if (el) el.textContent = 'Last sync: ' + _lastSyncTs.toLocaleTimeString();
-    } catch(e) { console.warn('Sync push failed:', key, e); }
+        _updateSyncUI();
+    } catch(e) {
+        console.warn('Sync push failed:', key, e.code || e.message);
+        // Retry once after 2s on network error
+        if (e.code === 'unavailable') {
+            setTimeout(() => pushToCloud(key, data), 2000);
+        }
+    }
 }
 
-// Called whenever any data changes — debounced per key
+// Unique device ID so we can ignore echoes from our own writes
+const _deviceId = localStorage.getItem('d2e_device_id') || (() => {
+    const id = Math.random().toString(36).slice(2);
+    localStorage.setItem('d2e_device_id', id);
+    return id;
+})();
+
+function _updateSyncUI() {
+    const el  = document.getElementById('lastSyncTime');
+    const dot = document.getElementById('syncDot');
+    if (el && _lastSyncTs) el.textContent = 'Synced ' + _lastSyncTs.toLocaleTimeString();
+    if (dot) { dot.style.background = 'var(--green)'; }
+}
+
+function _setSyncError() {
+    const dot = document.getElementById('syncDot');
+    if (dot) dot.style.background = 'var(--red)';
+}
+
+// autoSync — debounce 300ms (fast, near-instant)
 function autoSync(key, data) {
     if (!window._currentUser) return;
     clearTimeout(_syncDebounce[key]);
-    _syncDebounce[key] = setTimeout(() => pushToCloud(key, data), 1200);
+    _syncDebounce[key] = setTimeout(() => pushToCloud(key, data), 300);
 }
 
-// Subscribe to real-time updates from Firestore → updates all devices
+// immediateSync — no debounce (for shift saves, major actions)
+function immediateSync(key, data) {
+    if (!window._currentUser) return;
+    clearTimeout(_syncDebounce[key]);
+    pushToCloud(key, data);
+}
+
+// Subscribe — real-time listener for ALL keys including receipts
 function subscribeToSync(uid) {
     if (!window._fbDb || !window._fbOnSnapshot) return;
-    unsubscribeSync && unsubscribeSync();
-    const unsubFns = SYNC_KEYS.map(({key, set}) => {
+    // Unsubscribe previous listeners
+    _unsubFns.forEach(fn => { try { fn(); } catch(e) {} });
+    _unsubFns = [];
+
+    const allKeys = [
+        ...SYNC_KEYS,
+        { key: 'd2e_receipt_archive_v1', set: (v) => { receiptArchive = v; } }
+    ];
+
+    allKeys.forEach(({key, set}) => {
         const ref = window._fbDoc(window._fbDb, 'users', uid, 'data', key);
-        return window._fbOnSnapshot(ref, snap => {
+        const unsub = window._fbOnSnapshot(ref, { includeMetadataChanges: false }, snap => {
             if (!snap.exists()) return;
-            const raw = snap.data().value;
+            const data   = snap.data();
+            const raw    = data.value;
+            const fromTs = data.updatedAt || 0;
+            const device = data.device;
+
+            // Ignore if this is an echo of our own recent write (within 3s)
+            const localTs = _localWriteTs[key] || 0;
+            if (device === _deviceId && (fromTs - localTs < 3000)) return;
+
+            // Apply the remote data
             try {
                 const parsed = JSON.parse(raw);
                 set(parsed);
@@ -3733,24 +3870,65 @@ function subscribeToSync(uid) {
                 set(raw);
                 localStorage.setItem(key, raw);
             }
-            // Refresh all views
-            refreshAllViews();
+
+            // Smart refresh — only re-render what changed
+            _refreshForKey(key);
+            _lastSyncTs = new Date();
+            _updateSyncUI();
+        }, err => {
+            console.warn('Snapshot error:', key, err.code);
+            _setSyncError();
         });
+        _unsubFns.push(unsub);
     });
-    window._unsubscribeSync = () => unsubFns.forEach(fn => fn());
 }
 
-function refreshAllViews() {
+// Smart refresh — only re-render the relevant view for the changed key
+function _refreshForKey(key) {
+    switch(key) {
+        case 'taxi_income_data_v2':
+        case 'taxi_weekly_status':
+            renderTrackerTable();
+            calcBASGross();
+            autoCreditPreviousWeeks();
+            updateDataOverview();
+            break;
+        case 'd2e_cash_log_v1':
+            renderCashTracker();
+            break;
+        case 'd2e_fuel_log_v1':
+            renderFuelTracker();
+            break;
+        case 'd2e_trip_data_v1':
+            renderLevyReport();
+            updateLevyPreview();
+            break;
+        case 'd2e_schedule_v1':
+            if (document.getElementById('tab-schedule').classList.contains('active')) renderSchedule();
+            updateScheduleStatus();
+            break;
+        case 'd2e_receipt_archive_v1':
+            if (document.getElementById('tab-receipts').classList.contains('active')) renderReceiptArchive();
+            break;
+        default:
+            _refreshAllViews();
+    }
+}
+
+function _refreshAllViews() {
     renderTrackerTable();
     renderCashTracker();
     renderLevyReport();
     renderFuelTracker();
-    renderReceiptArchive();
+    if (document.getElementById('tab-receipts').classList.contains('active')) renderReceiptArchive();
     calcBASGross();
     updateLevyPreview();
     autoCreditPreviousWeeks();
     updateDataOverview();
 }
+
+// Keep the public name for pushAllData/pullAllData calls
+function refreshAllViews() { _refreshAllViews(); }
 
 /* ── PUSH / PULL ALL ── */
 async function pushAllData() {
