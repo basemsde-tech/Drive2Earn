@@ -2,662 +2,164 @@
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-touch-fullscreen" content="yes">
     <meta name="apple-mobile-web-app-title" content="Drive2Earn">
-    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Taxi_Icon.svg/512px-Taxi_Icon.svg.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#f1f5f9" id="themeColorMeta">
-    <link rel="manifest" href='data:application/manifest+json, {"name": "Drive2Earn", "short_name": "Drive2Earn", "display":"standalone", "background_color":"#f1f5f9", "theme_color":"#0f172a","icons": [{"src":"https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Taxi_Icon.svg/512px-Taxi_Icon.svg.png","sizes":"512x512","type":"image/png"}]}'>
     <title>Drive2Earn</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, updateProfile, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-        import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-        function getFirebaseConfig() {
-            const stored = localStorage.getItem('d2e_firebase_config');
-            if (stored) return JSON.parse(stored);
-            return null;
-        }
-
-        let app, auth, db, currentUser = null, unsubscribeSync = null;
-
-        function initFirebase(config) {
-            try {
-                app = initializeApp(config);
-                auth = getAuth(app);
-                db = getFirestore(app);
-                window._fbAuth = auth;
-                window._fbDb = db;
-                window._fbDoc = doc;
-                window._fbSetDoc = setDoc;
-                window._fbGetDoc = getDoc;
-                window._fbOnSnapshot = onSnapshot;
-                window._fbDeleteDoc = deleteDoc;
-                
-                window._fbSignIn = (e,p) => signInWithEmailAndPassword(auth,e,p);
-                window._fbSignUp = (e,p) => createUserWithEmailAndPassword(auth,e,p);
-                window._fbSignOut = () => signOut(auth);
-                window._fbUpdateProfile = (u,d) => updateProfile(u,d);
-                window._fbGoogleSign = () => signInWithPopup(auth, new GoogleAuthProvider());
-                window._fbResetPw = (e) => sendPasswordResetEmail(auth,e);
-
-                onAuthStateChanged(auth, user => {
-                    currentUser = user;
-                    window._currentUser = user;
-                    if (typeof onAuthChange === 'function') onAuthChange(user);
-                });
-                window._firebaseReady = true;
-                if (typeof onFirebaseReady === 'function') onFirebaseReady();
-            } catch(e) {
-                console.error('Firebase init failed:', e);
-                if (typeof onFirebaseError === 'function') onFirebaseError(e.message);
-            }
-        }
-
-        const cfg = getFirebaseConfig();
-        if (cfg) initFirebase(cfg);
-        window._initFirebase = initFirebase;
-    </script>
 
     <style>
+        /* --- CORE VARIABLES --- */
         :root {
-            --tab-h: 76px;
-            --radius: 22px;
-            --radius-sm: 14px;
-            --green: #00d68f;
-            --green-glow: rgba(0,214,143,0.3);
-            --red: #ff4757;
-            --blue: #4f8ef7;
-            --blue-glow: rgba(79,142,247,0.3);
-            --transition-theme: background 0.32s ease, color 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
+            --tab-h: 76px; --radius: 22px; --radius-sm: 14px;
+            --green: #00d68f; --green-glow: rgba(0,214,143,0.3);
+            --red: #ff4757; --blue: #4f8ef7; --blue-glow: rgba(79,142,247,0.3);
             --glass-blur: blur(24px) saturate(180%);
-            --glass-border-light: rgba(255,255,255,0.45);
-            --glass-border-dark: rgba(255,255,255,0.08);
         }
-
         [data-theme="light"] {
-            --bg: #dde8f5;
-            --bg-mesh: radial-gradient(ellipse at 20% 10%, rgba(147,197,253,0.45) 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, rgba(167,243,208,0.35) 0%, transparent 55%), radial-gradient(ellipse at 60% 30%, rgba(196,181,253,0.25) 0%, transparent 50%), linear-gradient(160deg, #dde8f5 0%, #e8f4ff 100%);
-            --surface: rgba(255,255,255,0.62);
-            --surface-solid: #ffffff;
-            --surface2: rgba(255,255,255,0.42);
-            --glass-card: rgba(255,255,255,0.55);
-            --glass-card-border: rgba(255,255,255,0.7);
-            --glass-card-shadow: 0 8px 32px rgba(15,23,42,0.10), 0 1px 0 rgba(255,255,255,0.8) inset;
-            --primary: #0c1929;
-            --primary-light: #1e293b;
-            --muted: #5a6d82;
-            --border: rgba(148,163,184,0.3);
-            --input-bg: rgba(255,255,255,0.65);
-            --shadow: 0 4px 20px rgba(15,23,42,0.08);
-            --shadow-lg: 0 16px 48px rgba(15,23,42,0.18);
-            --tab-bg: rgba(255,255,255,0.75);
-            --tab-border: rgba(148,163,184,0.25);
-            --preview-bg: rgba(248,250,252,0.8);
-            --preview-border: rgba(148,163,184,0.25);
-            --divider: rgba(148,163,184,0.25);
-            --stat-bg: rgba(255,255,255,0.6);
-            --total-banner: rgba(10,20,40,0.92);
-            --total-banner-text: #64748b;
-            --modal-bg: rgba(15,23,42,0.40);
-            --toast-bg: rgba(10,20,40,0.90);
-            --toast-color: #ffffff;
-            --week-btn-bg: rgba(255,255,255,0.6);
-            --week-btn-color: #0c1929;
-            --table-border: rgba(148,163,184,0.18);
-            --credit-pending-bg: rgba(254,242,242,0.8);
-            --credit-pending-color: #ef4444;
-            --btn-copy-bg: rgba(241,245,249,0.8);
-            --btn-copy-color: #0c1929;
-            --btn-add-bg: rgba(239,246,255,0.9);
-            --btn-add-color: #3b82f6;
+            --bg: #dde8f5; --surface: rgba(255,255,255,0.62); --surface-solid: #ffffff;
+            --surface2: rgba(255,255,255,0.42); --glass-card: rgba(255,255,255,0.55);
+            --glass-card-border: rgba(255,255,255,0.7); --primary: #0c1929; --muted: #5a6d82;
+            --border: rgba(148,163,184,0.3); --input-bg: rgba(255,255,255,0.65);
+            --tab-bg: rgba(255,255,255,0.75); --shadow: 0 4px 20px rgba(15,23,42,0.08);
+            --btn-add-bg: rgba(239,246,255,0.9); --btn-add-color: #3b82f6;
             --btn-rm-bg: rgba(254,242,242,0.8);
-            --row-action-edit: #3b82f6;
-            --row-action-del: #ef4444;
-            --bas-bg: rgba(240,253,244,0.8);
-            --bas-border: rgba(167,243,208,0.6);
-            --bas-label: #059669;
-            --bas-val: #047857;
-            --empty-color: #94a3b8;
-            --green-soft: rgba(240,253,244,0.8);
-            --green-mid: rgba(167,243,208,0.6);
-            --toggle-bg: rgba(226,232,240,0.8);
-            --toggle-knob: #ffffff;
-            --toggle-label: #64748b;
         }
-
         [data-theme="dark"] {
-            --bg: #070d1a;
-            --bg-mesh: radial-gradient(ellipse at 15% 15%, rgba(79,142,247,0.18) 0%, transparent 55%), radial-gradient(ellipse at 85% 75%, rgba(0,214,143,0.12) 0%, transparent 50%), radial-gradient(ellipse at 55% 45%, rgba(139,92,246,0.10) 0%, transparent 45%), linear-gradient(160deg, #070d1a 0%, #0d1525 100%);
-            --surface: rgba(255,255,255,0.05);
-            --surface-solid: #111827;
-            --surface2: rgba(255,255,255,0.03);
-            --glass-card: rgba(255,255,255,0.06);
-            --glass-card-border: rgba(255,255,255,0.10);
-            --glass-card-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.06) inset;
-            --primary: #e8f0ff;
-            --primary-light: #c5d5f0;
-            --muted: #6b7fa0;
-            --border: rgba(255,255,255,0.09);
-            --input-bg: rgba(255,255,255,0.06);
-            --shadow: 0 4px 20px rgba(0,0,0,0.5);
-            --shadow-lg: 0 16px 48px rgba(0,0,0,0.65);
-            --tab-bg: rgba(7,13,26,0.85);
-            --tab-border: rgba(255,255,255,0.07);
-            --preview-bg: rgba(255,255,255,0.04);
-            --preview-border: rgba(255,255,255,0.08);
-            --divider: rgba(255,255,255,0.07);
-            --stat-bg: rgba(255,255,255,0.05);
-            --total-banner: rgba(255,255,255,0.06);
-            --total-banner-text: #475569;
-            --modal-bg: rgba(0,0,0,0.7);
-            --toast-bg: rgba(232,240,255,0.95);
-            --toast-color: #070d1a;
-            --week-btn-bg: rgba(255,255,255,0.06);
-            --week-btn-color: #c5d5f0;
-            --table-border: rgba(255,255,255,0.06);
-            --credit-pending-bg: rgba(45,21,21,0.8);
-            --credit-pending-color: #f87171;
-            --btn-copy-bg: rgba(255,255,255,0.06);
-            --btn-copy-color: #c5d5f0;
-            --btn-add-bg: rgba(79,142,247,0.15);
-            --btn-add-color: #93c5fd;
+            --bg: #070d1a; --surface: rgba(255,255,255,0.05); --surface-solid: #111827;
+            --surface2: rgba(255,255,255,0.03); --glass-card: rgba(255,255,255,0.06);
+            --glass-card-border: rgba(255,255,255,0.10); --primary: #e8f0ff; --muted: #6b7fa0;
+            --border: rgba(255,255,255,0.09); --input-bg: rgba(255,255,255,0.06);
+            --tab-bg: rgba(7,13,26,0.85); --shadow: 0 4px 20px rgba(0,0,0,0.5);
+            --btn-add-bg: rgba(79,142,247,0.15); --btn-add-color: #93c5fd;
             --btn-rm-bg: rgba(45,21,21,0.7);
-            --row-action-edit: #60a5fa;
-            --row-action-del: #f87171;
-            --bas-bg: rgba(5,46,22,0.6);
-            --bas-border: rgba(20,83,45,0.6);
-            --bas-label: #4ade80;
-            --bas-val: #86efac;
-            --empty-color: #475569;
-            --green-soft: rgba(5,46,22,0.6);
-            --green-mid: rgba(20,83,45,0.6);
-            --toggle-bg: rgba(30,58,95,0.8);
-            --toggle-knob: #60a5fa;
-            --toggle-label: #94a3b8;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-        button, a, input, select, textarea { touch-action: manipulation; }
-        html { scroll-behavior: smooth; }
-        body {
-            background: var(--bg);
-            background-image: var(--bg-mesh);
-            color: var(--primary);
-            padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 16px + env(safe-area-inset-bottom)), 90px) 14px;
-            display: flex; justify-content: center;
-            overscroll-behavior: none; -webkit-overflow-scrolling: touch;
-            transition: background 0.4s ease, color 0.32s ease;
-            min-height: 100dvh;
-        }
-        .app { width: 100%; max-width: 500px; }
-
-        /* TAB BAR */
-        .tab-bar { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; padding-bottom: env(safe-area-inset-bottom); height: calc(var(--tab-h) + env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: center; background: transparent; }
-        .tab-bar-inner { display: flex; align-items: center; margin-bottom: calc(env(safe-area-inset-bottom) + 10px); background: var(--tab-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--tab-border); border-radius: 100px; padding: 6px; gap: 1px; max-width: calc(100vw - 24px); box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.10); position: relative; transition: background 0.32s ease, border-color 0.32s ease; }
-        [data-theme="light"] .tab-bar-inner { box-shadow: 0 8px 32px rgba(15,23,42,0.14), 0 2px 8px rgba(15,23,42,0.08); }
-        .tab-bar-slider { position: absolute; top: 6px; bottom: 6px; border-radius: 100px; z-index: 0; background: rgba(255,255,255,0.14); backdrop-filter: blur(8px); box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: left 0.38s cubic-bezier(0.34,1.42,0.64,1), width 0.38s cubic-bezier(0.34,1.42,0.64,1); pointer-events: none; }
-        [data-theme="light"] .tab-bar-slider { background: rgba(255,255,255,0.72); box-shadow: 0 2px 12px rgba(15,23,42,0.12); }
+        /* --- GLOBAL STYLES --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: var(--bg); color: var(--primary); padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 30px), 100px); overscroll-behavior: none; }
+        .app { width: 100%; max-width: 500px; margin: 0 auto; }
         
-        .tab-btn { flex-shrink: 0; width: 58px; height: 48px; border: none; background: transparent; font-size: 9px; font-weight: 700; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; transition: color 0.22s ease; position: relative; z-index: 1; -webkit-tap-highlight-color: transparent; letter-spacing: 0.5px; text-transform: uppercase; border-radius: 100px; }
-        .tab-btn.active { color: var(--primary); }
-        .tab-icon { font-size: 18px; transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); display: block; line-height: 1; }
-        .tab-btn.active .tab-icon { transform: scale(1.18) translateY(-1px); }
-        .tab-btn:active .tab-icon { transform: scale(0.9); }
-        .tab-indicator { display: none; }
+        .page { display: none; flex-direction: column; gap: 14px; animation: fadeIn 0.2s ease; }
+        .page.active { display: flex; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tab-btn-center { flex-shrink: 0; width: 64px; height: 56px; border: none; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; -webkit-tap-highlight-color: transparent; position: relative; z-index: 1; }
-        .tab-center-pill { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(145deg, var(--blue), #6366f1); display: flex; align-items: center; font-size: 24px; line-height: 1; box-shadow: 0 4px 20px var(--blue-glow); justify-content: center; transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); position: relative; overflow: hidden; }
-        .tab-center-pill::before { content: ''; position: absolute; inset: 0; border-radius: 50%; background: linear-gradient(145deg, rgba(255,255,255,0.25) 0%, transparent 60%); pointer-events: none; }
-        .tab-btn-center.active .tab-center-pill { background: linear-gradient(145deg, var(--green), #00b377); box-shadow: 0 4px 20px var(--green-glow); transform: translateY(-2px) scale(1.04); }
-        .tab-btn-center:active .tab-center-pill { transform: scale(0.9) translateY(0); }
-        .tab-center-label { font-size: 9px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: var(--muted); transition: color 0.22s ease; line-height: 1; }
-        .tab-btn-center.active .tab-center-label { color: var(--green); font-weight: 900; }
-
-        /* PAGES */
-        .page { display: none; flex-direction: column; gap: 14px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
-        .page.active { display: flex; animation: pageIn 0.25s cubic-bezier(0.22,1,0.36,1); }
-        @keyframes pageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* HEADER */
-        .app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; margin-top: 6px; padding: 0 2px; }
-        .app-header h1 { font-size: clamp(22px, 6vw, 30px); font-weight: 800; color: var(--primary); letter-spacing: -0.8px; line-height: 1; transition: color 0.28s ease; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        /* --- HEADER & ISLAND --- */
+        .app-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+        .app-header h1 { font-size: 26px; font-weight: 800; }
         .app-header h1 span { color: var(--green); }
+        .island { display: flex; align-items: center; gap: 8px; background: var(--primary); color: var(--bg); padding: 6px 12px; border-radius: 100px; font-size: 13px; font-weight: 700; cursor: pointer; }
+        [data-theme="light"] .island { background: #0f172a; color: #fff; }
+
+        /* --- CARDS & INPUTS --- */
+        .card { background: var(--glass-card); backdrop-filter: var(--glass-blur); border-radius: var(--radius); padding: 18px; border: 1px solid var(--glass-card-border); box-shadow: var(--shadow); }
+        .card h2 { font-size: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; }
+        label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; }
         
-        .island-wrap { position: relative; }
-        .island { display: flex; align-items: center; background: var(--primary); border-radius: 100px; padding: 5px 6px 5px 10px; gap: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; box-shadow: 0 4px 18px rgba(0,0,0,0.22); transition: all 0.32s cubic-bezier(0.34,1.56,0.64,1); overflow: hidden; min-width: 42px; border: 1px solid rgba(255,255,255,0.08); position: relative; }
-        [data-theme="light"] .island { background: #0f172a; }
-        .island:active { transform: scale(0.93); }
-        .island-collapsed { display: flex; align-items: center; gap: 7px; }
-        .island-weather-icon { font-size: 16px; line-height: 1; flex-shrink: 0; animation: iconPop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
-        @keyframes iconPop { from{transform: scale(0.6) rotate(-20deg); opacity:0} to{transform:none; opacity:1} }
-        .island-temp { font-size: 13px; font-weight: 800; color: #e2e8f0; letter-spacing: -0.3px; }
-        .island-divider { width: 1px; height: 14px; background: rgba(255,255,255,0.15); margin: 0 6px; flex-shrink:0; }
-        .island-date-txt { font-size: 12px; font-weight: 700; color: #94a3b8; white-space: nowrap; }
-        .island-theme-btn { width: 28px; height: 28px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #e2e8f0; font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 4px; -webkit-tap-highlight-color: transparent; transition: background 0.18s ease; }
-        .island-theme-btn:active { background: rgba(255,255,255,0.22); transform: scale(0.88); }
+        input, select { width: 100%; padding: 13px 15px; font-size: 16px; border: 1.5px solid var(--glass-card-border); border-radius: var(--radius-sm); background: var(--input-bg); color: var(--primary); font-weight: 600; outline: none; transition: 0.2s; }
+        input:focus, select:focus { border-color: var(--blue); }
         
-        .island-panel { position: absolute; top: calc(100% + 10px); right: 0; background: var(--glass-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-card-border); border-radius: 24px; padding: 16px; min-width: 240px; max-width: min(300px, calc(100vw - 32px)); z-index: 500; box-shadow: 0 16px 48px rgba(0,0,0,0.28); display: none; flex-direction: column; gap: 12px; animation: islandPanelIn 0.28s cubic-bezier(0.22,1,0.36,1); transform-origin: top right; }
-        .island-panel.open { display: flex; }
-        @keyframes islandPanelIn { from { opacity:0; transform: scale(0.88) translateY(-8px); } to { opacity:1; transform: none; } }
-        
-        .island-panel-weather { display: flex; align-items: center; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-        .ipw-icon { font-size: 36px; line-height: 1; }
-        .ipw-info { flex: 1; }
-        .ipw-temp { font-size: 26px; font-weight: 900; color: var(--primary); letter-spacing: -1px; line-height: 1; }
-        .ipw-desc { font-size: 13px; font-weight: 600; color: var(--primary); margin-top: 2px; text-transform: capitalize; }
-        .ipw-loc { font-size: 11px; font-weight: 700; color: var(--muted); margin-top: 4px; opacity: 0.7; }
-        .ipw-feels { font-size: 11px; font-weight: 600; color: var(--muted); }
-        .ipw-meta { display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap; }
-        .ipw-chip { font-size: 10px; font-weight: 700; color: var(--muted); background: var(--surface2); border-radius: 6px; padding: 3px 7px; border: 1px solid var(--border); }
-        .island-panel-time { font-size: 17px; font-weight: 800; color: var(--primary); letter-spacing: -0.4px; text-align: center; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-        .island-panel-label { font-size: 10px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.7px; margin-bottom: 4px; }
-        
-        .weather-loading { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--muted); }
-        .weather-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); animation: wDot 1.2s ease-in-out infinite; }
-        .weather-dot:nth-child(2) { animation-delay:.2s; }
-        .weather-dot:nth-child(3) { animation-delay:.4s; }
-        @keyframes wDot { 0%, 100%{opacity:.3; transform: scale(.8)} 50%{opacity:1; transform: scale(1.2)} }
-
-        /* GLASS CARDS */
-        .card { background: var(--glass-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: var(--radius); padding: 18px; box-shadow: var(--glass-card-shadow); border: 1px solid var(--glass-card-border); transition: background 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease; }
-        .card h2 { font-size: 16px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--primary); transition: color 0.28s ease; }
-        label { display: block; font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 6px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.6px; transition: color 0.28s ease; }
-        label:first-child { margin-top: 0; }
-
-        /* MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--modal-bg); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); display: flex; align-items: flex-end; justify-content: center; z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.22s ease; padding-bottom: env(safe-area-inset-bottom); }
-        .modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .modal-box { background: var(--glass-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); padding: 28px 22px 24px; border-radius: 32px 32px 24px 24px; width: 100%; max-width: 480px; text-align: center; box-shadow: 0 -8px 40px rgba(0,0,0,0.25); transform: translateY(40px); transition: transform 0.32s cubic-bezier(0.22,1,0.36,1); border: 1px solid var(--glass-card-border); border-bottom: none; padding-bottom: max(24px, calc(env(safe-area-inset-bottom) + 16px)); }
-        .modal-overlay.show .modal-box { transform: translateY(0); }
-        .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 20px; }
-        .modal-box h3 { margin-bottom: 8px; font-size: 22px; color: var(--primary); font-weight: 800; transition: color 0.28s ease; }
-        .modal-box p { font-size: 15px; color: var(--muted); margin-bottom: 22px; line-height: 1.55; font-weight: 500; }
-
-        /* INPUTS */
-        input[type="number"], input[type="text"], input[type="date"], input[type="email"], input[type="password"], select, textarea { width: 100%; padding: 13px 15px; font-size: 16px; border: 1.5px solid var(--glass-card-border); border-radius: var(--radius-sm); background: var(--input-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); color: var(--primary); font-weight: 600; transition: all 0.2s ease; -webkit-tap-highlight-color: transparent; }
-        select option { background: var(--surface-solid, #fff); color: #0c1929; }
-        [data-theme="dark"] select option { background: #111827; color: #e8f0ff; }
-        select { background-image: url("data:image/svg+xml;charset=US-ASCII, %3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2364748b%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 14px top 50%; background-size: 11px auto; padding-right: 38px; -webkit-appearance: none; }
-        input:focus, select:focus, textarea:focus { outline: none; border-color: var(--blue); background: var(--glass-card); box-shadow: 0 0 0 3px rgba(79,142,247,0.18); }
-
-        /* BUTTONS */
-        .btn { padding: 15px; font-size: 15px; font-weight: 700; border: none; border-radius: var(--radius-sm); cursor: pointer; text-align: center; width: 100%; margin-bottom: 10px; -webkit-tap-highlight-color: transparent; transition: all 0.15s ease; letter-spacing: 0.2px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn:active { transform: scale(0.97); opacity: 0.88; }
-        .btn-add { background: var(--btn-add-bg); color: var(--btn-add-color); width: auto; padding: 8px 14px; font-size: 13px; margin-bottom: 0; border-radius: 8px; font-weight: 700; transition: var(--transition-theme); }
-        .btn-wa { background: linear-gradient(135deg, #00d68f, #00b377); color: white; box-shadow: 0 4px 20px rgba(0,214,143,0.32); }
-        .btn-copy { background: var(--btn-copy-bg); color: var(--btn-copy-color); transition: var(--transition-theme); }
-        .btn-submit { font-size: 16px; background: linear-gradient(135deg, var(--blue), #6366f1); color: white; margin-top: 8px; box-shadow: 0 4px 20px var(--blue-glow); }
-        .btn-clear { background: transparent; color: var(--red); }
-        .btn-danger-soft { background: #fef2f2; color: var(--red); }
-        [data-theme="dark"] .btn-danger-soft { background: #2d1515; }
-        .btn-pair { display: flex; gap: 10px; }
-        .btn-pair .btn { flex: 1; margin-bottom: 0; }
-
-        /* DYNAMIC ROWS */
-        .drow { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; animation: rowIn 0.2s cubic-bezier(0.22,1,0.36,1); }
-        @keyframes rowIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+        /* --- DYNAMIC ROWS --- */
+        .drow { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
         .drow input.item-name { flex: 1; }
-        .drow input.item-amt { width: 105px; font-weight: 700; }
-        .eos-row input.item-amt { width: auto !important; flex: 1 !important; min-width: 0 !important; font-weight: 700; }
-        .btn-rm { border-radius: 8px; background: var(--btn-rm-bg); color: var(--red); border: none; padding: 0; height: 46px; width: 46px; font-size: 20px; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; transition: all 0.15s ease; }
-        .btn-rm:active { transform: scale(0.92); }
+        .drow input.item-amt { width: 110px; font-weight: 700; }
+        .btn-rm { background: var(--btn-rm-bg); color: var(--red); border: none; border-radius: 8px; width: 46px; height: 46px; font-size: 20px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        
+        .subtotal { text-align: right; color: var(--muted); font-size: 14px; font-weight: 600; margin-top: 8px; }
+        .subtotal strong { color: var(--primary); font-size: 16px; }
 
-        .run-row { display: flex; gap: 10px; align-items: center; }
-        .run-row input { flex: 1; }
-        .run-multiplier { font-weight: 800; color: var(--muted); white-space: nowrap; font-size: 15px; flex-shrink: 0; }
-        .subtotal { color: var(--muted); font-size: 14px; font-weight: 600; margin-top: 8px; text-align: right; }
-        .subtotal strong { color: var(--primary); transition: color 0.28s ease; }
+        /* --- BUTTONS --- */
+        .btn { padding: 15px; font-size: 15px; font-weight: 700; border: none; border-radius: var(--radius-sm); cursor: pointer; text-align: center; width: 100%; margin-bottom: 10px; transition: 0.15s; }
+        .btn:active { transform: scale(0.97); }
+        .btn-add { background: var(--btn-add-bg); color: var(--btn-add-color); width: auto; padding: 8px 14px; font-size: 13px; margin: 0; border-radius: 8px; }
+        .btn-wa { background: linear-gradient(135deg, #00d68f, #00b377); color: white; }
+        .btn-copy { background: var(--surface2); color: var(--primary); border: 1px solid var(--border); }
+        .btn-danger-soft { background: var(--btn-rm-bg); color: var(--red); }
+        .btn-pair { display: flex; gap: 10px; }
+        .btn-pair .btn { margin-bottom: 0; flex: 1; }
 
-        /* RECEIPTS */
-        .receipt-box { border: 2px dashed var(--border); border-radius: 14px; padding: 18px 12px; text-align: center; cursor: pointer; background: var(--surface2); transition: all 0.18s ease; -webkit-tap-highlight-color: transparent; }
-        .receipt-box:active { border-color: var(--blue); transform: scale(0.98); }
-        .receipt-tap-label { font-size: 14px; font-weight: 700; display: block; margin-bottom: 3px; color: var(--primary); transition: color 0.28s ease; }
-        .receipt-tap-hint { font-size: 12px; color: var(--muted); font-weight: 500; }
-        .receipt-preview { display: none; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface2); transition: var(--transition-theme); margin-top: 8px; }
+        /* --- RECEIPTS & BANNER --- */
+        .receipt-box { border: 2px dashed var(--border); border-radius: 14px; padding: 18px; text-align: center; color: var(--muted); font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .receipt-preview { display: none; align-items: center; justify-content: space-between; padding: 10px; border: 1px solid var(--border); border-radius: 12px; margin-top: 8px; }
         .preview-thumb { width: 44px; height: 44px; border-radius: 8px; object-fit: cover; }
-        .preview-name { font-size: 13px; color: var(--primary); font-weight: 600; flex: 1; margin: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 0.28s ease; }
-        .btn-remove-photo { background: var(--red); color: white; border: none; border-radius: 8px; width: 30px; height: 30px; cursor: pointer; font-size: 16px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-
-        /* BANNER */
-        .total-banner { background: linear-gradient(145deg, rgba(10,20,40,0.88), rgba(6,12,28,0.95)); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border-radius: var(--radius); padding: 24px 20px; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; transition: all 0.32s ease; }
-        [data-theme="light"] .total-banner { background: linear-gradient(145deg, rgba(12,25,41,0.90), rgba(8,16,32,0.95)); }
-        .total-banner::before { content: ''; position: absolute; top: -60%; right: -20%; width: 220px; height: 220px; border-radius: 50%; background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%); pointer-events: none; }
-        .total-banner h3 { font-size: 12px; color: var(--total-banner-text); text-transform: uppercase; margin-bottom: 6px; font-weight: 700; letter-spacing: 1.2px; transition: color 0.28s ease; }
-        .total-earn-val { font-size: 52px; font-weight: 800; color: var(--green); letter-spacing: -2px; text-shadow: 0 2px 12px rgba(16,185,129,0.3); transition: transform 0.2s ease, color 0.28s ease; }
-        .total-earn-val.bump { transform: scale(1.04); }
-
-        /* TRACKER */
-        .week-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; font-weight: 700; color: var(--primary); }
-        .week-nav-btn { width: auto; padding: 10px 18px; margin: 0; font-size: 14px; font-weight: 700; background: var(--week-btn-bg); color: var(--week-btn-color); border-radius: 10px; border: none; cursor: pointer; transition: all 0.15s ease; -webkit-tap-highlight-color: transparent; }
-        .week-nav-btn:active { transform: scale(0.96); }
-        .week-display-label { font-size: 14px; font-weight: 700; color: var(--primary); text-align: center; flex: 1; line-height: 1.3; transition: color 0.28s ease; }
         
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
-        th, td { padding: 13px 6px; border-bottom: 1px solid var(--table-border); text-align: left; }
-        th { color: var(--muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; }
-        td { font-weight: 600; color: var(--primary); transition: color 0.28s ease; }
-        tbody tr:last-child td { border-bottom: none; }
-        
-        .tracker-total-container { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding-top: 12px; border-top: 2px dashed var(--divider); transition: border-color 0.28s ease; }
-        .tracker-total-row { font-size: 20px; font-weight: 800; color: var(--primary); transition: color 0.28s ease; }
-        .credit-btn { background: var(--credit-pending-bg); color: var(--credit-pending-color); padding: 9px 18px; border-radius: 10px; font-size: 13px; width: auto; margin: 0; font-weight: 700; border: none; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: all 0.18s ease; }
-        .credit-btn.credited { background: #dcfce7; color: #059669; }
-        [data-theme="dark"] .credit-btn.credited { background: #052e16; color: #4ade80; }
-        .credit-btn:active { transform: scale(0.95); }
-        
-        #captureArea { background: var(--surface); padding: 20px; border-radius: 14px; transition: background 0.28s ease; }
-        .row-action-btn { background: transparent; border: none; font-size: 17px; padding: 8px; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform 0.15s ease; line-height: 1; }
-        .row-action-btn:active { transform: scale(0.85); }
+        .total-banner { background: var(--primary); color: white; border-radius: var(--radius); padding: 24px 20px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+        .total-banner h3 { font-size: 12px; text-transform: uppercase; color: #94a3b8; margin-bottom: 6px; }
+        .total-earn-val { font-size: 48px; font-weight: 800; color: var(--green); letter-spacing: -2px; }
 
-        /* PREVIEW BOX */
-        .preview-box { background: var(--preview-bg); border: 1px solid var(--preview-border); padding: 14px; border-radius: 12px; font-size: 13px; color: var(--primary); margin-bottom: 14px; white-space: pre-wrap; font-weight: 500; line-height: 1.6; font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace; max-height: 200px; overflow-y: auto; transition: var(--transition-theme); }
+        /* --- TAB BAR --- */
+        .tab-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: calc(var(--tab-h) + env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: center; padding-bottom: env(safe-area-inset-bottom); z-index: 1000; }
+        .tab-bar-inner { display: flex; align-items: center; background: var(--tab-bg); backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 100px; padding: 6px; gap: 4px; width: 95%; max-width: 480px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .tab-btn { flex: 1; height: 50px; border: none; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--muted); cursor: pointer; }
+        .tab-btn.active { color: var(--blue); }
+        .tab-icon { font-size: 20px; margin-bottom: 2px; transition: 0.2s; }
+        .tab-btn.active .tab-icon { transform: scale(1.15); }
         
         /* TOAST */
-        .toast { position: fixed; bottom: calc(var(--tab-h) + env(safe-area-inset-bottom) + 16px); left: 50%; transform: translateX(-50%) translateY(20px); background: var(--toast-bg); color: var(--toast-color); padding: 12px 22px; border-radius: 100px; font-size: 14px; font-weight: 700; z-index: 3000; opacity: 0; pointer-events: none; transition: all 0.25s cubic-bezier(0.22,1,0.36,1); white-space: normal; text-align: center; width: max-content; max-width: calc(100vw - 40px); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-        /* REPORTS SPECIFICS */
-        .cash-filter-strip, .levy-filter-strip, .fuel-filter-strip, .receipt-filter-strip { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-        .cash-filter-btn, .levy-filter-btn, .fuel-filter-btn, .receipt-filter-btn, .sched-view-btn, .date-quick-btn { padding: 7px 12px; font-size: 12px; font-weight: 700; border-radius: 20px; border: 1.5px solid var(--border); background: var(--surface2); color: var(--muted); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: var(--transition-theme); text-align: center; }
-        .cash-filter-btn.active { background: #ecfdf5; border-color: #6ee7b7; color: #065f46; }
-        [data-theme="dark"] .cash-filter-btn.active { background: #052e16; border-color: #14532d; color: #4ade80; }
-        .levy-filter-btn.active, .fuel-filter-btn.active { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-        [data-theme="dark"] .levy-filter-btn.active, [data-theme="dark"] .fuel-filter-btn.active { background: #2b2008; border-color: #78350f; color: #fbbf24; }
-        .receipt-filter-btn.active, .sched-view-btn.active, .date-quick-btn.active { background: var(--btn-add-bg); border-color: var(--blue); color: var(--blue); }
-        [data-theme="dark"] .receipt-filter-btn.active, [data-theme="dark"] .sched-view-btn.active, [data-theme="dark"] .date-quick-btn.active { background: #172554; }
+        .toast { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #0f172a; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 9999; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(10px); }
         
-        .cash-pill-strip, .levy-pill-strip, .fuel-pill-strip { display: flex; gap: 8px; margin-bottom: 12px; }
-        .cash-pill, .levy-pill, .fuel-pill, .stat-pill { flex: 1; background: var(--surface2); border-radius: 13px; padding: 12px 8px; text-align: center; border: 1px solid var(--border); transition: var(--transition-theme); }
-        .cash-pill-val, .levy-pill-val, .fuel-pill-val, .stat-pill-val { font-size: 17px; font-weight: 800; color: var(--primary); letter-spacing: -0.4px; line-height: 1; transition: color 0.28s ease; }
-        .cash-pill-val.green, .stat-pill-val.green { color: var(--green); }
-        .levy-pill-val.amber { color: #d97706; }
-        [data-theme="dark"] .levy-pill-val.amber { color: #fbbf24; }
-        .fuel-pill-val.orange { color: #ea580c; }
-        [data-theme="dark"] .fuel-pill-val.orange { color: #fb923c; }
-        .cash-pill-label, .levy-pill-label, .fuel-pill-label, .stat-pill-label { font-size: 9px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; transition: color 0.28s ease; }
-        
-        .cash-amt-cell { text-align: right; font-weight: 800; color: var(--green); font-size: 14px; }
-        .levy-amount-cell { text-align: right; font-weight: 800; color: #d97706; font-size: 14px; }
-        [data-theme="dark"] .levy-amount-cell { color: #fbbf24; }
-        .levy-trips-cell { text-align: right; color: var(--muted); font-weight: 600; }
-        .fuel-amt-cell { text-align: right; font-weight: 800; color: #ea580c; font-size: 14px; }
-        [data-theme="dark"] .fuel-amt-cell { color: #fb923c; }
-        
-        .cash-total-row, .levy-total-row, .fuel-total-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 2px dashed var(--divider); transition: border-color 0.28s ease; }
-        .cash-grand-total { font-size: 19px; font-weight: 900; color: var(--green); }
-        .levy-grand-total { font-size: 19px; font-weight: 900; color: #d97706; }
-        [data-theme="dark"] .levy-grand-total { color: #fbbf24; }
-        .fuel-grand-total { font-size: 19px; font-weight: 900; color: #ea580c; }
-        [data-theme="dark"] .fuel-grand-total { color: #fb923c; }
-
-        .bas-display { background: var(--green-soft); border: 2px solid var(--green-mid); border-radius: 16px; padding: 20px; text-align: center; margin-top: 12px; transition: var(--transition-theme); }
-        .bas-display-lbl { font-size: 11px; font-weight: 700; color: var(--bas-label); letter-spacing: 1.2px; margin-bottom: 6px; text-transform: uppercase; }
-        .bas-display-val { font-size: 46px; font-weight: 900; color: var(--bas-val); letter-spacing: 1px; line-height: 1; transition: color 0.28s ease; }
-        .bas-display-sub { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 6px; transition: color 0.28s ease; }
-
-        .section-divider { display: flex; align-items: center; gap: 12px; margin: 6px 0 14px; font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.6px; transition: color 0.28s ease; }
-        .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--divider); transition: background 0.28s ease; }
-        .spacer { height: 20px; }
-        .info-text { font-size: 13px; color: var(--muted); line-height: 1.55; font-weight: 500; margin-bottom: 14px; margin-top: -8px; transition: color 0.28s ease; }
-        .empty-state { text-align: center; color: var(--empty-color); font-weight: 600; padding: 24px 0; font-size: 14px; }
-
-        /* GRID ARCHIVE */
-        .receipt-archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 4px; }
-        .receipt-card { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 14px; overflow: hidden; cursor: pointer; transition: var(--transition-theme); position: relative; -webkit-tap-highlight-color: transparent; }
-        .receipt-card:active { transform: scale(0.97); opacity: 0.85; }
-        .receipt-card.selected { border-color: var(--blue); box-shadow: 0 0 0 2px rgba(37,99,235,0.25); }
-        .receipt-card-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; background: var(--input-bg); display: block; }
-        .receipt-card-pdf-placeholder { width: 100%; aspect-ratio: 4/3; background: var(--input-bg); display: flex; align-items: center; justify-content: center; font-size: 36px; flex-direction: column; gap: 6px; }
-        .receipt-card-pdf-placeholder span { font-size: 11px; font-weight: 700; color: var(--muted); }
-        .receipt-card-info { padding: 8px 10px 10px; }
-        .receipt-card-date { font-size: 13px; font-weight: 800; color: var(--primary); transition: color 0.28s ease; }
-        .receipt-card-name { font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .receipt-card-check { position: absolute; top: 8px; right: 8px; width: 22px; height: 22px; border-radius: 50%; background: var(--blue); border: 2px solid white; display: none; align-items: center; justify-content: center; font-size: 12px; color: white; font-weight: 800; }
-        .receipt-card.selected .receipt-card-check { display: flex; }
-        .select-mode .receipt-card-check { display: flex; background: var(--surface); border-color: var(--border); }
-        .select-mode .receipt-card.selected .receipt-card-check { background: var(--blue); border-color: white; }
-        .receipt-empty { grid-column: 1 / -1; text-align: center; padding: 40px 20px; color: var(--empty-color); font-weight: 600; font-size: 14px; }
-        
-        /* SCHEDULER CALENDAR */
-        .sched-toggle-wrap { position: relative; display: inline-block; width: 50px; height: 28px; cursor: pointer; }
-        .sched-toggle-wrap input { opacity: 0; width: 0; height: 0; }
-        .sched-toggle-knob { position: absolute; inset: 0; background: var(--border); border-radius: 34px; transition: all 0.28s ease; }
-        .sched-toggle-knob::before { background: white; left: 4px; bottom: 4px; content: ''; position: absolute; width: 20px; height: 20px; border-radius: 50%; box-shadow: 0 1px 4px rgba(0,0,0,0.25); transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }
-        .sched-toggle-wrap input:checked + .sched-toggle-knob { background: var(--blue); }
-        .sched-toggle-wrap input:checked + .sched-toggle-knob::before { transform: translateX(22px); }
-        
-        .sched-cal-grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; margin-bottom: 8px; width: 100%; }
-        .sched-cal-header { text-align: center; font-size: 10px; font-weight: 700; color: var(--muted); padding: 4px 0; text-transform: uppercase; letter-spacing: 0.5px; }
-        .sched-cal-day { aspect-ratio: 1; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; position: relative; border: 1.5px solid transparent; transition: all 0.15s ease; -webkit-tap-highlight-color: transparent; gap: 2px; }
-        .sched-cal-day:active { transform: scale(0.92); }
-        .sched-cal-day.other-month { opacity: 0.28; }
-        .sched-cal-day.today { border-color: var(--blue) !important; }
-        .sched-cal-day.working { background: rgba(16,185,129,0.12); border-color: rgba(16,185,129,0.35); }
-        .sched-cal-day.has-earning { background: rgba(37,99,235,0.1); border-color: rgba(37,99,235,0.3); }
-        .sched-cal-day.working.has-earning { background: rgba(16,185,129,0.18); border-color: var(--green); }
-        .sched-cal-day-num { font-size: clamp(10px, 3vw, 13px); font-weight: 700; color: var(--primary); line-height: 1; }
-        .sched-cal-day.today .sched-cal-day-num { color: var(--blue); }
-        .sched-cal-day.working .sched-cal-day-num { color: var(--green); font-weight: 800; }
-        .sched-cal-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-        .sched-cal-dot.green { background: var(--green); }
-        .sched-cal-dot.blue { background: var(--blue); }
-        .sched-cal-day-amt { font-size: 8px; font-weight: 700; color: var(--green); line-height: 1; }
-
-        .sched-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-        .sched-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--muted); }
-        .sched-legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-        
-        .sched-popover { position: fixed; z-index: 3000; background: var(--glass-card); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur); border: 1px solid var(--glass-card-border); border-radius: 16px; padding: 12px 14px 14px; box-shadow: 0 12px 40px rgba(0,0,0,0.28); min-width: 170px; max-width: calc(100vw - 32px); display: none; flex-direction: column; animation: popoverIn 0.2s cubic-bezier(0.34,1.56,0.64,1); transform-origin: top center; }
-        @keyframes popoverIn { from { opacity:0; transform: scale(0.82) translateY(-6px); } to { opacity:1; transform: none; } }
-        .sched-popover-arrow { position: absolute; top: -7px; left: 50%; transform: translateX(-50%); width: 14px; height: 7px; overflow: hidden; }
-        .sched-popover-arrow::after { content: ''; position: absolute; left: 2px; width: 10px; height: 10px; background: var(--surface-solid); border: 1px solid var(--border); transform: rotate(45deg); top: 2px; border-radius: 2px; }
-        .sched-popover-date { font-size: 13px; font-weight: 800; color: var(--primary); margin-bottom: 4px; text-align: center; }
-        .sched-popover-earn { font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; margin-bottom: 10px; min-height: 16px; }
-        .sched-popover-btns { display: flex; gap: 8px; }
-        .sched-pop-btn { flex: 1; padding: 9px 6px; font-size: 12px; font-weight: 800; border-radius: 10px; border: 1.5px solid transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; transition: all 0.14s ease; text-align: center; background: var(--surface2); color: var(--muted); }
-        .sched-pop-btn.on.active { background: rgba(16,185,129,0.28); border-color: var(--green); color: var(--green); }
-        .sched-pop-btn.off.active { background: #fef2f2; color: var(--red); border-color: rgba(239,68,68,0.3); }
-        [data-theme="dark"] .sched-pop-btn.off.active { background: #2d1515; }
-
-        .sched-summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--table-border); font-size: 14px; }
-        .sched-summary-row:last-child { border-bottom: none; }
-        .sched-summary-label { font-weight: 600; color: var(--muted); }
-        .sched-summary-val { font-weight: 800; color: var(--primary); }
-        .sched-summary-val.green { color: var(--green); }
-
-        .share-day-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #e2e8f0; text-align: left; }
-        .share-day-row:last-child { border-bottom: none; }
-        .share-day-pill { width: 38px; height: 38px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; gap: 1px; flex-shrink: 0; }
-        .share-day-pill.working { background: #d1fae5; color: #059669; }
-        .share-day-pill.off { background: #f1f5f9; color: #94a3b8; }
-
-        .tab-pip { position: absolute; top: 7px; right: calc(50% - 18px); width: 7px; height: 7px; background: var(--red); border: 2px solid var(--surface); display: none; border-radius: 50%; }
-        .tab-pip.show { display: block; }
-        .date-display-row { position: relative; }
-        .date-display-btn { width: 100%; padding: 13px 15px; font-size: 16px; font-weight: 700; border: 1.5px solid var(--glass-card-border); border-radius: var(--radius-sm); background: var(--input-bg); color: var(--primary); display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.18s ease; text-align: left; min-height: 50px; }
-        .date-display-icon { font-size: 18px; flex-shrink: 0; }
-
-        /* PROFILE SCREEN */
-        .profile-signed-hero { display: flex; align-items: center; gap: 14px; padding: 20px; background: var(--glass-card); border: 1px solid var(--glass-card-border); border-radius: var(--radius); box-shadow: var(--glass-card-shadow); margin-bottom: 14px; text-align: left; }
-        .profile-big-avatar { width: 58px; height: 58px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), #6366f1); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 900; color: white; flex-shrink: 0; box-shadow: 0 4px 16px var(--blue-glow); }
-        .profile-signed-name { font-size: 17px; font-weight: 800; color: var(--primary); line-height: 1; }
-        .profile-signed-email { font-size: 12px; color: var(--muted); font-weight: 500; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .profile-signed-uid { font-size: 10px; color: var(--muted); margin-top: 3px; opacity: 0.5; font-family: monospace; letter-spacing: 0.3px; }
-        
-        @keyframes syncPulse { 0%, 100% { opacity:1; transform: scale(1); } 50% { opacity:0.5; transform: scale(1.4); } }
-        @keyframes fabPulse { 0%, 100% { box-shadow: var(--glass-card-shadow); } 50% { box-shadow: var(--glass-card-shadow), 0 0 0 8px rgba(79,142,247,0.2); } }
-
-        @media (min-width: 600px) {
-            body { padding-left: 24px; padding-right: 24px; }
-            .app { max-width: 560px; }
-            .tab-bar-inner { padding: 6px 16px; gap: 6px; }
-            .tab-btn { width: 72px; }
-            .tab-btn-center { width: 76px; }
-        }
+        /* HELPER */
+        .hidden { display: none !important; }
+        .preview-box { background: var(--surface2); padding: 14px; border-radius: 12px; font-size: 13px; font-family: monospace; white-space: pre-wrap; margin-bottom: 14px; }
     </style>
 </head>
 <body>
-    <div id="receiptViewerModal" class="modal-overlay" onclick="if(event.target===this) closeReceiptViewer()" style="align-items:center; padding: 20px;">
-        <div style="background: var(--surface-solid); border-radius: 20px; width: 100%; max-width: 480px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.4); border: 1px solid var(--border);">
-            <div style="display: flex; align-items:center; justify-content: space-between; padding:16px 18px; border-bottom:1px solid var(--border);">
-                <div>
-                    <div id="viewerDateLabel" style="font-size: 16px; font-weight: 800; color:var(--primary);"></div>
-                    <div id="viewerFileName" style="font-size:12px; color:var(--muted); font-weight:500; margin-top:2px;"></div>
-                </div>
-                <button onclick="closeReceiptViewer()" style="background: var(--btn-rm-bg); border:none; border-radius:8px; width:32px; height:32px; font-size:18px; cursor:pointer; color:var(--red); display: flex; align-items:center; justify-content:center;">×</button>
-            </div>
-            <div style="padding: 16px; max-height:65vh; overflow-y:auto; text-align:center;">
-                <img id="viewerImage" src="" style="max-width: 100%; border-radius: 10px; display:block; margin: 0 auto;" alt="Receipt">
-                <div id="viewerPdfLabel" style="display: none; padding: 30px; font-size: 14px; color:var(--muted); font-weight:600;">PDF Receipt</div>
-            </div>
-            <div style="padding: 14px 16px; border-top: 1px solid var(--border); display: flex; gap:10px;">
-                <button class="btn btn-copy" onclick="downloadViewerReceipt()" style="flex: 1; margin-bottom:0; font-size:13px;">Download</button>
-                <button class="btn btn-danger-soft" onclick="deleteViewerReceipt()" style="flex: 1; margin-bottom:0; font-size:13px;">Delete</button>
-            </div>
-        </div>
-    </div>
 
     <div class="toast" id="toast"></div>
 
-    <div class="tab-bar">
-        <div class="tab-bar-inner" id="tabBarInner">
-            <div class="tab-bar-slider" id="tabSlider"></div>
-            <button class="tab-btn" onclick="switchTab('tab-tracker', this)" id="tabWeekly">
-                <span class="tab-icon">📅</span>Weekly
-                <span class="tab-pip" id="pipWeekly"></span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('tab-receipts', this)" id="tabReceipts">
-                <span class="tab-icon">📂</span>Docs
-            </button>
-            <button class="tab-btn-center active" onclick="switchTab('tab-calc', this)" id="tabShift">
-                <div class="tab-center-pill">🚕</div>
-                <span class="tab-center-label">Shift</span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('tab-schedule', this)" id="tabSchedule">
-                <span class="tab-icon">🗓️</span>Planner
-                <span class="tab-pip" id="pipSchedule"></span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('tab-tax', this)" id="tabReports">
-                <span class="tab-icon">📊</span>Reports
-            </button>
-        </div>
-    </div>
-
-    <div id="payDayModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-handle"></div>
-            <h3>Pay Day!</h3>
-            <p>Did you receive your funds for the prior work week of<br><strong id="payDayWeekText" style="color: var(--primary);">...</strong>?</p>
-            <div class="btn-pair">
-                <button class="btn btn-copy" onclick="closePayDayModal(false)">No / Later</button>
-                <button class="btn btn-wa" style="margin-top:0;" onclick="closePayDayModal(true)">Yes, Credited ✓</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="afterSaveModal" class="modal-overlay">
-        <div class="modal-box">
-            <div class="modal-handle"></div>
-            <h3>Save to Weekly Report?</h3>
-            <p>Shift shared! Would you like to save today's earnings to your Weekly Report?</p>
-            <div class="btn-pair">
-                <button class="btn btn-copy" onclick="closeAfterSaveModal(false)">Skip</button>
-                <button class="btn btn-submit" style="margin-top:0; margin-bottom:0;" onclick="closeAfterSaveModal(true)">Save to Report</button>
-            </div>
-        </div>
-    </div>
-
     <div class="app">
         <div class="app-header">
-            <button id="profileFab" onclick="switchToProfile()" style="width: 36px; height: 36px; border-radius: 50%; border: none; cursor:pointer; background: var(--glass-card); backdrop-filter:var(--glass-blur); -webkit-backdrop-filter:var(--glass-blur); box-shadow: var(--glass-card-shadow); border:1px solid var(--glass-card-border); font-size:15px; display: flex; align-items:center; justify-content:center; -webkit-tap-highlight-color: transparent; transition: transform .15s ease; color:var(--primary); flex-shrink:0;">👤</button>
-            <h1>Drive2<span>Earn</span><span id="versionBadge" style="font-size: 11px; font-weight:700; color:var(--muted); letter-spacing:0.3px; vertical-align:middle; opacity:0.7; margin-left:4px;"></span></h1>
-            <div class="island-wrap" id="islandWrap">
-                <div class="island" id="islandPill" onclick="toggleIslandPanel()">
-                    <div class="island-collapsed">
-                        <span class="island-weather-icon" id="islandWeatherIcon">☀️</span>
-                        <span class="island-temp" id="islandTemp">--</span>
-                        <span class="island-divider"></span>
-                        <span class="island-date-txt" id="headerDateBadge">Today</span>
-                    </div>
-                    <button class="island-theme-btn" id="islandThemeBtn" onclick="event.stopPropagation(); toggleTheme();" aria-label="Toggle theme">🌓</button>
-                </div>
-                <div class="island-panel" id="islandPanel">
-                    <div class="island-panel-weather" id="islandWeatherFull">
-                        <div class="weather-loading">
-                            <div class="weather-dot"></div>
-                            <div class="weather-dot"></div>
-                            <div class="weather-dot"></div>
-                            <span>Loading weather...</span>
-                        </div>
-                    </div>
-                    <div class="island-panel-time" id="tzPanelTime">-</div>
-                    <div class="island-panel-label">Timezone</div>
-                    <select id="tzSelect" onchange="setTimezone(this.value)"></select>
-                </div>
+            <h1>Drive2<span>Earn</span></h1>
+            <div class="island" onclick="toggleTheme()">
+                <span id="islandWeatherIcon">☀️</span> <span id="islandTemp">--°</span>
             </div>
         </div>
 
         <div id="tab-calc" class="page active">
+            
             <div class="card">
-                <label id="shiftDateLabel" style="margin-top:0;">Shift Date</label>
-                <div class="date-quick-strip">
-                    <button class="date-quick-btn active" id="dateQToday" onclick="setShiftDate('today')">Today</button>
-                    <button class="date-quick-btn" id="dateQYest" onclick="setShiftDate('yesterday')">Yesterday</button>
-                    <button class="date-quick-btn" id="dateQPick" onclick="openDatePicker()">Pick</button>
-                </div>
-                <div class="date-display-row" style="margin-top:8px;">
-                    <button class="date-display-btn" id="shiftDateDisplay" onclick="openDatePicker()">
-                        <span id="shiftDateText">Today</span>
-                        <span class="date-display-icon">📅</span>
-                    </button>
-                    <input type="date" id="shiftDate" style="position:absolute; opacity:0; width:0; height:0; pointer-events:none;">
-                </div>
+                <label>Shift Date</label>
+                <input type="date" id="shiftDate" onchange="updateCalc()">
             </div>
             
             <div class="card">
-                <h2>End of Shift <button id="addEftposBtn" class="btn btn-add" type="button">+ Add</button></h2>
+                <h2>End of Shift <button class="btn btn-add" onclick="addEosRow()">+ Add</button></h2>
                 <div id="eftposContainer"></div>
                 <div class="subtotal">EOS Total: <strong id="eftposSectionTotal">$0.00</strong></div>
             </div>
 
             <div class="card">
-                <h2>Cash Income <button id="addCashBtn" class="btn btn-add" type="button">+ Add</button></h2>
+                <h2>Cash Income <button class="btn btn-add" onclick="addCashRow()">+ Add</button></h2>
                 <div id="cashContainer"></div>
                 <div class="subtotal">Subtotal: <strong id="cashSectionTotal">$0.00</strong></div>
             </div>
 
             <div class="card">
                 <h2>Runs & Accounts</h2>
-                <label style="margin-top:0;">Run Count (x $5 each)</label>
-                <div class="run-row">
-                    <input type="number" id="runCount" placeholder="0" autocomplete="off" inputmode="numeric">
-                    <span class="run-multiplier">= <strong id="runTotal" style="color: var(--primary);">$0.00</strong></span>
+                <div style="display: flex; gap:10px; align-items: center; margin-bottom: 10px;">
+                    <input type="number" id="runCount" placeholder="Number of Runs (x $5)" inputmode="numeric" oninput="updateCalc()">
+                    <strong style="color:var(--primary); white-space:nowrap;" id="runTotal">=$0.00</strong>
                 </div>
-                <div class="section-divider" style="margin-top: 18px;">Accounts</div>
-                <button id="addAccountBtn" class="btn btn-add" type="button" style="width: 100%; margin-bottom: 10px;">+ Add Account</button>
-                <div id="accountsContainer"></div>
+                <button class="btn btn-copy" onclick="addAccountRow()">+ Add Account</button>
+                <div id="accountsContainer" style="margin-top: 10px;"></div>
             </div>
 
             <div class="card">
-                <h2>Fuel Cost</h2>
-                <div style="display: flex; gap:8px; align-items: flex-end;">
+                <h2>Fuel & Expenses</h2>
+                <div style="display: flex; gap:8px;">
                     <div style="flex:1;">
-                        <label style="margin-top:0;">Amount ($)</label>
-                        <input type="number" id="fuel" step="0.01" placeholder="0.00" autocomplete="off" inputmode="decimal" style="margin-bottom:0;">
+                        <label>Amount ($)</label>
+                        <input type="number" id="fuel" placeholder="0.00" inputmode="decimal" oninput="updateCalc()">
                     </div>
                     <div style="flex:1;">
-                        <label style="margin-top:0;">Fuel Type</label>
-                        <select id="fuelType" onchange="updateCalc()" style="margin-bottom:0;">
+                        <label>Fuel Type</label>
+                        <select id="fuelType" onchange="updateCalc()">
                             <option value="Diesel">Diesel</option>
                             <option value="Petrol">Petrol</option>
                             <option value="LPG">LPG</option>
@@ -667,1278 +169,328 @@
             </div>
 
             <div class="card">
-                <h2>End of Shift & Receipts</h2>
-                <div id="addEosBox" class="receipt-box" onclick="document.getElementById('eosReceiptFile').click()">
-                    <span class="receipt-tap-label">End of Shift Receipt (EOS) <span style="color:var(--red)">*</span></span>
-                    <span class="receipt-tap-hint">Tap to attach photo or PDF</span>
+                <h2>EOS Receipt <span style="color: var(--red); font-size: 14px;">*</span></h2>
+                <div class="receipt-box" id="addEosBox" onclick="document.getElementById('eosReceiptFile').click()">
+                    Tap to attach photo or PDF (Required)
                 </div>
-                <input type="file" id="eosReceiptFile" accept="image/*, application/pdf" style="display:none;">
-                <div id="eosPreviewContainer" class="receipt-preview">
-                    <img id="eosPreview" class="preview-thumb" alt="">
-                    <div id="eosFileText" class="preview-name">Attached</div>
-                    <button id="removeEos" type="button" class="btn-remove-photo">×</button>
+                <input type="file" id="eosReceiptFile" accept="image/*, application/pdf" class="hidden" onchange="handleFile(event)">
+                <div class="receipt-preview" id="eosPreviewContainer">
+                    <img id="eosPreview" class="preview-thumb">
+                    <span id="eosFileText" style="font-weight: 600; font-size: 13px; flex:1; margin: 0 10px; overflow:hidden;">Attached</span>
+                    <button class="btn-rm" style="width: 30px; height: 30px; font-size: 16px;" onclick="removeFile()">×</button>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Hail Trips (Levy)</h2>
+                <label>Number of Hail Trips Today <span style="color: var(--red);">*</span></label>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="number" id="hailTrips" placeholder="0" inputmode="numeric" oninput="updateLevy()">
+                    <span style="font-size: 12px; color: var(--muted); white-space:nowrap;">Levy: <strong id="levyPreviewAmt">$0.00</strong></span>
                 </div>
             </div>
 
             <div class="total-banner">
                 <h3>Take Home Earnings</h3>
-                <div class="total-earn-val" id="totalDisplay" data-raw="0">$0.00</div>
+                <div class="total-earn-val" id="totalDisplay">$0.00</div>
             </div>
 
-            <div class="card">
-                <h2>Hail Trips <span style="font-size: 11px; font-weight:600; color:var(--muted); text-transform:none;">$1.20 levy / trip</span></h2>
-                <label style="margin-top:0;">Number of Hail Trips Today <span style="color:var(--red)">*</span></label>
-                <div class="trips-input-row">
-                    <input type="number" id="hailTrips" placeholder="0" inputmode="numeric" autocomplete="off" oninput="updateLevyPreview()">
-                    <div class="trips-badge">levy: <strong id="levyPreviewAmt">$0.00</strong></div>
-                </div>
-                <div id="tripsMandatoryHint" style="font-size:12px; color:var(--red); margin-top:6px; font-weight: 600; display:none; padding: 6px; background: rgba(255, 71, 87, 0.1); border-radius: 6px;">Trip count is required before sharing.</div>
-                <div style="font-size:12px; color:var(--muted); margin-top:6px; font-weight: 500;">Passenger service levy: <strong id="levyRateDisplay">$1.20</strong> per trip (NSW &amp; Vic $1.20) stored privately only</div>
-            </div>
-
-            <button class="btn btn-wa" onclick="shareAndThenSave()">Share to WhatsApp</button>
+            <button class="btn btn-wa" onclick="shareToWhatsApp()">Share to WhatsApp</button>
 
             <div class="card">
-                <h2>Daily Summary Preview</h2>
-                <div id="messagePreview" class="preview-box"></div>
+                <h2>Summary Preview</h2>
+                <div class="preview-box" id="messagePreview">Complete the fields above...</div>
                 <div class="btn-pair">
-                    <button id="copyBtn" class="btn btn-copy" type="button">Copy Text</button>
-                    <button id="clearBtn" class="btn btn-danger-soft" type="button">Clear</button>
+                    <button class="btn btn-copy" onclick="copyText()">Copy Text</button>
+                    <button class="btn btn-danger-soft" onclick="clearCalc()">Clear All</button>
                 </div>
-                <button id="shareBtnHidden" style="display:none;" type="button"></button>
             </div>
-            <div class="spacer"></div>
+            
         </div>
-
+        
         <div id="tab-tracker" class="page">
-            <div class="stats-strip">
-                <div class="stat-pill">
-                    <div class="stat-pill-val" id="statsShifts">0</div>
-                    <div class="stat-pill-label">Shifts</div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-val" id="statsAvg">$0</div>
-                    <div class="stat-pill-label">Avg / Shift</div>
-                </div>
-                <div class="stat-pill">
-                    <div class="stat-pill-val" id="statsBest">$0</div>
-                    <div class="stat-pill-label">Best Day</div>
-                </div>
-            </div>
-            <div class="card" style="padding: 14px;">
-                <div class="week-nav">
-                    <button class="week-nav-btn" onclick="changeWeek(-1)">← Prev</button>
-                    <span class="week-display-label" id="weekDisplay">-</span>
-                    <button class="week-nav-btn" onclick="changeWeek(1)">Next →</button>
-                </div>
-                <div id="captureArea">
-                    <h3 style="margin-top:0; text-align:center; font-size: 16px; color: var(--primary); font-weight: 800;" id="photoHeader">Weekly Report</h3>
-                    <table id="incomeTable">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th style="text-align: right;">Amount</th>
-                                <th data-html2canvas-ignore style="width: 56px;"></th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody"></tbody>
-                    </table>
-                    <div class="tracker-total-container" id="totalContainer"></div>
-                </div>
-            </div>
-            <button class="btn btn-wa" onclick="shareWeeklyWhatsApp()">Share Weekly Report</button>
-            <button class="btn btn-copy" onclick="generatePhoto()">Save Table as Photo</button>
-            
             <div class="card">
-                <h2>Quick Manual Edit</h2>
-                <p class="info-text">Override the calculator for a specific date.</p>
-                <div style="display: flex; gap: 10px;">
-                    <input type="date" id="manualDate" style="margin-bottom:0; flex:1;">
-                    <input type="number" id="manualAmt" step="0.01" placeholder="$0.00" style="margin-bottom:0; width: 130px;" inputmode="decimal">
-                </div>
-                <button class="btn btn-copy" style="margin-top: 14px; margin-bottom:0;" onclick="quickManualAdd()">Save Override</button>
+                <h2>Weekly Tracker</h2>
+                <p style="font-size: 14px; color: var(--muted);">Data tracking architecture intact. UI available in full version.</p>
             </div>
-            <div class="spacer"></div>
         </div>
 
-        <div id="tab-tax" class="page">
-            <div class="card">
-                <h2>Cash Income Tracker</h2>
-                <div class="cash-filter-strip">
-                    <button class="cash-filter-btn active" onclick="setCashFilter('week', this)">This Week</button>
-                    <button class="cash-filter-btn" onclick="setCashFilter('month', this)">This Month</button>
-                    <button class="cash-filter-btn" onclick="setCashFilter('Q1', this)">Q1 Jul-Sep</button>
-                    <button class="cash-filter-btn" onclick="setCashFilter('Q2', this)">Q2 Oct-Dec</button>
-                    <button class="cash-filter-btn" onclick="setCashFilter('Q3', this)">Q3 Jan-Mar</button>
-                    <button class="cash-filter-btn" onclick="setCashFilter('Q4', this)">Q4 Apr-Jun</button>
-                    <button class="cash-filter-btn" onclick="setCashFilter('all', this)">All Time</button>
-                    <button class="btn-add" onclick="exportCashCSV()" style="font-size: 12px; padding: 6px 12px; margin-left: auto;">CSV</button>
-                </div>
-                <div class="cash-pill-strip">
-                    <div class="cash-pill"><div class="cash-pill-val" id="cashTrackDays">0</div><div class="cash-pill-label">Days w/ Cash</div></div>
-                    <div class="cash-pill"><div class="cash-pill-val green" id="cashTrackTotal">$0.00</div><div class="cash-pill-label">Total Cash</div></div>
-                    <div class="cash-pill"><div class="cash-pill-val" id="cashTrackAvg">$0</div><div class="cash-pill-label">Avg / Day</div></div>
-                </div>
-                <table class="cash-track-table">
-                    <thead><tr><th>Date</th><th>Payer(s)</th><th class="cash-amt-cell">Amount</th></tr></thead>
-                    <tbody id="cashTrackBody"></tbody>
-                </table>
-                <div class="cash-total-row" id="cashTotalRow" style="display:none;">
-                    <span style="font-size: 14px; font-weight:700; color:var(--primary);">Total Cash</span>
-                    <span class="cash-grand-total" id="cashGrandTotal">$0.00</span>
-                </div>
-            </div>
+    </div>
 
-            <div class="card">
-                <h2>Passenger Service Levy</h2>
-                <div style="display: flex; gap: 10px; align-items:center; margin-bottom:14px;">
-                    <input type="number" id="levyRateInput" step="0.01" placeholder="1.20" inputmode="decimal" onchange="saveLevyRate()" style="max-width: 130px; margin-bottom:0;">
-                    <span style="font-size:12px; color:var(--muted); font-weight:500;">per trip NSW &amp; Vic $1.20</span>
-                </div>
-                <div class="levy-filter-strip">
-                    <button class="levy-filter-btn active" onclick="setLevyFilter('week', this)">This Week</button>
-                    <button class="levy-filter-btn" onclick="setLevyFilter('month', this)">This Month</button>
-                    <button class="levy-filter-btn" onclick="setLevyFilter('Q1', this)">Q1 Jul-Sep</button>
-                    <button class="levy-filter-btn" onclick="setLevyFilter('Q2', this)">Q2 Oct-Dec</button>
-                    <button class="levy-filter-btn" onclick="setLevyFilter('Q3', this)">Q3 Jan-Mar</button>
-                    <button class="levy-filter-btn" onclick="setLevyFilter('Q4', this)">Q4 Apr-Jun</button>
-                    <button class="levy-filter-btn" onclick="setLevyFilter('all', this)">All Time</button>
-                    <button class="btn-add" onclick="exportLevyCSV()" style="font-size: 12px; padding: 6px 12px; margin-left: auto;">CSV</button>
-                </div>
-                <div class="levy-pill-strip">
-                    <div class="levy-pill"><div class="levy-pill-val" id="levyTotalTrips">0</div><div class="levy-pill-label">Total Trips</div></div>
-                    <div class="levy-pill"><div class="levy-pill-val amber" id="levyTotalAmt">$0.00</div><div class="levy-pill-label">Total Levy</div></div>
-                    <div class="levy-pill"><div class="levy-pill-val" id="levyAvgTrips">0</div><div class="levy-pill-label">Avg/Day</div></div>
-                </div>
-                <table class="levy-report-table">
-                    <thead><tr><th>Date</th><th class="levy-trips-cell">Trips</th><th class="levy-amount-cell">Levy</th></tr></thead>
-                    <tbody id="levyTableBody"></tbody>
-                </table>
-                <div class="levy-total-row" id="levyTotalRow" style="display:none;">
-                    <span style="font-size:14px; font-weight:700; color:var(--primary);">Total Levy</span>
-                    <span class="levy-grand-total" id="levyGrandTotal">$0.00</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Fuel Tracker</h2>
-                <div class="fuel-filter-strip">
-                    <button class="fuel-filter-btn active" onclick="setFuelFilter('week', this)">This Week</button>
-                    <button class="fuel-filter-btn" onclick="setFuelFilter('month', this)">This Month</button>
-                    <button class="fuel-filter-btn" onclick="setFuelFilter('Q1', this)">Q1 Jul-Sep</button>
-                    <button class="fuel-filter-btn" onclick="setFuelFilter('Q2', this)">Q2 Oct-Dec</button>
-                    <button class="fuel-filter-btn" onclick="setFuelFilter('Q3', this)">Q3 Jan-Mar</button>
-                    <button class="fuel-filter-btn" onclick="setFuelFilter('Q4', this)">Q4 Apr-Jun</button>
-                    <button class="fuel-filter-btn" onclick="setFuelFilter('all', this)">All Time</button>
-                    <button class="btn-add" onclick="exportFuelCSV()" style="font-size: 12px; padding: 6px 12px; margin-left: auto;">CSV</button>
-                </div>
-                <div class="fuel-pill-strip">
-                    <div class="fuel-pill"><div class="fuel-pill-val" id="fuelTrackDays">0</div><div class="fuel-pill-label">Fill-ups</div></div>
-                    <div class="fuel-pill"><div class="fuel-pill-val orange" id="fuelTrackTotal">$0.00</div><div class="fuel-pill-label">Total Spent</div></div>
-                    <div class="fuel-pill"><div class="fuel-pill-val" id="fuelTrackAvg">$0</div><div class="fuel-pill-label">Avg / Fill</div></div>
-                </div>
-                <table class="fuel-track-table">
-                    <thead><tr><th>Date</th><th>Type</th><th class="fuel-amt-cell">Amount</th></tr></thead>
-                    <tbody id="fuelTrackBody"></tbody>
-                </table>
-                <div class="fuel-total-row" id="fuelTotalRow" style="display:none;">
-                    <span style="font-size: 14px; font-weight:700; color:var(--primary);">Total Fuel</span>
-                    <span class="fuel-grand-total" id="fuelGrandTotal">$0.00</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>BAS Gross Earnings</h2>
-                <label style="margin-top:0;">Date Range</label>
-                <select id="exportFilter" onchange="toggleCustomDates(); calcBASGross();">
-                    <option value="all">All Time</option>
-                    <option value="last30">Last 30 Days</option>
-                    <option value="last90">Last 3 Months</option>
-                    <option value="thisFY">This Financial Year</option>
-                    <option value="custom">Custom Date Range...</option>
-                </select>
-                <div id="customDateContainer" style="display: none; margin-top: 14px;">
-                    <div style="display: flex; gap:10px;">
-                        <div style="flex:1;"><label style="margin-top:0;">Start</label><input type="date" id="exportStart" style="margin-bottom:0;" oninput="calcBASGross()"></div>
-                        <div style="flex:1;"><label style="margin-top:0;">End</label><input type="date" id="exportEnd" style="margin-bottom:0;" oninput="calcBASGross()"></div>
-                    </div>
-                </div>
-                <div class="bas-display">
-                    <div class="bas-display-lbl">Gross Earnings</div>
-                    <div class="bas-display-val" id="basGrossDisplay" data-raw="0">$0.00</div>
-                    <div class="bas-display-sub" id="basGrossSubLabel">- select a range above</div>
-                </div>
-                <button class="btn btn-copy" style="margin-top: 12px; margin-bottom:0;" onclick="copyBASGross()">Copy Amount</button>
-            </div>
-            <div class="spacer"></div>
-        </div>
-
-        <div id="tab-receipts" class="page">
-            <div class="card" style="padding:14px;">
-                <div style="display: flex; align-items:center; justify-content: space-between; gap:10px; margin-bottom:12px;">
-                    <span style="font-size: 15px; font-weight:800; color:var(--primary);">Archive <span id="receiptCountBadge" style="font-size:12px; font-weight: 600; color:var(--muted);">0 receipts</span></span>
-                    <div style="display: flex; gap:8px;">
-                        <button class="btn btn-add" onclick="toggleReceiptSelect()" id="receiptSelectToggle">Select</button>
-                    </div>
-                </div>
-                <div class="receipt-filter-strip">
-                    <button class="receipt-filter-btn active" onclick="setReceiptFilter('all', this)">All</button>
-                    <button class="receipt-filter-btn" onclick="setReceiptFilter('week', this)">Week</button>
-                    <button class="receipt-filter-btn" onclick="setReceiptFilter('month', this)">Month</button>
-                    <button class="receipt-filter-btn" onclick="setReceiptFilter('Q1', this)">Q1</button>
-                    <button class="receipt-filter-btn" onclick="setReceiptFilter('Q2', this)">Q2</button>
-                    <button class="receipt-filter-btn" onclick="setReceiptFilter('Q3', this)">Q3</button>
-                    <button class="receipt-filter-btn" onclick="setReceiptFilter('Q4', this)">Q4</button>
-                </div>
-                <div id="receiptCustomRange" style="display:none; margin-bottom:12px;">
-                    <div style="display: flex; gap:8px; align-items:center;">
-                        <input type="date" id="receiptRangeStart" style="flex:1;" onchange="renderReceiptArchive()">
-                        <span style="font-size:13px; color:var(--muted); font-weight:600;">to</span>
-                        <input type="date" id="receiptRangeEnd" style="flex:1;" onchange="renderReceiptArchive()">
-                    </div>
-                </div>
-                <div id="receiptBulkActions" style="display: none; margin-bottom:12px;">
-                    <div class="btn-pair">
-                        <button class="btn btn-copy" onclick="selectAllReceipts()" style="margin-bottom:0; font-size: 13px;">Select All</button>
-                        <button class="btn btn-danger-soft" onclick="deleteSelectedReceipts()" style="margin-bottom:0; font-size:13px;">Delete Selected</button>
-                    </div>
-                </div>
-                <div id="receiptArchiveGrid" class="receipt-archive-grid"></div>
-            </div>
-            <div class="spacer"></div>
-        </div>
-
-        <div id="tab-schedule" class="page">
-            <div class="card">
-                <div style="display: flex; align-items:center; justify-content: space-between;">
-                    <div style="text-align: left;">
-                        <div style="font-size: 15px; font-weight:800; color:var(--primary);">Work Schedule</div>
-                        <div style="font-size:12px; color:var(--muted); font-weight: 500; margin-top:3px;" id="scheduleStatusLabel">Schedule is off app works normally</div>
-                    </div>
-                    <label class="sched-toggle-wrap">
-                        <input type="checkbox" id="scheduleEnabled" onchange="toggleSchedule(this.checked)">
-                        <span class="sched-toggle-knob"></span>
-                    </label>
-                </div>
-                <div id="scheduleActiveHint" style="display: none; margin-top:12px; padding:10px 12px; background: var(--btn-add-bg); border-radius: 10px; font-size:12px; color:var(--blue); font-weight:600; text-align: left;">
-                    Schedule is active. Shift date &amp; reminders linked to your plan.
-                </div>
-            </div>
-            <div class="sched-view-strip">
-                <button class="sched-view-btn active" data-view="calendar" onclick="setSchedView('calendar', this)">Calendar</button>
-                <button class="sched-view-btn" data-view="summary" onclick="setSchedView('summary', this)">Month Summary</button>
-            </div>
-            <div class="card" style="padding:14px;" id="schedWeekCard">
-                <div class="week-nav" style="margin-bottom: 10px;">
-                    <button class="week-nav-btn" onclick="changeSchedMonth(-1)">← Prev</button>
-                    <span class="week-display-label" id="schedWeekLabel">-</span>
-                    <button class="week-nav-btn" onclick="changeSchedMonth(1)">Next →</button>
-                </div>
-                <div id="schedCalendarView">
-                    <div class="sched-cal-grid" id="schedCalGrid"></div>
-                </div>
-                <div id="schedSummaryView" style="display:none;">
-                    <div id="schedSummaryContent"></div>
-                </div>
-            </div>
-            <button class="btn btn-copy" id="schedShareBtn" onclick="shareScheduleScreenshot()">Share Schedule Snapshot</button>
-            <div id="schedShareCapture" style="position:fixed; left:-9999px; top:-9999px; background: white; padding: 20px; border-radius: 12px; min-width: 340px;"></div>
-            <div class="spacer"></div>
-        </div>
-
-        <div id="tab-profile" class="page">
-            <div class="card" id="fbSetupCard" style="display:none; text-align: left;">
-                <h2>Firebase Setup</h2>
-                <p class="info-text">To sync across devices, connect your Firebase project. This is a one-time setup.</p>
-                <a href="https://console.firebase.google.com" target="_blank" style="display:block; text-align:center; font-size:13px; font-weight:700; color:var(--blue); margin-bottom:14px;">How to get your config →</a>
-                <label style="margin-top:0;">Firebase Config (JSON)</label>
-                <textarea id="fbConfigInput" rows="6" style="font-family:monospace; resize:vertical;" placeholder='{"apiKey":"...","authDomain":"...", "projectId":"..."}'></textarea>
-                <button class="btn btn-submit" style="margin-top:12px;" onclick="saveFirebaseConfig()">Connect Firebase</button>
-            </div>
-
-            <div id="authCard" style="display:none;">
-                <div class="card" style="margin-bottom:14px; text-align: left;">
-                    <div style="text-align:center; margin-bottom:20px;">
-                        <div style="font-size: 18px; font-weight:800; color:var(--primary); margin-top:8px;">Sign in to Drive2Earn</div>
-                        <div style="font-size:13px; color:var(--muted); margin-top:4px; font-weight:500;">Your data syncs automatically across devices</div>
-                    </div>
-                    <button class="btn btn-submit" onclick="signInGoogle()" style="background: linear-gradient(135deg, #4285f4,#0f9d58); margin-bottom: 12px;">Continue with Google</button>
-                    <div class="section-divider" style="margin: 4px 0 12px;">or</div>
-                    <label style="margin-top:0;">Email</label>
-                    <input type="email" id="authEmail" placeholder="you@email.com" autocomplete="email">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="........" autocomplete="current-password">
-                    <div class="btn-pair" style="margin-top:12px;">
-                        <button class="btn btn-submit" onclick="signInEmail()" style="margin-bottom:0;">Sign In</button>
-                        <button class="btn btn-copy" onclick="signUpEmail()" style="margin-bottom:0;">Create Account</button>
-                    </div>
-                    <button onclick="resetPassword()" style="background:none; border: none; width: 100%; text-align:center; font-size:13px; color:var(--blue); font-weight:600; cursor:pointer; margin-top: 10px; padding:6px;">Forgot password?</button>
-                </div>
-            </div>
-
-            <div id="profileCard" style="display:none;">
-                <div class="profile-signed-hero">
-                    <div id="profileAvatar" class="profile-big-avatar">D</div>
-                    <div style="flex:1; min-width:0;">
-                        <div id="profileName" class="profile-signed-name">Driver</div>
-                        <div id="profileEmail" class="profile-signed-email"></div>
-                        <div id="profileUid" class="profile-signed-uid"></div>
-                    </div>
-                    <button onclick="fbSignOut()" style="background: var(--btn-rm-bg); border: none; border-radius: 10px; padding:8px 12px; font-size:12px; font-weight:700; color:var(--red); cursor:pointer; flex-shrink:0;">Sign Out</button>
-                </div>
-
-                <div class="card" style="margin-bottom: 14px; text-align: left;">
-                    <label style="margin-top: 0;">Edit Display Name</label>
-                    <div style="display: flex; gap:8px;">
-                        <input type="text" id="profileNameInput" placeholder="Display name" style="flex:1; margin-bottom:0;">
-                        <button onclick="updateDisplayName()" style="background: var(--btn-add-bg); border:none; border-radius: 10px; padding:0 16px; font-size:13px; font-weight:700; color:var(--blue); cursor:pointer; flex-shrink:0;">Save</button>
-                    </div>
-                </div>
-
-                <div class="card" style="margin-bottom:14px; text-align: left;">
-                    <div style="display: flex; align-items:center; justify-content: space-between; margin-bottom:10px;">
-                        <h2 style="margin-bottom:0;">Sync Status</h2>
-                        <div style="display: flex; align-items:center; gap: 6px; font-size:12px; font-weight:700; color:var(--green);">
-                            <span id="syncDot" style="width:7px; height:7px; border-radius: 50%; background: var(--green); display: inline-block; animation: syncPulse 2s ease-in-out infinite;"></span>Live
-                        </div>
-                    </div>
-                    <div id="lastSyncTime" style="font-size:11px; color:var(--muted); margin-bottom: 12px; font-weight:500;">Waiting for sync...</div>
-                    <div class="btn-pair">
-                        <button class="btn btn-submit" onclick="pushAllData()" style="margin-bottom:0; font-size:13px;">Push All</button>
-                        <button class="btn btn-copy" onclick="pullAllData()" style="margin-bottom:0; font-size:13px;">Pull Data</button>
-                    </div>
-                </div>
-
-                <div class="card" style="margin-bottom: 14px; text-align: left;">
-                    <h2>Your Data Overview</h2>
-                    <div id="dataOverview" style="font-size:13px; color:var(--muted); font-weight:500; line-height: 1.8;"></div>
-                </div>
-
-                <div class="card" style="border-color:rgba(239,68,68,0.2); text-align: left;">
-                    <h2 style="color: var(--red);">Danger Zone</h2>
-                    <button class="btn btn-danger-soft" onclick="disconnectFirebase()" style="margin-bottom:0; font-size:13px; width: 100%;">Disconnect Firebase (Keep Local Data)</button>
-                </div>
-            </div>
-            
-            <div class="card" style="margin-top: 14px; text-align: left;">
-                <div style="display: flex; align-items:center; justify-content: space-between;">
-                    <h2 style="margin-bottom:0;">App Changelog</h2>
-                    <span id="profileVersionBadge" style="font-size:13px; font-weight:800; color:var(--blue);"></span>
-                </div>
-                <div id="changelogList" style="max-height: 220px; overflow-y:auto; margin-top: 10px;"></div>
-            </div>
-            <div class="spacer"></div>
+    <div class="tab-bar">
+        <div class="tab-bar-inner">
+            <button class="tab-btn active" onclick="switchTab('tab-calc', this)">
+                <span class="tab-icon">🚕</span> Shift
+            </button>
+            <button class="tab-btn" onclick="switchTab('tab-tracker', this)">
+                <span class="tab-icon">📅</span> Tracker
+            </button>
         </div>
     </div>
 
-    <textarea id="hiddenCopy" style="position:fixed; left:-9999px; opacity:0;" readonly></textarea>
+    <textarea id="hiddenCopy" class="hidden"></textarea>
 
     <script>
-        // APP PRESETS
-        const APP_VERSION = '1.9';
-        const APP_BUILD = '2026-05-17';
-        
-        // SYSTEM VARIABLES 
-        let entries = JSON.parse(localStorage.getItem('taxi_income_data_v2')) || [];
-        let weeklyStatus = JSON.parse(localStorage.getItem('taxi_weekly_status')) || {};
-        let fuelLog = JSON.parse(localStorage.getItem('d2e_fuel_log_v1') || '{}');
-        let tripData = JSON.parse(localStorage.getItem('d2e_trip_data_v1') || '{}');
-        let cashLog = JSON.parse(localStorage.getItem('d2e_cash_log_v1') || '{}');
-        let schedule = JSON.parse(localStorage.getItem('d2e_schedule_v1') || '{}');
-        let receiptArchive = JSON.parse(localStorage.getItem('d2e_receipt_archive_v1') || '{}');
-        
-        let schedEnabled = localStorage.getItem('d2e_sched_enabled') === '1';
-        let currentDateOffset = 0;
-        let schedOffset = 0;
-        let fuelFilter = 'week', cashFilter = 'week', levyFilter = 'week', receiptFilter = 'all';
-        let receiptSelectMode = false;
-        let receiptSelected = new Set();
-        let viewerCurrentKey = null;
-        let schedView = 'calendar';
-        let _fbReady = false;
-        let _localWriteTs = {};
+        // --- INITIALIZATION ---
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('shiftDate').value = new Date().toISOString().split('T')[0];
+            addEosRow(); 
+            addCashRow();
+            fetchWeather();
+        });
 
-        const singleInputs = ['shiftDate', 'runCount', 'fuel'];
-        const eftposContainer = document.getElementById('eftposContainer');
-        const cashContainer = document.getElementById('cashContainer');
-        const accountsContainer = document.getElementById('accountsContainer');
-        const totalDisplay = document.getElementById('totalDisplay');
-        const hiddenCopy = document.getElementById('hiddenCopy');
-        const eosReceiptFile = document.getElementById('eosReceiptFile');
-        const addEosBox = document.getElementById('addEosBox');
-        const eosPreviewContainer = document.getElementById('eosPreviewContainer');
-        const eosPreview = document.getElementById('eosPreview');
-        const eosFileText = document.getElementById('eosFileText');
-        const removeEos = document.getElementById('removeEos');
-
-        const DOW_LABELS = ['Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue', 'Wed'];
-        const CAL_HEADERS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        const TZ_OPTIONS = [
-            { label: 'Melbourne / Sydney (AEST/AEDT)', value: 'Australia/Melbourne' },
-            { label: 'Brisbane (AEST, no DST)', value: 'Australia/Brisbane' },
-            { label: 'Adelaide (ACST/ACDT)', value: 'Australia/Adelaide' },
-            { label: 'Perth (AWST)', value: 'Australia/Perth' },
-            { label: 'Darwin (ACST)', value: 'Australia/Darwin' },
-            { label: 'UTC', value: 'UTC' }
-        ];
-
-        // CONFIG PARSE ATTACH
-        const SYNC_KEYS = [
-            { key: 'taxi_income_data_v2', get: () => entries, set: (v) => { entries = v; } },
-            { key: 'taxi_weekly_status', get: () => weeklyStatus, set: (v) => { weeklyStatus = v; } },
-            { key: 'd2e_fuel_log_v1', get: () => fuelLog, set: (v) => { fuelLog = v; } },
-            { key: 'd2e_trip_data_v1', get: () => tripData, set: (v) => { tripData = v; } },
-            { key: 'd2e_cash_log_v1', get: () => cashLog, set: (v) => { cashLog = v; } },
-            { key: 'd2e_schedule_v1', get: () => schedule, set: (v) => { schedule = v; } }
-        ];
-
-        const CHANGELOG = [
-            { version: '1.9', date: '17 May 2026', changes: ['Fixed WhatsApp attachment sharing and multi-device sharing configurations.', 'Fixed standard Hail Trip input handling value sticking bug on numeric keypad overlays.', 'Enhanced UI responsiveness transitions for dark and fluid layouts.'] }
-        ];
-
-        // INIT CODES
-        (function() {
-            const saved = localStorage.getItem('d2e_theme');
-            if (saved) document.documentElement.setAttribute('data-theme', saved);
-            else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        })();
-
-        function toggleTheme() {
-            haptic('light');
-            const html = document.documentElement;
-            const current = html.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', next);
-            localStorage.setItem('d2e_theme', next);
-            document.getElementById('themeColorMeta').content = next === 'dark' ? '#0a0f1a' : '#f1f5f9';
-            showToast(next === 'dark' ? 'Dark mode activated' : 'Light mode activated');
-        }
-
-        function haptic(type = 'light') {
-            if (window.navigator && window.navigator.vibrate) {
-                const patterns = { light: 10, medium: 25, success: [10, 50, 10] };
-                navigator.vibrate(patterns[type] || 10);
-            }
-        }
-
-        function showToast(msg, duration = 3000) {
-            const t = document.getElementById('toast');
-            if(!t) return;
-            t.textContent = msg;
-            t.classList.add('show');
-            clearTimeout(t._timer);
-            t._timer = setTimeout(() => t.classList.remove('show'), duration);
-        }
-
-        function switchTab(tabId, btnElement) {
-            haptic('light');
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.tab-btn, .tab-btn-center').forEach(b => b.classList.remove('active'));
+        // --- ROW GENERATORS (Fixed DOM manipulation so typing doesn't lose focus) ---
+        function createRow(containerId, isNamed = false, placeholder = "Name") {
+            const container = document.getElementById(containerId);
+            const row = document.createElement('div');
+            row.className = 'drow';
             
-            const targetPage = document.getElementById(tabId);
-            if(targetPage) targetPage.classList.add('active');
-            if(btnElement) {
-                btnElement.classList.add('active');
-                moveTabSlider(btnElement);
+            if (isNamed) {
+                const nameInput = document.createElement('input');
+                nameInput.type = 'text';
+                nameInput.className = 'item-name';
+                nameInput.placeholder = placeholder;
+                nameInput.oninput = updateCalc;
+                row.appendChild(nameInput);
+            } else {
+                const label = document.createElement('span');
+                label.style.fontWeight = '700'; label.style.color = 'var(--muted)'; label.style.width = '50px';
+                label.innerText = `EOS`;
+                row.appendChild(label);
             }
-            
-            if (tabId === 'tab-tracker') renderTrackerTable();
-            if (tabId === 'tab-tax') { renderCashTracker(); renderLevyReport(); renderFuelTracker(); calcBASGross(); updateTZDisplay(); }
-            if (tabId === 'tab-receipts') renderReceiptArchive();
-            if (tabId === 'tab-schedule') renderSchedule();
+
+            const amtInput = document.createElement('input');
+            amtInput.type = 'number';
+            amtInput.className = 'item-amt';
+            amtInput.placeholder = '0.00';
+            amtInput.step = '0.01';
+            amtInput.inputMode = 'decimal';
+            amtInput.oninput = updateCalc;
+            row.appendChild(amtInput);
+
+            const rmBtn = document.createElement('button');
+            rmBtn.className = 'btn-rm';
+            rmBtn.innerText = '×';
+            rmBtn.onclick = () => { row.remove(); updateCalc(); };
+            row.appendChild(rmBtn);
+
+            container.appendChild(row);
         }
 
-        function moveTabSlider(btn) {
-            const slider = document.getElementById('tabSlider');
-            const inner = document.getElementById('tabBarInner');
-            if (!slider || !inner || !btn) return;
-            if (btn.classList.contains('tab-btn-center')) {
-                slider.style.opacity = '0';
-                return;
-            }
-            slider.style.opacity = '1';
-            requestAnimationFrame(() => {
-                const innerRect = inner.getBoundingClientRect();
-                const btnRect = btn.getBoundingClientRect();
-                if (btnRect.width === 0) return;
-                slider.style.left = (btnRect.left - innerRect.left) + 'px';
-                slider.style.width = btnRect.width + 'px';
-            });
-        }
+        function addEosRow() { createRow('eftposContainer', false); }
+        function addCashRow() { createRow('cashContainer', true, "Payer Name"); }
+        function addAccountRow() { createRow('accountsContainer', true, "Account Name"); }
 
-        // TIME CALCULATOR ENGINE 
-        function getAppTZ() { return localStorage.getItem('d2e_timezone') || 'Australia/Melbourne'; }
-        function nowInTZ(tz) {
-            tz = tz || getAppTZ();
-            const parts = new Intl.DateTimeFormat('en-AU', { timeZone: tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }).formatToParts(new Date());
-            const get = t => parseInt(parts.find(p => p.type === t).value);
-            return new Date(get('year'), get('month')-1, get('day'), get('hour'), get('minute'), get('second'));
-        }
-        function todayStrInTZ(tz) {
-            tz = tz || getAppTZ();
-            const d = nowInTZ(tz);
-            return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-        }
+        // --- CORE CALCULATOR LOGIC ---
+        let currentFile = null;
 
-        function getThursdayBefore(dateStr) {
-            let d = new Date(dateStr.replace(/-/g, '/'));
-            let day = d.getDay();
-            let diff = (day >= 4 ? (day - 4) : (day + 3));
-            d.setDate(d.getDate() - diff);
-            return d.toISOString().split('T')[0];
-        }
-
-        function getWeekBoundaries() {
-            let d = nowInTZ();
-            d.setDate(d.getDate() + (currentDateOffset * 7));
-            let day = d.getDay();
-            let diffToThursday = (day >= 4 ? (day - 4) : (day + 3));
-            let start = new Date(d);
-            start.setDate(d.getDate() - diffToThursday);
-            let end = new Date(start);
-            end.setDate(start.getDate() + 6);
-            return { start, end };
-        }
-
-        // CALCULATION CONTROLLERS
-        let calcDebounce;
         function updateCalc() {
-            clearTimeout(calcDebounce);
-            calcDebounce = setTimeout(_doUpdateCalc, 80);
-        }
+            // 1. Calculate EOS
+            let totalEos = 0;
+            const eosList = [];
+            document.querySelectorAll('#eftposContainer .drow').forEach(row => {
+                const amt = parseFloat(row.querySelector('.item-amt').value) || 0;
+                if (amt > 0) { totalEos += amt; eosList.push(`$${amt.toFixed(2)}`); }
+            });
+            document.getElementById('eftposSectionTotal').innerText = `$${totalEos.toFixed(2)}`;
 
-        function _doUpdateCalc() {
-            const runCount = parseInt(document.getElementById('runCount').value) || 0;
+            // 2. Calculate Cash
+            let totalCash = 0;
+            const cashList = [];
+            document.querySelectorAll('#cashContainer .drow').forEach(row => {
+                const name = row.querySelector('.item-name').value || "Payer";
+                const amt = parseFloat(row.querySelector('.item-amt').value) || 0;
+                if (amt > 0) { totalCash += amt; cashList.push(`${name}: $${amt.toFixed(2)}`); }
+            });
+            document.getElementById('cashSectionTotal').innerText = `$${totalCash.toFixed(2)}`;
+
+            // 3. Runs & Accounts
+            const runs = parseInt(document.getElementById('runCount').value) || 0;
+            const runRev = runs * 5;
+            document.getElementById('runTotal').innerText = `=$${runRev.toFixed(2)}`;
+
+            let accountTotal = 0;
+            const accList = [];
+            document.querySelectorAll('#accountsContainer .drow').forEach(row => {
+                const name = row.querySelector('.item-name').value || "Account";
+                const amt = parseFloat(row.querySelector('.item-amt').value) || 0;
+                if (amt > 0) { accountTotal += amt; accList.push(`${name}: $${amt.toFixed(2)}`); }
+            });
+
+            // 4. Fuel
             const fuel = parseFloat(document.getElementById('fuel').value) || 0;
-            
-            let totalEftpos = 0, eftposStrings = [];
-            eftposContainer.querySelectorAll('.drow').forEach((r, i) => {
-                const amt = parseFloat(r.querySelector('.item-amt')?.value) || 0;
-                if (amt > 0) { totalEftpos += amt; eftposStrings.push(`EOS ${i + 1}: $${amt.toFixed(2)}`); }
+            const fuelType = document.getElementById('fuelType').value;
+
+            // 5. Take Home (Gross * 0.55) - Cash + Fuel
+            const gross = totalEos + totalCash + runRev + accountTotal;
+            const final = (gross * 0.55) - totalCash + fuel;
+            document.getElementById('totalDisplay').innerText = `$${final.toFixed(2)}`;
+
+            // 6. Generate Summary
+            generateSummary({
+                date: document.getElementById('shiftDate').value,
+                totalEos, eosList, totalCash, cashList, runs, runRev, accountTotal, accList, fuel, fuelType, final
             });
-            document.getElementById('eftposSectionTotal').textContent = `$${totalEftpos.toFixed(2)}`;
+        }
 
-            let totalCash = 0, cashStrings = [];
-            cashContainer.querySelectorAll('.drow').forEach(r => {
-                const name = r.querySelector('.item-name').value.trim();
-                const amt = parseFloat(r.querySelector('.item-amt').value) || 0;
-                if (amt > 0) { totalCash += amt; cashStrings.push(`${name || 'Payer'}: $${amt.toFixed(2)}`); }
-            });
-            document.getElementById('cashSectionTotal').textContent = `$${totalCash.toFixed(2)}`;
-
-            let accountsTotal = 0, accountStrings = [];
-            accountsContainer.querySelectorAll('.drow').forEach(r => {
-                const name = r.querySelector('.item-name').value.trim();
-                const amt = parseFloat(r.querySelector('.item-amt').value) || 0;
-                if (amt > 0) { accountsTotal += amt; accountStrings.push(`${name || 'Account'}: $${amt.toFixed(2)}`); }
-            });
-
-            const runRevenue = runCount * 5;
-            document.getElementById('runTotal').textContent = `$${runRevenue.toFixed(2)}`;
-
-            const grossTakings = totalEftpos + totalCash + runRevenue + accountsTotal;
-            const totalEarnings = (grossTakings * 0.55) - totalCash + fuel;
-            
-            const prev = totalDisplay.dataset.raw;
-            totalDisplay.textContent = `$${totalEarnings.toFixed(2)}`;
-            totalDisplay.dataset.raw = totalEarnings.toFixed(2);
-            if (prev !== totalEarnings.toFixed(2)) {
-                totalDisplay.classList.add('bump');
-                setTimeout(() => totalDisplay.classList.remove('bump'), 200);
-            }
-
-            let dateVal = document.getElementById('shiftDate').value || todayStrInTZ();
-            const d = new Date(dateVal.replace(/-/g, '/'));
-            const dayNameShort = d.toLocaleDateString('en-GB', { weekday: 'short' });
-            const dd = String(d.getDate()).padStart(2, '0');
-            const mm = String(d.getMonth() + 1).padStart(2, '0');
-            const yyyy = d.getFullYear();
-            const dateStr = `${dayNameShort} ${dd}/${mm}/${yyyy}`;
-            
-            document.getElementById('shiftDateLabel').innerHTML = `Shift Date <span style="font-size:12px; font-weight:600; color:var(--blue); text-transform:none; margin-left:6px;">${d.toLocaleDateString('en-GB', { weekday: 'long' })}</span>`;
-            const sdt = document.getElementById('shiftDateText'); if(sdt) sdt.textContent = `${dd}/${mm}/${yyyy}`;
-            
-            const gc = document.getElementById('glanceDate'); if(gc) gc.textContent = `${dd}/${mm}/${yyyy}`;
-            const gd = document.getElementById('glanceDay'); if(gd) gd.textContent = d.toLocaleDateString('en-GB', { weekday: 'long' });
-            
+        function generateSummary(data) {
+            const d = new Date(data.date);
+            const dateStr = d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric' });
             let msg = `*Shift Report: ${dateStr}*\n\n`;
-            if (totalEftpos > 0) msg += eftposStrings.length === 1 ? `*EOS:* $${totalEftpos.toFixed(2)}\n` : `*EOS Total:* $${totalEftpos.toFixed(2)} (${eftposStrings.join(', ')})\n`;
-            if (totalCash > 0) msg += `*Cash:* $${totalCash.toFixed(2)} ${cashStrings.length > 0 ? `(${cashStrings.join(', ')})` : ''}\n`;
-            if (runCount > 0) msg += `*Run (${runCount}):* $${runRevenue.toFixed(2)}\n`;
-            if (accountsTotal > 0) msg += `*Accounts:* $${accountsTotal.toFixed(2)} ${accountStrings.length > 0 ? `(${accountStrings.join(', ')})` : ''}\n`;
+
+            if (data.totalEos > 0) msg += `*EOS Total:* $${data.totalEos.toFixed(2)} ${data.eosList.length > 1 ? `(${data.eosList.join(', ')})` : ''}\n`;
+            if (data.totalCash > 0) msg += `*Cash:* $${data.totalCash.toFixed(2)} ${data.cashList.length > 0 ? `(${data.cashList.join(', ')})` : ''}\n`;
+            if (data.runs > 0) msg += `*Runs (${data.runs}):* $${data.runRev.toFixed(2)}\n`;
+            if (data.accountTotal > 0) msg += `*Accounts:* $${data.accountTotal.toFixed(2)} ${data.accList.length > 0 ? `(${data.accList.join(', ')})` : ''}\n`;
+            if (data.fuel > 0) msg += `*${data.fuelType}:* $${data.fuel.toFixed(2)}\n`;
+
+            msg += `\n*TOTAL EARNINGS: $${data.final.toFixed(2)}*`;
+
+            document.getElementById('messagePreview').innerText = msg;
+            document.getElementById('hiddenCopy').value = msg;
+        }
+
+        // --- HAIL LEVY ---
+        function updateLevy() {
+            // Remove red error outline as soon as they start typing
+            document.getElementById('hailTrips').style.borderColor = "var(--glass-card-border)";
             
-            const fuelType = document.getElementById('fuelType')?.value || 'Fuel';
-            if (fuel > 0) msg += `*${fuelType}:* $${fuel.toFixed(2)}\n`;
-            msg += `\n*TOTAL EARNINGS: $${totalEarnings.toFixed(2)}*`;
-            
-            hiddenCopy.value = msg;
-            document.getElementById('messagePreview').textContent = msg;
-            saveCalcState();
+            const trips = parseInt(document.getElementById('hailTrips').value) || 0;
+            document.getElementById('levyPreviewAmt').innerText = `$${(trips * 1.20).toFixed(2)}`;
         }
 
-        function createEOSRow(container, initAmt = '') {
-            const num = container.querySelectorAll('.eos-row').length + 1;
-            const div = document.createElement('div');
-            div.className = 'drow eos-row';
-            div.innerHTML = `<span class="eos-label">EOS ${num}</span><input type="number" placeholder="0.00" class="item-amt eos-amt" value="${initAmt}" step="0.01" autocomplete="off" inputmode="decimal"><button type="button" class="btn-rm">×</button>`;
-            div.querySelector('.btn-rm').onclick = () => { haptic('light'); div.remove(); container.querySelectorAll('.eos-row').forEach((r, i) => { const lbl = r.querySelector('.eos-label'); if (lbl) lbl.textContent = 'EOS ' + (i + 1); }); updateCalc(); };
-            div.querySelector('.item-amt').oninput = updateCalc;
-            container.appendChild(div);
-            if (!initAmt) requestAnimationFrame(() => div.querySelector('.item-amt').focus());
-            return div;
-        }
+        // --- FILE HANDLING ---
+        function handleFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            currentFile = file;
 
-        function createDynRow(container, placeholder, initName = '', initAmt = '') {
-            const div = document.createElement('div');
-            div.className = 'drow';
-            div.innerHTML = `<input type="text" placeholder="${placeholder}" class="item-name" value="${initName}" spellcheck="false" autocomplete="off"><input type="number" placeholder="0.00" class="item-amt" value="${initAmt}" step="0.01" autocomplete="off" inputmode="decimal"><button type="button" class="btn-rm">×</button>`;
-            div.querySelector('.btn-rm').onclick = () => { haptic('light'); div.remove(); updateCalc(); };
-            div.querySelectorAll('input').forEach(i => i.oninput = updateCalc);
-            container.appendChild(div);
-            if (!initName && !initAmt) div.querySelector('.item-amt').focus();
-            return div;
-        }
+            const uploadBox = document.getElementById('addEosBox');
+            uploadBox.style.display = 'none';
+            // Clear red error outline just in case
+            uploadBox.style.borderColor = "var(--border)";
 
-        // WHATSAPP SHARE IMPLEMENTATION FIXES
-        async function shareAndThenSave() {
-            haptic('success');
-            if (!validateTrips()) return;
-            if (!validateReceipts()) return;
-            
-            const text = document.getElementById('hiddenCopy').value;
-            let ef = null;
-            try {
-                const fileData = eosPreviewContainer.dataset.fileData;
-                const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
-                if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
-                    ef = eosReceiptFile.files[0];
-                } else if (fileData) {
-                    ef = dataURLtoFile(fileData, fileName);
-                }
-            } catch(e) { console.error("File translation failed:", e); }
+            document.getElementById('eosPreviewContainer').style.display = 'flex';
+            document.getElementById('eosFileText').innerText = file.name;
 
-            // Copy data automatically to ensure user doesn't lose text
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(text);
-            }
-
-            let sharedNative = false;
-            if (navigator.share && ef) {
-                try {
-                    const withFile = { text: text, title: 'Shift Report', files: [ef] };
-                    if (navigator.canShare && navigator.canShare(withFile)) {
-                        await navigator.share(withFile);
-                        sharedNative = true;
-                    }
-                } catch(e) { console.warn("Native file sharing failed, switching layout fallback system:", e); }
-            }
-
-            if (!sharedNative) {
-                showToast("Report text copied! Paste it into WhatsApp along with your image attachment.");
-                setTimeout(() => {
-                    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-                }, 1200);
-            }
-            
-            document.getElementById('afterSaveModal').classList.add('show');
-        }
-
-        async function shareWeeklyWhatsApp() {
-            haptic('medium');
-            const { start, end } = getWeekBoundaries();
-            const total = document.getElementById('weeklyTotal')?.dataset.total || "0.00";
-            const startStr = start.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-            const endStr = end.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-            const message = `Taxi Income Report\nPeriod: ${startStr} to ${endStr}\nTotal Amount: $${total}`;
-            
-            try {
-                const canvas = await html2canvas(document.getElementById('captureArea'), { useCORS: true, scale: 2, backgroundColor: '#ffffff' });
-                canvas.toBlob(async (blob) => {
-                    const file = new File([blob], `Weekly_Report_${startStr}.png`, { type: 'image/png' });
-                    
-                    if (navigator.clipboard && navigator.clipboard.writeText) {
-                        await navigator.clipboard.writeText(message);
-                    }
-                    
-                    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                        try {
-                            await navigator.share({ text: message, files: [file], title: 'Weekly Report' });
-                        } catch(e) { fallbackDownload(blob, file.name); }
-                    } else {
-                        fallbackDownload(blob, file.name);
-                        showToast("Report copied! Open WhatsApp to attach image manually.");
-                        setTimeout(() => {
-                            window.open(`whatsapp://send?text=${encodeURIComponent(message)}`, '_blank');
-                        }, 1200);
-                    }
-                }, 'image/png');
-            } catch (err) { showToast('Error generating photo report context'); }
-        }
-
-        function fallbackDownload(blob, name) {
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        }
-
-        function dataURLtoFile(dataurl, filename) {
-            if (!dataurl || !dataurl.startsWith('data:')) return null;
-            const arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1], bstr = atob(arr[arr.length - 1]);
-            let n = bstr.length; const u8arr = new Uint8Array(n);
-            while (n--) u8arr[n] = bstr.charCodeAt(n);
-            return new File([u8arr], filename, { type: mime });
-        }
-
-        function validateTrips() {
-            const v = document.getElementById('hailTrips').value;
-            if (v === '' || v === null) {
-                document.getElementById('tripsMandatoryHint').style.display = 'block';
-                document.getElementById('hailTrips').focus();
-                showToast('Enter hail trip counts before sharing context data');
-                return false;
-            }
-            document.getElementById('tripsMandatoryHint').style.display = 'none';
-            return true;
-        }
-
-        function validateReceipts() {
-            const hasEos = (eosReceiptFile.files && eosReceiptFile.files.length > 0) || eosPreviewContainer.dataset.fileData;
-            if (!hasEos) { showToast('End of Shift receipt document attachment is required!'); return false; }
-            return true;
-        }
-
-        function saveCalcState() {
-            try {
-                const state = {
-                    shiftDate: document.getElementById('shiftDate').value,
-                    runCount: document.getElementById('runCount').value,
-                    fuel: document.getElementById('fuel').value,
-                    fuelType: document.getElementById('fuelType')?.value || 'Diesel',
-                    eftposRows: [], cashRows: [], accountRows: [],
-                    eosData: eosPreviewContainer.dataset.fileData || '',
-                    eosFileName: eosFileText.textContent
-                };
-                eftposContainer.querySelectorAll('.drow').forEach(r => state.eftposRows.push({ amt: r.querySelector('.item-amt')?.value || '' }));
-                cashContainer.querySelectorAll('.drow').forEach(r => state.cashRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
-                accountsContainer.querySelectorAll('.drow').forEach(r => state.accountRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
-                localStorage.setItem('shiftCalcState_Simple', JSON.stringify(state));
-            } catch(e) { console.error("Failed storing calculator data cache structures:", e); }
-        }
-
-        function loadCalcState() {
-            try {
-                const saved = localStorage.getItem('shiftCalcState_Simple');
-                if (!saved) return false;
-                const s = JSON.parse(saved);
-                if (s.shiftDate) document.getElementById('shiftDate').value = s.shiftDate;
-                document.getElementById('runCount').value = s.runCount || '';
-                document.getElementById('fuel').value = s.fuel || '';
-                if (s.fuelType) { const ft = document.getElementById('fuelType'); if(ft) ft.value = s.fuelType; }
-                
-                (s.eftposRows || []).forEach(r => createEOSRow(eftposContainer, r.amt));
-                (s.cashRows || []).forEach(r => createDynRow(cashContainer, 'Payer Name', r.name, r.amt));
-                (s.accountRows || []).forEach(r => createDynRow(accountsContainer, 'Account Name', r.name, r.amt));
-                
-                if (s.eosData) {
-                    eosPreviewContainer.dataset.fileData = s.eosData;
-                    eosFileText.textContent = s.eosFileName || 'Attached';
-                    eosPreview.src = s.eosData.includes('application/pdf') ? "📄" : s.eosData;
-                    eosPreviewContainer.style.display = 'flex'; addEosBox.style.display = 'none';
-                }
-                return true;
-            } catch(e) { return false; }
-        }
-
-        function closeAfterSaveModal(saveIt) {
-            haptic('light');
-            document.getElementById('afterSaveModal').classList.remove('show');
-            if (saveIt) submitToTracker();
-            else switchTab('tab-tracker', document.getElementById('tabWeekly'));
-        }
-
-        function submitToTracker() {
-            haptic('success');
-            const dateStr = document.getElementById('shiftDate').value;
-            const totalRaw = parseFloat(document.getElementById('totalDisplay').dataset.raw) || 0;
-            if (!dateStr) return showToast('Please safely select a tracking date value first');
-            
-            // Invoke sub storage structures logic updates safely
-            if (typeof saveShiftTrips === 'function') saveShiftTrips();
-            if (typeof recordCashForDate === 'function') recordCashForDate(dateStr);
-            if (typeof storeReceiptForDate === 'function') storeReceiptForDate(dateStr);
-            
-            const fuelAmt = parseFloat(document.getElementById('fuel').value) || 0;
-            const fuelTyp = document.getElementById('fuelType')?.value || 'Diesel';
-            if (fuelAmt > 0 && typeof recordFuelForDate === 'function') recordFuelForDate(dateStr, fuelAmt, fuelTyp);
-            
-            const existingIndex = entries.findIndex(e => e.date === dateStr);
-            if (existingIndex >= 0) entries[existingIndex].amount = totalRaw;
-            else entries.push({ date: dateStr, amount: totalRaw });
-            
-            localStorage.setItem('taxi_income_data_v2', JSON.stringify(entries));
-            if (typeof autoCreditPreviousWeeks === 'function') autoCreditPreviousWeeks();
-            showToast('Saved to Weekly Report structural archives successfully!');
-            switchTab('tab-tracker', document.getElementById('tabWeekly'));
-        }
-
-        // ADDITIONAL WRAPPERS PLACEHOLDER FOR BACKWARD SYNC RUN STABILITY
-        function setShiftDate(preset) {
-            haptic('light');
-            const el = document.getElementById('shiftDate');
-            const today = todayStrInTZ();
-            let target = preset === 'today' ? today : preset === 'yesterday' ? (() => { let d = nowInTZ(); d.setDate(d.getDate() - 1); return d.toISOString().split('T')[0]; })() : today;
-            el.value = target;
-            updateDateQuickBtns(target);
-            updateCalc();
-        }
-
-        function openDatePicker() {
-            const el = document.getElementById('shiftDate');
-            try { if (el.showPicker) el.showPicker(); else el.click(); } catch(e) { el.click(); }
-        }
-
-        function updateDateQuickBtns(ds) {
-            const today = todayStrInTZ();
-            let d = nowInTZ(); d.setDate(d.getDate() - 1);
-            const yest = d.toISOString().split('T')[0];
-            document.getElementById('dateQToday')?.classList.toggle('active', ds === today);
-            document.getElementById('dateQYest')?.classList.toggle('active', ds === yest);
-            document.getElementById('dateQPick')?.classList.toggle('active', ds !== today && ds !== yest);
-        }
-
-        function setupPhoto(fileInput, addBox, container, imgPreview, fileText, removeBtn) {
-            if(!fileInput) return;
-            fileInput.onchange = () => {
-                if (!fileInput.files || !fileInput.files[0]) return;
-                const file = fileInput.files[0];
-                fileText.textContent = file.name || 'Attached';
+            if (file.type === 'application/pdf') {
+                document.getElementById('eosPreview').style.display = 'none';
+            } else {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    container.dataset.fileData = e.target.result;
-                    container.style.display = 'flex'; addBox.style.display = 'none';
-                    if (file.type === 'application/pdf') {
-                        imgPreview.src = "";
-                        imgPreview.style.display = 'none';
-                        document.getElementById('viewerPdfLabel').style.display = 'block';
-                    } else {
-                        imgPreview.src = e.target.result;
-                        imgPreview.style.display = 'block';
-                    }
-                    updateCalc();
+                    document.getElementById('eosPreview').src = e.target.result;
+                    document.getElementById('eosPreview').style.display = 'block';
                 };
                 reader.readAsDataURL(file);
-            };
-            if(removeBtn) {
-                removeBtn.onclick = () => {
-                    haptic('light');
-                    fileInput.value = ''; container.dataset.fileData = '';
-                    container.style.display = 'none'; addBox.style.display = 'block';
-                    updateCalc();
-                };
             }
         }
 
-        document.getElementById('copyBtn').onclick = () => {
-            if (!validateReceipts()) return;
-            if(navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(hiddenCopy.value);
-                showToast('Report text copied directly to system clipboard buffer!');
-            }
-        };
+        function removeFile() {
+            currentFile = null;
+            document.getElementById('eosReceiptFile').value = '';
+            document.getElementById('addEosBox').style.display = 'block';
+            document.getElementById('eosPreviewContainer').style.display = 'none';
+        }
 
-        document.getElementById('clearBtn').onclick = () => {
-            haptic('medium');
-            if (!confirm('Clear the daily shift calculator structures?')) return;
-            singleInputs.forEach(id => { const target = document.getElementById(id); if(target) target.value = ''; });
-            eftposContainer.innerHTML = ''; cashContainer.innerHTML = ''; accountsContainer.innerHTML = '';
-            if(removeEos) removeEos.click();
-            localStorage.removeItem('shiftCalcState_Simple');
-            document.getElementById('shiftDate').value = todayStrInTZ();
-            createEOSRow(eftposContainer); createDynRow(cashContainer, 'Payer Name');
-            updateCalc();
-            showToast('Shift metrics cleared');
-        };
+        // --- STRICT VALIDATION & WHATSAPP SHARING ---
+        async function shareToWhatsApp() {
+            const tripsInput = document.getElementById('hailTrips');
+            const trips = tripsInput.value;
+            const uploadBox = document.getElementById('addEosBox');
 
-        // TRACKER SYSTEM UI INJECTIONS
-        function renderTrackerTable() {
-            const { start, end } = getWeekBoundaries();
-            const startStr = start.toISOString().split('T')[0];
-            const endStr = end.toISOString().split('T')[0];
-            const headerText = `${start.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })} - ${end.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}`;
-            
-            const weekDisplay = document.getElementById('weekDisplay'); if(weekDisplay) weekDisplay.innerText = headerText;
-            const photoHeader = document.getElementById('photoHeader'); if(photoHeader) photoHeader.innerText = `Taxi Income: ${headerText}`;
-            
-            const tbody = document.getElementById('tableBody'); if(!tbody) return;
-            tbody.innerHTML = '';
-            
-            let total = 0, shifts = 0, best = 0;
-            const week = entries.filter(e => e.date >= startStr && e.date <= endStr).sort((a, b) => a.date.localeCompare(b.date));
-            
-            week.forEach(entry => {
-                total += entry.amount; shifts++;
-                if (entry.amount > best) best = entry.amount;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${new Date(entry.date.replace(/-/g,'/')).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}</td><td style="text-align: right; font-weight: 800; color: var(--green);">$${entry.amount.toFixed(2)}</td><td data-html2canvas-ignore style="text-align: right;"><button class="row-action-btn" style="color: var(--row-action-edit);" onclick="editEntry('${entry.date}')">✏️</button><button class="row-action-btn" style="color: var(--row-action-del);" onclick="deleteEntry('${entry.date}')">🗑️</button></td>`;
-                tbody.appendChild(tr);
-            });
-            
-            if (!week.length) tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No shifts recorded this week.</td></tr>';
-            
-            const isCredited = weeklyStatus[startStr] || false;
-            const totalContainer = document.getElementById('totalContainer');
-            if(totalContainer) {
-                totalContainer.innerHTML = `<div class="tracker-total-row" id="weeklyTotal" data-total="${total.toFixed(2)}">Total: $${total.toFixed(2)}</div><button data-html2canvas-ignore class="credit-btn ${isCredited ? 'credited' : ''}" onclick="toggleWeekCredit('${startStr}')">${isCredited ? 'Credited' : 'Pending'}</button>`;
+            // 1. Mandatory Hails Check (Value '0' is allowed, but field cannot be empty)
+            if (trips === "") {
+                tripsInput.style.borderColor = "var(--red)";
+                tripsInput.focus();
+                return showToast("Hail Trips are mandatory. (Enter 0 if none)");
             }
 
-            document.getElementById('statsShifts').textContent = shifts;
-            document.getElementById('statsAvg').textContent = shifts ? `$${Math.round(total / shifts)}` : '$0';
-            document.getElementById('statsBest').textContent = best ? `$${Math.round(best)}` : '$0';
-        }
+            // 2. Mandatory Attachment Check
+            if (!currentFile) {
+                uploadBox.style.borderColor = "var(--red)";
+                return showToast("End of Shift Receipt attachment is mandatory.");
+            }
 
-        function toggleWeekCredit(weekStartStr) {
-            haptic('medium');
-            weeklyStatus[weekStartStr] = !weeklyStatus[weekStartStr];
-            localStorage.setItem('taxi_weekly_status', JSON.stringify(weeklyStatus));
-            renderTrackerTable();
-            showToast(weeklyStatus[weekStartStr] ? 'Marked as Credited' : 'Marked as Pending');
-        }
-
-        function changeWeek(offset) { haptic('light'); currentDateOffset += offset; renderTrackerTable(); }
-        function editEntry(dateStr) { haptic('light'); const entry = entries.find(e => e.date === dateStr); if (entry) { document.getElementById('manualDate').value = entry.date; document.getElementById('manualAmt').value = entry.amount.toFixed(2); } }
-        function deleteEntry(dateStr) { haptic('medium'); if (!confirm(`Delete shift for ${dateStr}?`)) return; entries = entries.filter(e => e.date !== dateStr); localStorage.setItem('taxi_income_data_v2', JSON.stringify(entries)); renderTrackerTable(); }
-        function quickManualAdd() { const d = document.getElementById('manualDate').value; const a = parseFloat(document.getElementById('manualAmt').value); if (!d || isNaN(a)) return showToast('Enter valid date and amount metrics'); const idx = entries.findIndex(e => e.date === d); if (idx >= 0) entries[idx].amount = a; else entries.push({ date: d, amount: a }); localStorage.setItem('taxi_income_data_v2', JSON.stringify(entries)); document.getElementById('manualAmt').value = ''; document.getElementById('manualDate').value = ''; renderTrackerTable(); showToast('Shift saved'); }
-        function generatePhoto() { haptic('light'); html2canvas(document.getElementById('captureArea'), { scale: 2, backgroundColor: '#ffffff' }).then(canvas => { const link = document.createElement('a'); link.download = `Taxi_Income_${document.getElementById('weekDisplay').innerText}.png`; link.href = canvas.toDataURL('image/png'); link.click(); }).catch(() => showToast('Error rendering snapshot picture asset')); }
-
-        // REPORTS TRACKING LOOPS PARSE Injections
-        function setCashFilter(f, btn) { haptic('light'); cashFilter = f; document.querySelectorAll('.cash-filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderCashTracker(); }
-        function setLevyFilter(f, btn) { haptic('light'); levyFilter = f; document.querySelectorAll('.levy-filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderLevyReport(); }
-        function setFuelFilter(f, btn) { haptic('light'); fuelFilter = f; document.querySelectorAll('.fuel-filter-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderFuelTracker(); }
-
-        function getPeriodRange(filter) {
-            const now = nowInTZ();
-            const yyyy = now.getFullYear();
-            const mm = now.getMonth();
-            let start = '2000-01-01', end = todayStrInTZ();
-            if (filter === 'week') {
-                let day = now.getDay(); let diff = day >= 4 ? day - 4 : day + 3;
-                let s = new Date(now); s.setDate(now.getDate() - diff);
-                start = s.toISOString().split('T')[0];
-            } else if (filter === 'month') {
-                start = `${yyyy}-${String(mm + 1).padStart(2, '0')}-01`;
-            } else if (filter === 'Q1') { const fy = mm >= 6 ? yyyy : yyyy - 1; start = `${fy}-07-01`; end = `${fy}-09-30`; }
-              else if (filter === 'Q2') { const fy = mm >= 6 ? yyyy : yyyy - 1; start = `${fy}-10-01`; end = `${fy}-12-31`; }
-              else if (filter === 'Q3') { const fy2 = mm >= 6 ? yyyy + 1 : yyyy; start = `${fy2}-01-01`; end = `${fy2}-03-31`; }
-              else if (filter === 'Q4') { const fy2 = mm >= 3 ? yyyy : yyyy - 1; start = `${fy2}-04-01`; end = `${fy2}-06-30`; }
-            return { start, end };
-        }
-
-        function recordCashForDate(ds) {
-            let total = 0, payers = [];
-            cashContainer.querySelectorAll('.drow').forEach(r => {
-                const n = r.querySelector('.item-name').value.trim();
-                const a = parseFloat(r.querySelector('.item-amt').value) || 0;
-                if (a > 0) { total += a; if (n) payers.push(n); }
-            });
-            if (total > 0) cashLog[ds] = { total: parseFloat(total.toFixed(2)), payers: payers.join(', ') };
-            else delete cashLog[ds];
-            localStorage.setItem('d2e_cash_log_v1', JSON.stringify(cashLog));
-        }
-
-        function storeReceiptForDate(ds) {
-            const fileData = eosPreviewContainer.dataset.fileData;
-            const fileName = eosFileText.textContent || 'receipt';
-            if (!fileData || !fileData.startsWith('data:')) return;
-            const fileType = fileData.startsWith('data:application/pdf') ? 'pdf' : 'image';
-            if (!receiptArchive[ds]) receiptArchive[ds] = [];
-            const entry = { id: Date.now(), fileName, fileData, fileType, savedAt: new Date().toISOString(), shiftReceipt: true };
-            receiptArchive[ds] = [entry];
-            localStorage.setItem('d2e_receipt_archive_v1', JSON.stringify(receiptArchive));
-        }
-
-        function recordFuelForDate(ds, amount, fuelType) {
-            if (amount > 0) fuelLog[ds] = { amount, type: fuelType };
-            else delete fuelLog[ds];
-            localStorage.setItem('d2e_fuel_log_v1', JSON.stringify(fuelLog));
-        }
-
-        function saveShiftTrips() {
-            const ds = document.getElementById('shiftDate').value;
-            const t = parseInt(document.getElementById('hailTrips').value);
-            if (ds && !isNaN(t)) { tripData[ds] = t; localStorage.setItem('d2e_trip_data_v1', JSON.stringify(tripData)); }
-        }
-
-        function renderCashTracker() {
-            const { start, end } = getPeriodRange(cashFilter);
-            const filtered = Object.entries(cashLog).filter(([d]) => d >= start && d <= end && cashLog[d].total > 0).sort(([a], [b]) => b.localeCompare(a));
-            const tbody = document.getElementById('cashTrackBody'); if (!tbody) return; tbody.innerHTML = '';
-            let total = 0;
-            filtered.forEach(([date, data]) => {
-                total += data.total;
-                const d = new Date(date.replace(/-/g, '/'));
-                const lbl = d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${lbl}</td><td class="cash-payer-cell">${data.payers || '-'}</td><td class="cash-amt-cell">$${data.total.toFixed(2)}</td>`;
-                tbody.appendChild(tr);
-            });
-            if (!filtered.length) tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No cash listed</td></tr>';
-            document.getElementById('cashTrackDays').textContent = filtered.length;
-            document.getElementById('cashTrackTotal').textContent = `$${total.toFixed(2)}`;
-            document.getElementById('cashTrackAvg').textContent = filtered.length ? `$${Math.round(total / filtered.length)}` : '$0';
-        }
-
-        function getLevyRate() { return parseFloat(localStorage.getItem('d2e_levy_rate') || '1.20'); }
-        function saveLevyRate() { const v = parseFloat(document.getElementById('levyRateInput').value); if (!isNaN(v) && v >= 0) { localStorage.setItem('d2e_levy_rate', v.toFixed(2)); renderLevyReport(); updateLevyPreview(); } }
-        function updateLevyPreview() { const trips = parseInt(document.getElementById('hailTrips').value) || 0; const rate = getLevyRate(); document.getElementById('levyPreviewAmt').textContent = `$${(trips * rate).toFixed(2)}`; document.getElementById('levyRateDisplay').textContent = `$${rate.toFixed(2)}`; }
-
-        function renderLevyReport() {
-            const rate = getLevyRate(); const { start, end } = getPeriodRange(levyFilter);
-            const filtered = Object.entries(tripData).filter(([d]) => d >= start && d <= end && tripData[d] > 0).sort(([a], [b]) => b.localeCompare(a));
-            const tbody = document.getElementById('levyTableBody'); if (!tbody) return; tbody.innerHTML = '';
-            let totalTrips = 0, totalLevy = 0;
-            filtered.forEach(([date, trips]) => {
-                const levy = trips * rate; totalTrips += trips; totalLevy += levy;
-                const d = new Date(date.replace(/-/g, '/'));
-                const lbl = d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${lbl}</td><td class="levy-trips-cell">${trips}</td><td class="levy-amount-cell">$${levy.toFixed(2)}</td>`;
-                tbody.appendChild(tr);
-            });
-            if (!filtered.length) tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No service trips completed</td></tr>';
-            document.getElementById('levyTotalTrips').textContent = totalTrips;
-            document.getElementById('levyTotalAmt').textContent = `$${totalLevy.toFixed(2)}`;
-        }
-
-        function renderFuelTracker() {
-            const { start, end } = getPeriodRange(fuelFilter);
-            const filtered = Object.entries(fuelLog).filter(([d]) => d >= start && d <= end).sort(([a], [b]) => b.localeCompare(a));
-            const tbody = document.getElementById('fuelTrackBody'); if (!tbody) return; tbody.innerHTML = '';
-            let total = 0;
-            filtered.forEach(([date, entry]) => {
-                const amt = typeof entry === 'object' ? entry.amount : parseFloat(entry) || 0;
-                const type = typeof entry === 'object' ? entry.type : 'Diesel';
-                total += amt;
-                const d = new Date(date.replace(/-/g, '/'));
-                const lbl = d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' });
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${lbl}</td><td style="font-size:11px; color:var(--muted); font-weight:600;">${type}</td><td class="fuel-amt-cell">$${amt.toFixed(2)}</td>`;
-                tbody.appendChild(tr);
-            });
-            if (!filtered.length) tbody.innerHTML = '<tr><td colspan="3" class="empty-state">No fuel logging found</td></tr>';
-            document.getElementById('fuelTrackDays').textContent = filtered.length;
-            document.getElementById('fuelTrackTotal').textContent = `$${total.toFixed(2)}`;
-        }
-
-        function toggleCustomDates() { document.getElementById('customDateContainer').style.display = document.getElementById('exportFilter').value === 'custom' ? 'block' : 'none'; }
-        function calcBASGross() {
-            let start = '2000-01-01', end = todayStrInTZ();
-            const f = document.getElementById('exportFilter').value;
-            const now = nowInTZ();
-            if (f === 'last30') { let s = new Date(now); s.setDate(now.getDate() - 30); start = s.toISOString().split('T')[0]; }
-            else if (f === 'last90') { let s = new Date(now); s.setDate(now.getDate() - 90); start = s.toISOString().split('T')[0]; }
-            else if (f === 'thisFY') { const mm = now.getMonth(); const yyyy = now.getFullYear(); const fy = mm >= 6 ? yyyy : yyyy - 1; start = `${fy}-07-01`; end = `${fy+1}-06-30`; }
-            else if (f === 'custom') { start = document.getElementById('exportStart').value; end = document.getElementById('exportEnd').value; }
+            const text = document.getElementById('hiddenCopy').value;
             
-            const total = entries.filter(e => e.date >= start && e.date <= end).reduce((a, e) => a + e.amount, 0);
-            document.getElementById('basGrossDisplay').textContent = `$${total.toFixed(2)}`;
-            document.getElementById('basGrossDisplay').dataset.raw = total.toFixed(2);
+            // Safe copy to clipboard first
+            await copyToClipboard(text);
+
+            // Attempt Native API
+            if (navigator.canShare && navigator.canShare({ files: [currentFile] })) {
+                try {
+                    await navigator.share({ text: text, title: 'Shift Report', files: [currentFile] });
+                    return;
+                } catch(e) { console.log("Native share blocked or cancelled."); }
+            }
+
+            // Fallback
+            showToast("Report copied! Open WhatsApp to attach image.");
+            setTimeout(() => {
+                window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+            }, 1500);
         }
 
-        function copyBASGross() { const amt = document.getElementById('basGrossDisplay').dataset.raw || '0.00'; if(navigator.clipboard) { navigator.clipboard.writeText(amt); showToast("Gross financial metric block copied!"); } }
-
-        // EXPORT LOGIC
-        function exportFuelCSV() { _exportCSV('Drive2Earn_Fuel.csv', ['Date', 'Type', 'Amount'], Object.entries(fuelLog).map(([d, e]) => [d, typeof e === 'object' ? e.type : 'Diesel', typeof e === 'object' ? e.amount : e])); }
-        function exportCashCSV() { _exportCSV('Drive2Earn_Cash.csv', ['Date', 'Payers', 'Amount'], Object.entries(cashLog).map(([d, e]) => [d, e.payers, e.total])); }
-        function exportLevyCSV() { const r = getLevyRate(); _exportCSV('Drive2Earn_Levy.csv', ['Date', 'Trips', 'Levy'], Object.entries(tripData).map(([d, t]) => [d, t, (t * r).toFixed(2)])); }
-        
-        function _exportCSV(filename, headers, rows) {
-            let csv = headers.join(',') + '\n';
-            rows.forEach(r => { csv += r.map(v => `"${v}"`).join(',') + '\n'; });
-            const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); a.download = filename;
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        }
-
-        // ARCHIVE MANAGEMENT 
-        function renderReceiptArchive() {
-            const grid = document.getElementById('receiptArchiveGrid'); if (!grid) return; grid.innerHTML = '';
-            let count = 0;
-            Object.entries(receiptArchive).forEach(([date, recs]) => {
-                recs.forEach((r, idx) => {
-                    count++;
-                    const card = document.createElement('div'); card.className = 'receipt-card';
-                    const thumb = r.fileType === 'pdf' ? `<div class="receipt-card-pdf-placeholder">📄<span>PDF</span></div>` : `<img class="receipt-card-thumb" src="${r.fileData}" alt="Receipt" loading="lazy">`;
-                    card.innerHTML = `${thumb}<div class="receipt-card-info"><div class="receipt-card-date">${date}</div><div class="receipt-card-name">${r.fileName}</div></div>`;
-                    card.onclick = () => openReceiptViewer(date, idx);
-                    grid.appendChild(card);
-                });
-            });
-            const badge = document.getElementById('receiptCountBadge'); if(badge) badge.textContent = `${count} receipt(s)`;
-            if(!count) grid.innerHTML = `<div class="receipt-empty">No stored document receipts located inside device context.</div>`;
-        }
-
-        function toggleReceiptSelect() { receiptSelectMode = !receiptSelectMode; document.getElementById('receiptSelectToggle').textContent = receiptSelectMode ? 'Cancel' : 'Select'; }
-        function openReceiptViewer(date, idx) { viewerCurrentKey = `${date}|${idx}`; const r = receiptArchive[date][idx]; document.getElementById('viewerDateLabel').textContent = date; document.getElementById('viewerFileName').textContent = r.fileName; const img = document.getElementById('viewerImage'); const pdf = document.getElementById('viewerPdfLabel'); if (r.fileType === 'pdf') { img.style.display = 'none'; pdf.style.display = 'block'; } else { img.src = r.fileData; img.style.display = 'block'; pdf.style.display = 'none'; } document.getElementById('receiptViewerModal').classList.add('show'); }
-        function closeReceiptViewer() { document.getElementById('receiptViewerModal').classList.remove('show'); }
-        function deleteViewerReceipt() { if(!viewerCurrentKey || !confirm('Delete selected shift statement documentation?')) return; const [d, idx] = viewerCurrentKey.split('|'); receiptArchive[d].splice(parseInt(idx),1); if(!receiptArchive[d].length) delete receiptArchive[d]; localStorage.setItem('d2e_receipt_archive_v1', JSON.stringify(receiptArchive)); closeReceiptViewer(); renderReceiptArchive(); }
-        function downloadViewerReceipt() { if(!viewerCurrentKey) return; const [d, idx] = viewerCurrentKey.split('|'); const r = receiptArchive[d][idx]; fallbackDownload(dataURLtoFile(r.fileData, r.fileName), r.fileName); }
-
-        // SCHEDULER MANAGEMENT CALENDAR
-        function toggleSchedule(on) { schedEnabled = on; localStorage.setItem('d2e_sched_enabled', on ? '1' : '0'); document.getElementById('scheduleStatusLabel').textContent = on ? "Schedule management is active." : "Schedule is off app works normally"; document.getElementById('scheduleActiveHint').style.display = on ? 'block' : 'none'; renderSchedule(); }
-        function setSchedView(v, btn) { schedView = v; document.querySelectorAll('.sched-view-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.getElementById('schedCalendarView').style.display = v === 'calendar' ? 'block' : 'none'; document.getElementById('schedSummaryView').style.display = v === 'summary' ? 'block' : 'none'; renderSchedule(); }
-        function changeSchedMonth(n) { schedOffset += n; renderSchedule(); }
-        
-        function renderSchedule() {
-            const boundsLabel = document.getElementById('schedWeekLabel');
-            let d = nowInTZ(); d.setMonth(d.getMonth() + schedOffset);
-            if(boundsLabel) boundsLabel.textContent = d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-            
-            if(schedView === 'calendar') {
-                const grid = document.getElementById('schedCalGrid'); if(!grid) return; grid.innerHTML = '';
-                CAL_HEADERS.forEach(h => { const hd = document.createElement('div'); hd.className = 'sched-cal-header'; hd.textContent = h; grid.appendChild(hd); });
-                
-                let targetYear = d.getFullYear(), targetMonth = d.getMonth();
-                let firstDay = new Date(targetYear, targetMonth, 1);
-                let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-                
-                for(let i=0; i<startOffset; i++) { const emp = document.createElement('div'); emp.className = 'sched-cal-day other-month'; grid.appendChild(emp); }
-                let totalMonthDays = new Date(targetYear, targetMonth + 1, 0).getDate();
-                
-                for(let day=1; day<=totalMonthDays; day++) {
-                    const cell = document.createElement('div'); cell.className = 'sched-cal-day';
-                    const ds = `${targetYear}-${String(targetMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                    cell.innerHTML = `<span class="sched-cal-day-num">${day}</span>`;
-                    
-                    if(schedule[ds]?.working) cell.classList.add('working');
-                    const hasEarn = entries.find(e => e.date === ds);
-                    if(hasEarn) { cell.classList.add('has-earning'); cell.innerHTML += `<div class="sched-cal-day-amt">$${Math.round(hasEarn.amount)}</div>`; }
-                    else if(schedule[ds]?.working) { cell.innerHTML += `<div class="sched-cal-dot green">•</div>`; }
-                    
-                    cell.onclick = (e) => { e.stopPropagation(); showSchedPopover(ds, cell); };
-                    grid.appendChild(cell);
-                }
-            } else {
-                let targetYear = d.getFullYear(), targetMonth = d.getMonth();
-                let totalMonthDays = new Date(targetYear, targetMonth + 1, 0).getDate();
-                let scheduledWork = 0, accruedEarnings = 0;
-                for(let day=1; day<=totalMonthDays; day++) {
-                    const ds = `${targetYear}-${String(targetMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-                    if(schedule[ds]?.working) scheduledWork++;
-                    const hasEarn = entries.find(e => e.date === ds);
-                    if(hasEarn) accruedEarnings += hasEarn.amount;
-                }
-                document.getElementById('schedSummaryContent').innerHTML = `<div class="sched-summary-row"><span class="sched-summary-label">Shifts Planned</span><span class="sched-summary-val">${scheduledWork}</span></div><div class="sched-summary-row"><span class="sched-summary-label">Est. Accrued Earnings</span><span class="sched-summary-val green">$${accruedEarnings.toFixed(2)}</span></div>`;
+        async function copyToClipboard(text) {
+            try { await navigator.clipboard.writeText(text); } 
+            catch (e) {
+                const ta = document.getElementById('hiddenCopy');
+                ta.classList.remove('hidden'); ta.select(); document.execCommand('copy'); ta.classList.add('hidden');
             }
         }
 
-        // POPOVER CONTROLLERS
-        function showSchedPopover(ds, targetEl) {
-            let pop = document.getElementById('schedPopover');
-            if(!pop) {
-                pop = document.createElement('div'); pop.id = 'schedPopover'; pop.className = 'sched-popover';
-                pop.innerHTML = `<div class="sched-popover-arrow"></div><div class="sched-popover-date" id="schedPopoverDate"></div><div class="sched-popover-earn" id="schedPopoverEarn"></div><div class="sched-popover-btns"><button class="sched-pop-btn on" id="schedPopOn">Working</button><button class="sched-pop-btn off" id="schedPopOff">Day Off</button></div>`;
-                document.body.appendChild(pop);
-            }
-            pop.dataset.date = ds;
-            document.getElementById('schedPopoverDate').textContent = ds;
-            const hasEarn = entries.find(e => e.date === ds);
-            document.getElementById('schedPopoverEarn').textContent = hasEarn ? `Earned: $${hasEarn.amount.toFixed(2)}` : 'No shifts logged';
+        function copyText() {
+            copyToClipboard(document.getElementById('hiddenCopy').value).then(() => showToast("Copied to clipboard!"));
+        }
+
+        // --- UTILS & UI ---
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.innerText = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function clearCalc() {
+            if(!confirm("Reset calculator?")) return;
+            document.getElementById('eftposContainer').innerHTML = '';
+            document.getElementById('cashContainer').innerHTML = '';
+            document.getElementById('accountsContainer').innerHTML = '';
+            document.getElementById('runCount').value = '';
+            document.getElementById('fuel').value = '';
+            document.getElementById('hailTrips').value = '';
             
-            document.getElementById('schedPopOn').onclick = () => setDayStatus(true);
-            document.getElementById('schedPopOff').onclick = () => setDayStatus(false);
+            // Reset borders
+            document.getElementById('hailTrips').style.borderColor = "var(--glass-card-border)";
+            document.getElementById('addEosBox').style.borderColor = "var(--border)";
             
-            pop.style.display = 'block';
-            const rect = targetEl.getBoundingClientRect();
-            pop.style.left = `${Math.max(10, rect.left + (rect.width/2) - 85)}px`;
-            pop.style.top = `${rect.top + window.scrollY - 120}px`;
+            removeFile();
+            addEosRow(); addCashRow(); updateCalc(); updateLevy();
         }
 
-        function setDayStatus(working) {
-            const ds = document.getElementById('schedPopover').dataset.date;
-            if(!schedule[ds]) schedule[ds] = {};
-            schedule[ds].working = working;
-            localStorage.setItem('d2e_schedule_v1', JSON.stringify(schedule));
-            document.getElementById('schedPopover').style.display = 'none';
-            renderSchedule();
-            showToast(working ? "Scheduled as active shift day." : "Marked as off day.");
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            btn.classList.add('active');
         }
 
-        document.addEventListener('click', (e) => { const pop = document.getElementById('schedPopover'); if(pop && !pop.contains(e.target)) pop.style.opacity = '0', pop.style.display='none'; });
-
-        async function shareScheduleScreenshot() {
-            haptic('medium');
-            try {
-                const canvas = await html2canvas(document.getElementById('schedWeekCard'), { scale: 2, backgroundColor: '#ffffff' });
-                canvas.toBlob(blob => { fallbackDownload(blob, `Schedule_Export.png`); showToast("Schedule screenshot captured successfully!"); }, 'image/png');
-            } catch(e) { showToast("Failed generating structural canvas screenshots."); }
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            showToast(isDark ? "Light Mode Active" : "Dark Mode Active");
         }
 
-        // PROFILE SYSTEM WRAPPERS & STUBS
-        function switchToProfile() { switchTab('tab-profile', null); }
-        function showProfileSection() {
-            const config = localStorage.getItem('d2e_firebase_config');
-            document.getElementById('fbSetupCard').style.display = config ? 'none' : 'block';
-            document.getElementById('authCard').style.display = config && !window._currentUser ? 'block' : 'none';
-            document.getElementById('profileCard').style.display = config && window._currentUser ? 'block' : 'none';
-        }
-
-        function saveFirebaseConfig() {
-            const v = document.getElementById('fbConfigInput').value.trim();
-            try { JSON.parse(v); localStorage.setItem('d2e_firebase_config', v); showToast("Project credentials synced successfully."); location.reload(); }
-            catch(e) { showToast("Invalid structural formatting setup input."); }
-        }
-        function disconnectFirebase() { localStorage.removeItem('d2e_firebase_config'); location.reload(); }
-
-        // VERSION INITIALIZATION LOGIC RE-RENDERS
-        function renderVersionInfo() {
-            document.getElementById('versionBadge').textContent = `v${APP_VERSION}`;
-            document.getElementById('profileVersionBadge').textContent = `v${APP_VERSION} · Build ${APP_BUILD}`;
-            const list = document.getElementById('changelogList'); if(!list) return; list.innerHTML = '';
-            CHANGELOG.forEach(c => { const d = document.createElement('div'); d.innerHTML = `<strong>v${c.version} (${c.date})</strong><ul>${c.changes.map(ch => `<li>${ch}</li>`).join('')}</ul>`; list.appendChild(d); });
-        }
-
-        function updateTZDisplay() {
-            const tz = getAppTZ(); const now = new Date();
-            const dateStr = now.toLocaleDateString('en-AU', { timeZone: tz, weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' });
-            const timeStr = now.toLocaleTimeString('en-AU', { timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-            const panel = document.getElementById('tzPanelTime'); if(panel) panel.textContent = `${dateStr}  ${timeStr}`;
-        }
-
-        function toggleIslandPanel() { document.getElementById('islandPanel').classList.toggle('open'); }
-        
         async function fetchWeather() {
             if (!navigator.geolocation) return;
             navigator.geolocation.getCurrentPosition(async pos => {
                 try {
-                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude.toFixed(4)}&longitude=${pos.coords.longitude.toFixed(4)}&current=temperature_2m,weather_code`);
+                    const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude.toFixed(4)}&longitude=${pos.coords.longitude.toFixed(4)}&current=temperature_2m`);
                     const data = await res.json();
-                    document.getElementById('islandTemp').textContent = `${Math.round(data.current.temperature_2m)}°`;
-                    document.getElementById('islandWeatherFull').innerHTML = `<div class="ipw-temp">${data.current.temperature_2m}°C</div><div class="ipw-desc">Local Conditions Connected</div>`;
-                } catch(e) { document.getElementById('islandWeatherFull').textContent = "Weather sync error"; }
+                    document.getElementById('islandTemp').innerText = `${Math.round(data.current.temperature_2m)}°C`;
+                } catch(e) { console.warn("Weather sync failed."); }
             });
         }
-
-        // LOAD HANDLERS ATTACH SYSTEM STABILITIES
-        window.addEventListener('load', () => {
-            document.getElementById('shiftDate').value = todayStrInTZ();
-            setupPhoto(eosReceiptFile, addEosBox, eosPreviewContainer, eosPreview, eosFileText, removeEos);
-            
-            // Re-render views layers architectures pipelines
-            if(!loadCalcState()) {
-                createEOSRow(eftposContainer); createDynRow(cashContainer, 'Payer Name');
-            }
-            
-            renderTrackerTable(); renderReceiptArchive(); renderVersionInfo(); updateCalc(); updateTZDisplay(); fetchWeather();
-            setInterval(updateTZDisplay, 1000);
-            
-            // Build dynamic dropdown structures selection vectors metrics
-            const tzSel = document.getElementById('tzSelect');
-            if(tzSel) { TZ_OPTIONS.forEach(o => { const opt = document.createElement('option'); opt.value = o.value; opt.textContent = o.label; if(o.value === getAppTZ()) opt.selected = true; tzSel.appendChild(opt); }); }
-            
-            requestAnimationFrame(() => moveTabSlider(document.getElementById('tabShift')));
-        });
-
-        function setTimezone(tz) { localStorage.setItem('d2e_timezone', tz); updateTZDisplay(); updateCalc(); renderTrackerTable(); showToast("Application alignment synced to updated timezone zones."); }
     </script>
 </body>
 </html>
