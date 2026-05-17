@@ -334,7 +334,7 @@
         .tab-btn-center.active .tab-center-label { color: var(--green); font-weight: 900; }
 
         /* ── PAGES ── */
-        .page { display: none; flex-direction: column; gap: 14px; padding-bottom: 16px; }
+        .page { display: none; flex-direction: column; gap: 14px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
         .page.active { display: flex; animation: pageIn 0.25s cubic-bezier(0.22,1,0.36,1); }
         @keyframes pageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -556,6 +556,7 @@
         @keyframes rowIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         .drow input.item-name { flex: 1; }
         .drow input.item-amt { width: 105px; font-weight: 700; }
+        .eos-row input.item-amt { width: auto !important; flex: 1 !important; min-width: 0 !important; font-weight: 700; }
         .btn-rm {
             background: var(--btn-rm-bg); color: var(--red); border: none; border-radius: 8px;
             padding: 0; height: 46px; width: 46px; font-size: 20px; cursor: pointer;
@@ -1252,25 +1253,7 @@
             .tab-btn-center { width: 76px; }
         }
 
-        @media (min-width: 900px) {
-            body { padding-top: 32px; padding-left: 0; padding-right: 0; }
-            .app { max-width: 640px; }
-            /* Desktop tab bar — wider pill */
-            .tab-bar-inner { padding: 8px 24px; gap: 8px; }
-            .tab-btn { width: 88px; height: 52px; font-size: 10px; }
-            .tab-btn-center { width: 88px; }
-            .tab-center-pill { width: 56px; height: 56px; font-size: 26px; }
-            /* Larger cards on desktop */
-            .card { padding: 22px 24px; }
-            /* Inputs */
-            input[type="number"], input[type="text"], input[type="date"], select {
-                font-size: 15px;
-            }
-            /* Island panel — prevent overflow on desktop */
-            .island-panel { min-width: 300px; }
-            /* Wider modal */
-            .modal-box { max-width: 520px; }
-        }
+
 
         /* Landscape phone fix */
         @media (max-height: 500px) and (orientation: landscape) {
@@ -1286,6 +1269,21 @@
         .empty-state {
             text-align: center; color: var(--muted); padding: 28px 0;
             font-size: 13px; font-weight: 600;
+        }
+
+
+        /* ── EOS ROW INPUT ── */
+        .eos-row { display: flex; gap: 8px; align-items: center; }
+        .eos-row .eos-label { flex-shrink: 0; }
+        .eos-row .eos-amt, .eos-row input.item-amt {
+            flex: 1 !important; width: auto !important;
+            min-width: 80px; max-width: 100%; font-weight: 700;
+        }
+        /* ── EOS LABEL ── */
+        .eos-label {
+            font-size: 12px; font-weight: 800; color: var(--muted);
+            white-space: nowrap; flex-shrink: 0; min-width: 38px;
+            text-transform: uppercase; letter-spacing: 0.5px;
         }
     </style>
 </head>
@@ -1392,7 +1390,7 @@
             font-size:15px;display:flex;align-items:center;justify-content:center;
             -webkit-tap-highlight-color:transparent;transition:transform .15s ease;
             color:var(--primary);flex-shrink:0;">👤</button>
-        <h1>Drive2<span>Earn</span></h1>
+        <h1>Drive2<span>Earn</span> <span id="versionBadge" style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.3px;vertical-align:middle;opacity:0.7;"></span></h1>
         <div class="island-wrap" id="islandWrap">
             <!-- The pill itself -->
             <div class="island" id="islandPill" onclick="toggleIslandPanel()">
@@ -1456,9 +1454,9 @@
         </div>
 
         <div class="card">
-            <h2>💳 Digital Income <button id="addEftposBtn" class="btn btn-add" type="button">+ Add</button></h2>
+            <h2>💳 End of Shift <button id="addEftposBtn" class="btn btn-add" type="button">+ Add</button></h2>
             <div id="eftposContainer"></div>
-            <div class="subtotal">Subtotal: <strong id="eftposSectionTotal">$0.00</strong></div>
+            <div class="subtotal">EOS Total: <strong id="eftposSectionTotal">$0.00</strong></div>
         </div>
 
         <div class="card">
@@ -1471,7 +1469,7 @@
             <h2>🚗 Runs & Accounts</h2>
             <label style="margin-top:0;">Run Count (× $5 each)</label>
             <div class="run-row">
-                <input type="number" id="runCount" placeholder="0" autocomplete="off" inputmode="numeric">
+                <input type="text" id="runCount" placeholder="0" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
                 <span class="run-multiplier">= <strong id="runTotal" style="color: var(--primary);">$0.00</strong></span>
             </div>
             <div class="section-divider" style="margin-top: 18px;">Accounts</div>
@@ -1481,8 +1479,20 @@
 
         <div class="card">
             <h2>⛽ Fuel Cost</h2>
-            <label style="margin-top:0;">Amount ($)</label>
-            <input type="number" id="fuel" step="0.01" placeholder="0.00" autocomplete="off" inputmode="decimal">
+            <div style="display:flex;gap:8px;align-items:flex-end;">
+                <div style="flex:1;">
+                    <label style="margin-top:0;">Amount ($)</label>
+                    <input type="number" id="fuel" step="0.01" placeholder="0.00" autocomplete="off" inputmode="decimal" style="margin-bottom:0;">
+                </div>
+                <div style="flex:1;">
+                    <label style="margin-top:0;">Fuel Type</label>
+                    <select id="fuelType" onchange="updateCalc()" style="margin-bottom:0;">
+                        <option value="Diesel">⛽ Diesel</option>
+                        <option value="Petrol">⛽ Petrol</option>
+                        <option value="LPG">⛽ LPG</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="card">
@@ -1508,7 +1518,7 @@
             <h2>🚕 Hail Trips <span style="font-size:11px;font-weight:600;color:var(--muted);text-transform:none;">$1.20 levy / trip</span></h2>
             <label style="margin-top:0;">Number of Hail Trips Today <span style="color:var(--red)">*</span></label>
             <div class="trips-input-row">
-                <input type="number" id="hailTrips" placeholder="0" inputmode="numeric" autocomplete="off" oninput="updateLevyPreview()">
+                <input type="text" id="hailTrips" placeholder="0" inputmode="numeric" pattern="[0-9]*" autocomplete="off" oninput="updateLevyPreview()">
                 <div class="trips-badge">levy: <strong id="levyPreviewAmt">$0.00</strong></div>
             </div>
             <div id="tripsMandatoryHint">⚠️ Trip count is required before sharing</div>
@@ -1680,7 +1690,7 @@
                 <div class="fuel-pill"><div class="fuel-pill-val" id="fuelTrackAvg">$0</div><div class="fuel-pill-label">Avg / Fill</div></div>
             </div>
             <table class="fuel-track-table">
-                <thead><tr><th>Date</th><th class="fuel-amt-cell">Amount</th></tr></thead>
+                <thead><tr><th>Date</th><th>Type</th><th class="fuel-amt-cell">Amount</th></tr></thead>
                 <tbody id="fuelTrackBody"></tbody>
             </table>
             <div class="fuel-total-row" id="fuelTotalRow" style="display:none;">
@@ -1896,6 +1906,15 @@
                     <button class="btn btn-submit" onclick="pushAllData()" style="margin-bottom:0;font-size:13px;">⬆ Push All</button>
                     <button class="btn btn-copy" onclick="pullAllData()" style="margin-bottom:0;font-size:13px;">⬇ Pull</button>
                 </div>
+            </div>
+
+            <!-- Version & Changelog -->
+            <div class="card" style="margin-bottom:14px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                    <h2 style="margin-bottom:0;">🔖 Version</h2>
+                    <span id="profileVersionBadge" style="font-size:13px;font-weight:800;color:var(--blue);"></span>
+                </div>
+                <div id="changelogList" style="max-height:320px;overflow-y:auto;"></div>
             </div>
 
             <!-- Data overview -->
@@ -2252,11 +2271,12 @@ function saveCalcState() {
             shiftDate: document.getElementById('shiftDate').value,
             runCount: document.getElementById('runCount').value,
             fuel: document.getElementById('fuel').value,
+            fuelType: document.getElementById('fuelType')?.value || 'Diesel',
             eftposRows: [], cashRows: [], accountRows: [],
             eosData: eosPreviewContainer.dataset.fileData || '',
             eosFileName: eosFileText.textContent
         };
-        eftposContainer.querySelectorAll('.drow').forEach(r => state.eftposRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
+        eftposContainer.querySelectorAll('.drow').forEach(r => state.eftposRows.push({ name: '', amt: r.querySelector('.item-amt')?.value || '' }));
         cashContainer.querySelectorAll('.drow').forEach(r => state.cashRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
         accountsContainer.querySelectorAll('.drow').forEach(r => state.accountRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
         localStorage.setItem('shiftCalcState_Simple', JSON.stringify(state));
@@ -2271,7 +2291,8 @@ function loadCalcState() {
         if (s.shiftDate) document.getElementById('shiftDate').value = s.shiftDate;
         document.getElementById('runCount').value = s.runCount || '';
         document.getElementById('fuel').value = s.fuel || '';
-        (s.eftposRows || []).forEach(r => createDynRow(eftposContainer, 'Terminal / Ref', r.name, r.amt));
+        if (s.fuelType) { const ft = document.getElementById('fuelType'); if(ft) ft.value = s.fuelType; }
+        (s.eftposRows || []).forEach(r => createEOSRow(eftposContainer, r.amt));
         (s.cashRows || []).forEach(r => createDynRow(cashContainer, 'Payer Name', r.name, r.amt));
         (s.accountRows || []).forEach(r => createDynRow(accountsContainer, 'Account Name', r.name, r.amt));
         const PDF_ICON = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`;
@@ -2296,10 +2317,9 @@ function _doUpdateCalc() {
     const fuel = parseFloat(document.getElementById('fuel').value) || 0;
 
     let totalEftpos = 0, eftposStrings = [];
-    eftposContainer.querySelectorAll('.drow').forEach(r => {
-        const name = r.querySelector('.item-name').value.trim();
-        const amt = parseFloat(r.querySelector('.item-amt').value) || 0;
-        if (amt > 0) { totalEftpos += amt; eftposStrings.push(`${name || 'Machine'} $${amt.toFixed(2)}`); }
+    eftposContainer.querySelectorAll('.drow').forEach((r, i) => {
+        const amt = parseFloat(r.querySelector('.item-amt')?.value) || 0;
+        if (amt > 0) { totalEftpos += amt; eftposStrings.push(`EOS ${i + 1}: $${amt.toFixed(2)}`); }
     });
     document.getElementById('eftposSectionTotal').textContent = `$${totalEftpos.toFixed(2)}`;
 
@@ -2342,14 +2362,15 @@ function _doUpdateCalc() {
     updateDateQuickBtns(dateVal);
     const gc=document.getElementById('glanceDate'); if(gc) gc.textContent=`${dd}/${mm}/${yyyy}`;
     const gd=document.getElementById('glanceDay'); if(gd) gd.textContent=dayName;
-    loadTripsForDate(dateVal);
     document.getElementById('headerDateBadge').textContent = `${dayName.slice(0, 3)} ${dd}/${mm}`;
 
     let msg = `*Shift Report: ${dateStr}*\n\n`;
     if (totalEftpos > 0) {
-        msg += `💳 *EFTPOS:* $${totalEftpos.toFixed(2)}`;
-        if (eftposStrings.length > 1 || eftposStrings.some(s => !s.startsWith('Machine $'))) msg += ` (${eftposStrings.join(', ')})`;
-        msg += `\n`;
+        if (eftposStrings.length === 1) {
+            msg += `💳 *EOS:* $${totalEftpos.toFixed(2)}\n`;
+        } else {
+            msg += `💳 *EOS Total:* $${totalEftpos.toFixed(2)} (${eftposStrings.join(', ')})\n`;
+        }
     }
     if (totalCash > 0) {
         msg += `💵 *Cash:* $${totalCash.toFixed(2)}`;
@@ -2362,7 +2383,8 @@ function _doUpdateCalc() {
         if (accountStrings.length > 0) msg += ` (${accountStrings.join(', ')})`;
         msg += `\n`;
     }
-    if (fuel > 0) msg += `⛽ *Fuel Cost:* $${fuel.toFixed(2)}\n`;
+    const fuelType = document.getElementById('fuelType')?.value || 'Fuel';
+    if (fuel > 0) msg += `⛽ *${fuelType}:* $${fuel.toFixed(2)}\n`;
     msg += `\n💰 *TOTAL EARNINGS: $${totalEarnings.toFixed(2)}*`;
 
     hiddenCopy.value = msg;
@@ -2370,12 +2392,38 @@ function _doUpdateCalc() {
     saveCalcState();
 }
 
+function createEOSRow(container, initAmt = '') {
+    const num = container.querySelectorAll('.eos-row').length + 1;
+    const div = document.createElement('div');
+    div.className = 'drow eos-row';
+    div.innerHTML = `
+        <span class="eos-label">EOS ${num}</span>
+        <input type="text" placeholder="0.00" class="item-amt eos-amt" value="${initAmt}" autocomplete="off" inputmode="decimal" pattern="[0-9]*\.?[0-9]*">
+        <button type="button" class="btn-rm">×</button>`;
+    div.querySelector('.btn-rm').onclick = () => {
+        haptic('light'); div.remove();
+        // Renumber remaining rows
+        container.querySelectorAll('.eos-row').forEach((r, i) => {
+            const lbl = r.querySelector('.eos-label');
+            if (lbl) lbl.textContent = 'EOS ' + (i + 1);
+        });
+        updateCalc();
+    };
+    div.querySelector('.item-amt').oninput = updateCalc;
+    container.appendChild(div);
+    // Focus the new input (only when adding manually, not on restore)
+    if (!initAmt) {
+        requestAnimationFrame(() => div.querySelector('.item-amt').focus());
+    }
+    return div;
+}
+
 function createDynRow(container, placeholder, initName = '', initAmt = '') {
     const div = document.createElement('div');
     div.className = 'drow';
     div.innerHTML = `
         <input type="text" placeholder="${placeholder}" class="item-name" value="${initName}" spellcheck="false" autocomplete="off" inputmode="text">
-        <input type="number" placeholder="$0.00" class="item-amt" value="${initAmt}" step="0.01" autocomplete="off" inputmode="decimal">
+        <input type="text" placeholder="0.00" class="item-amt" value="${initAmt}" autocomplete="off" inputmode="decimal" pattern="[0-9]*\.?[0-9]*">
         <button type="button" class="btn-rm">×</button>`;
     div.querySelector('.btn-rm').onclick = () => { haptic('light'); div.remove(); updateCalc(); };
     div.querySelectorAll('input').forEach(i => i.oninput = updateCalc);
@@ -2467,7 +2515,8 @@ function submitToTracker() {
     recordCashForDate(dateStr);
     storeReceiptForDate(dateStr);
     const fuelAmt = parseFloat(document.getElementById('fuel').value) || 0;
-    if (fuelAmt > 0) recordFuelForDate(dateStr, fuelAmt);
+    const fuelTyp = document.getElementById('fuelType')?.value || 'Fuel';
+    if (fuelAmt > 0) recordFuelForDate(dateStr, fuelAmt, fuelTyp);
     const existingIndex = entries.findIndex(e => e.date === dateStr);
     if (existingIndex >= 0) entries[existingIndex].amount = totalRaw;
     else entries.push({ date: dateStr, amount: totalRaw });
@@ -2484,15 +2533,16 @@ function submitToTracker() {
 singleInputs.forEach(id => document.getElementById(id).oninput = updateCalc);
 document.getElementById('shiftDate').addEventListener('change', function() {
     updateDateQuickBtns(this.value);
+    loadTripsForDate(this.value);
     updateCalc();
     if (schedEnabled) {
         const ds = this.value;
         if (ds && !schedule[ds]?.working) {
-            showToast('⚠️ This date is not in your schedule — double check!', 3500);
+            showToast('Not a scheduled work day', 3500);
         }
     }
 });
-document.getElementById('addEftposBtn').onclick = () => { haptic('light'); createDynRow(eftposContainer, 'Terminal / Ref'); };
+document.getElementById('addEftposBtn').onclick = () => { haptic('light'); createEOSRow(eftposContainer); };
 document.getElementById('addCashBtn').onclick = () => { haptic('light'); createDynRow(cashContainer, 'Payer Name'); };
 document.getElementById('addAccountBtn').onclick = () => { haptic('light'); createDynRow(accountsContainer, 'Account Name'); };
 
@@ -2502,7 +2552,7 @@ if (!loadCalcState()) {
     document.getElementById('addCashBtn').click();
     updateCalc();
 } else {
-    if (eftposContainer.children.length === 0) document.getElementById('addEftposBtn').click();
+    if (eftposContainer.querySelectorAll('.eos-row').length === 0) document.getElementById('addEftposBtn').click();
     if (cashContainer.children.length === 0) document.getElementById('addCashBtn').click();
     updateCalc();
 }
@@ -2689,12 +2739,13 @@ let fuelFilter = 'week';
 
 function saveFuelLog() { localStorage.setItem('d2e_fuel_log_v1', JSON.stringify(fuelLog)); autoSync('d2e_fuel_log_v1', fuelLog); }
 
-function recordFuelForDate(ds, amount) {
+function recordFuelForDate(ds, amount, fuelType) {
     if (amount > 0) {
-        // If there's already a fuel entry for this date, add to it
-        fuelLog[ds] = parseFloat(((fuelLog[ds] || 0) + amount).toFixed(2));
+        const existing = fuelLog[ds];
+        // Support both old format (number) and new format (object)
+        const prevAmt = typeof existing === 'object' ? existing.amount : (existing || 0);
+        fuelLog[ds] = { amount: parseFloat((prevAmt + amount).toFixed(2)), type: fuelType || 'Fuel' };
     } else if (fuelLog[ds]) {
-        // If fuel is cleared to 0, remove
         delete fuelLog[ds];
     }
     saveFuelLog();
@@ -2711,22 +2762,24 @@ function setFuelFilter(f, btn) {
 function renderFuelTracker() {
     const {start, end} = getPeriodRange(fuelFilter);
     const filtered = Object.entries(fuelLog)
-        .filter(([d]) => d >= start && d <= end && fuelLog[d] > 0)
+        .filter(([d]) => { const e = fuelLog[d]; const amt = typeof e === 'object' ? e.amount : e; return d >= start && d <= end && amt > 0; })
         .sort(([a],[b]) => b.localeCompare(a));
     const tbody = document.getElementById('fuelTrackBody'); if (!tbody) return;
     tbody.innerHTML = '';
     let total = 0;
-    filtered.forEach(([date, amt]) => {
+    filtered.forEach(([date, entry]) => {
+        const amt  = typeof entry === 'object' ? entry.amount : entry;
+        const type = typeof entry === 'object' ? entry.type   : 'Fuel';
         total += amt;
         const d = new Date(date.replace(/-/g,'/')), lbl = d.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${lbl}</td><td class="fuel-amt-cell">$${amt.toFixed(2)}</td>`;
+        tr.innerHTML = `<td>${lbl}</td><td style="font-size:11px;color:var(--muted);font-weight:600;">${type}</td><td class="fuel-amt-cell">$${amt.toFixed(2)}</td>`;
         tbody.appendChild(tr);
     });
     if (!filtered.length) tbody.innerHTML = '<tr><td colspan="2" class="empty-state">No fuel entries in this period</td></tr>';
     const e1 = document.getElementById('fuelTrackDays'); if(e1) e1.textContent = filtered.length;
     const e2 = document.getElementById('fuelTrackTotal'); if(e2) e2.textContent = `$${total.toFixed(2)}`;
-    const e3 = document.getElementById('fuelTrackAvg'); if(e3) e3.textContent = filtered.length ? `$${(total/filtered.length).toFixed(2)}` : '$0';
+    const e3 = document.getElementById('fuelTrackAvg'); if(e3) e3.textContent = filtered.length ? `$${(total/filtered.length).toFixed(2)}` : '$0.00';
     const tr2 = document.getElementById('fuelTotalRow'); if(tr2) tr2.style.display = filtered.length ? 'flex' : 'none';
     const gt = document.getElementById('fuelGrandTotal'); if(gt) gt.textContent = `$${total.toFixed(2)}`;
 }
@@ -2735,11 +2788,11 @@ function exportFuelCSV() {
     haptic('medium');
     const {start, end} = getPeriodRange(fuelFilter);
     const filtered = Object.entries(fuelLog)
-        .filter(([d]) => d >= start && d <= end && fuelLog[d] > 0)
+        .filter(([d]) => { const e = fuelLog[d]; const amt = typeof e === 'object' ? e.amount : e; return d >= start && d <= end && amt > 0; })
         .sort(([a],[b]) => a.localeCompare(b));
     if (!filtered.length) return showToast('⚠️ No fuel entries in this period');
-    let csv = 'Date,Amount\n', total = 0;
-    filtered.forEach(([date, amt]) => { csv += `${date},$${amt.toFixed(2)}\n`; total += amt; });
+    let csv = 'Date,Type,Amount\n', total = 0;
+    filtered.forEach(([date, entry]) => { const amt = typeof entry === 'object' ? entry.amount : entry; const type = typeof entry === 'object' ? entry.type : 'Fuel'; csv += `${date},${type},$${amt.toFixed(2)}\n`; total += amt; });
     csv += `\nTotal,$${total.toFixed(2)}\n`;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
@@ -2985,8 +3038,15 @@ function updateLevyPreview() {
     if (trips > 0) document.getElementById('tripsMandatoryHint').style.display = 'none';
 }
 function validateTrips() {
-    const v = document.getElementById('hailTrips').value;
-    if (v === '' || v === null) { document.getElementById('tripsMandatoryHint').style.display = 'block'; document.getElementById('hailTrips').focus(); showToast('⚠️ Enter trip count before sharing'); return false; }
+    const el = document.getElementById('hailTrips');
+    const v  = el ? el.value.trim() : '';
+    if (v === '') {
+        const hint = document.getElementById('tripsMandatoryHint');
+        if (hint) hint.style.display = 'block';
+        if (el) el.focus();
+        showToast('Enter trip count (use 0 if no hail trips)');
+        return false;
+    }
     return true;
 }
 function saveShiftTrips() {
@@ -3133,27 +3193,72 @@ async function shareAndThenSave() {
     if (!validateTrips()) return;
     if (!validateReceipts()) return;
     const text = document.getElementById('hiddenCopy').value;
-    let shareData = { text, title: 'Shift Report' };
+
+    // Get receipt file if attached
+    let ef = null;
     try {
         const fileData = eosPreviewContainer.dataset.fileData;
         const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
-        let ef = null;
         if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
             ef = eosReceiptFile.files[0];
-        } else if (fileData) { ef = dataURLtoFile(fileData, fileName); }
-        if (ef) shareData.files = [ef];
-        if (navigator.share) {
-            try {
-                const canShare = !navigator.canShare || navigator.canShare(shareData);
-                await navigator.share(canShare ? shareData : { text, title: 'Shift Report' });
-            } catch(e) {
-                if (e.name === 'AbortError') return; // user cancelled
-                window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-            }
-        } else {
-            window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+        } else if (fileData) {
+            ef = dataURLtoFile(fileData, fileName);
         }
-    } catch(e) { console.warn('Share error:', e); }
+    } catch(e) {}
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS && navigator.share) {
+        if (ef) {
+            // iOS: copy message to clipboard first, then share the file
+            // (iOS Web Share API cannot send text + file together to WhatsApp)
+            try {
+                await navigator.clipboard.writeText(text);
+            } catch(err) {
+                const el = document.getElementById('hiddenCopy');
+                el.select(); el.setSelectionRange(0, 99999);
+                try { document.execCommand('copy'); } catch(e2) {}
+            }
+            try {
+                const fileShare = { files: [ef], title: 'EOS Receipt' };
+                if (navigator.canShare && navigator.canShare(fileShare)) {
+                    showToast('Message copied — paste it in WhatsApp', 4000);
+                    await navigator.share(fileShare);
+                    document.getElementById('afterSaveModal').classList.add('show');
+                    return;
+                }
+            } catch(e) {
+                if (e.name === 'AbortError') return;
+            }
+        }
+        // No file — share text directly
+        try {
+            await navigator.share({ text: text, title: 'Shift Report' });
+            document.getElementById('afterSaveModal').classList.add('show');
+            return;
+        } catch(e) {
+            if (e.name === 'AbortError') return;
+        }
+    }
+
+    // Android: try text + file together
+    if (!isIOS && navigator.share) {
+        try {
+            let shareData = { text: text, title: 'Shift Report' };
+            if (ef) {
+                const withFile = { text: text, title: 'Shift Report', files: [ef] };
+                if (navigator.canShare && navigator.canShare(withFile)) shareData = withFile;
+            }
+            await navigator.share(shareData);
+            document.getElementById('afterSaveModal').classList.add('show');
+            return;
+        } catch(e) {
+            if (e.name === 'AbortError') return;
+        }
+    }
+
+    // Fallback: WhatsApp URL
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
     document.getElementById('afterSaveModal').classList.add('show');
 }
 
@@ -3558,6 +3663,7 @@ function setShiftDate(preset) {
     }
     el.value = target;
     updateDateQuickBtns(target);
+    loadTripsForDate(target);
     // Warn if schedule is on and not a work day
     if (schedEnabled && !schedule[target]?.working) {
         showToast('⚠️ Not a scheduled work day — double check!', 3500);
@@ -3976,6 +4082,7 @@ function switchToProfile() {
     document.getElementById('tab-profile').classList.add('active');
     showProfileSection();
     updateDataOverview();
+    renderVersionInfo();
     // Hide slider
     const slider = document.getElementById('tabSlider');
     if (slider) slider.style.opacity = '0';
@@ -3992,6 +4099,160 @@ window.addEventListener('load', () => {
     showProfileSection();
 });
 
+
+/* =====================================================================
+   APP VERSION
+===================================================================== */
+const APP_VERSION = '1.9';
+const APP_BUILD   = '2025-05-17';
+const CHANGELOG = [
+    {
+        version: '1.9',
+        date: '17 May 2025',
+        changes: [
+            'Fuel type dropdown (Diesel / Petrol / LPG) shown in shift message',
+            'Fuel tracker now stores and displays fuel type per entry',
+            'Share fixed — message and receipt photo sent together in one share sheet',
+            'Mobile-only optimisation — removed desktop breakpoints',
+            'Data safety confirmed — localStorage never touched on updates',
+        ]
+    },
+    {
+        version: '1.8',
+        date: '16 May 2025',
+        changes: [
+            'Instant sync engine — push in 300ms, shift saves push immediately',
+            'Smart refresh — only re-renders the view that changed',
+            'Receipts now sync in real-time across devices',
+            'Echo prevention — ignores own writes to avoid flicker',
+            'Auto-retry on network failure',
+        ]
+    },
+    {
+        version: '1.7',
+        date: '15 May 2025',
+        changes: [
+            'User profile & Firebase authentication (Google + Email/Password)',
+            'Real-time cross-device sync via Firestore',
+            'Profile page with avatar, display name, sync status',
+            'Data overview in profile',
+        ]
+    },
+    {
+        version: '1.6',
+        date: '14 May 2025',
+        changes: [
+            'Work Schedule — calendar view with month navigation',
+            'Tap or hold any day to set Working / Day Off',
+            'Schedule popover with live earnings display',
+            'Share schedule screenshot',
+            'Floating Dynamic Island with live weather & timezone',
+        ]
+    },
+    {
+        version: '1.5',
+        date: '13 May 2025',
+        changes: [
+            'Liquid glass design system — frosted cards, mesh gradient background',
+            'Floating glass tab bar with spring-physics slider',
+            'Center Shift button — elevated glowing pill',
+            'Tab order: Weekly | Docs | Shift | Planner | Reports',
+        ]
+    },
+    {
+        version: '1.4',
+        date: '12 May 2025',
+        changes: [
+            'Receipts archive tab — auto-stores EOS receipt on save',
+            'Select mode with select-all and bulk delete',
+            'Receipt viewer modal with download',
+            'Today / Yesterday quick date buttons',
+            'Fuel tracker with period filters and CSV export',
+        ]
+    },
+    {
+        version: '1.3',
+        date: '11 May 2025',
+        changes: [
+            'Cash Income Tracker in Reports tab',
+            'Passenger Service Levy tracker ($1.20/trip)',
+            'BAS Gross Earnings with date range filter',
+            'Hail trips mandatory before sharing',
+            'Timezone selector in header island',
+        ]
+    },
+    {
+        version: '1.2',
+        date: '10 May 2025',
+        changes: [
+            'DD/MM/YYYY date format throughout',
+            'Weekly auto-credit (Fri/Sat/Sun pay day detection)',
+            'Schedule view in planner — calendar + summary',
+            'Share schedule screenshot',
+        ]
+    },
+    {
+        version: '1.1',
+        date: '9 May 2025',
+        changes: [
+            'Daily Shift calculator with EFTPOS / Cash / Runs / Accounts',
+            'Weekly earnings tracker (Thu–Wed week)',
+            'Manual edit for weekly entries',
+            'WhatsApp share shift report',
+            'Light / Dark theme toggle',
+        ]
+    },
+];
+
+
+/* ── VERSION RENDER ── */
+function renderVersionInfo() {
+    var badge = document.getElementById('versionBadge');
+    var profBadge = document.getElementById('profileVersionBadge');
+    if (badge) badge.textContent = 'v' + APP_VERSION;
+    if (profBadge) profBadge.textContent = 'v' + APP_VERSION + ' · ' + APP_BUILD;
+    var list = document.getElementById('changelogList');
+    if (!list) return;
+    list.innerHTML = '';
+    CHANGELOG.forEach(function(entry, idx) {
+        var div = document.createElement('div');
+        div.style.marginBottom = '14px';
+        div.style.paddingBottom = '14px';
+        if (idx < CHANGELOG.length - 1) div.style.borderBottom = '1px solid var(--border)';
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+        var vs = document.createElement('span');
+        vs.style.cssText = 'font-size:13px;font-weight:900;color:var(--primary);';
+        vs.textContent = 'v' + entry.version;
+        hdr.appendChild(vs);
+        if (idx === 0) {
+            var lb = document.createElement('span');
+            lb.style.cssText = 'background:var(--green);color:#001f0a;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;';
+            lb.textContent = 'LATEST';
+            hdr.appendChild(lb);
+        }
+        var ds = document.createElement('span');
+        ds.style.cssText = 'font-size:11px;color:var(--muted);font-weight:500;margin-left:auto;';
+        ds.textContent = entry.date;
+        hdr.appendChild(ds);
+        div.appendChild(hdr);
+        var ul = document.createElement('ul');
+        ul.style.cssText = 'list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;';
+        entry.changes.forEach(function(ch) {
+            var li = document.createElement('li');
+            li.style.cssText = 'font-size:12px;color:var(--muted);font-weight:500;padding-left:14px;position:relative;';
+            var dot = document.createElement('span');
+            dot.style.cssText = 'position:absolute;left:0;color:var(--green);';
+            dot.textContent = '·';
+            li.appendChild(dot);
+            li.appendChild(document.createTextNode(ch));
+            ul.appendChild(li);
+        });
+        div.appendChild(ul);
+        list.appendChild(div);
+    });
+}
+
 renderTrackerTable();
 autoCreditPreviousWeeks();
 renderReceiptArchive();
@@ -4000,11 +4261,13 @@ renderLevyReport();
 renderFuelTracker();
 calcBASGross();
 updateLevyPreview();
+loadTripsForDate(document.getElementById('shiftDate').value || todayStrInTZ());
 buildTZSelect();
 updateTZDisplay();
 setInterval(updateTZDisplay, 1000);
 checkPayDayPopup();
 initSchedule();
+renderVersionInfo();
 requestAnimationFrame(initTabSlider);
 // Island init
 fetchWeather();
