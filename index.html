@@ -556,6 +556,7 @@
         @keyframes rowIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
         .drow input.item-name { flex: 1; }
         .drow input.item-amt { width: 105px; font-weight: 700; }
+        .eos-row input.item-amt { width: auto !important; flex: 1 !important; min-width: 0 !important; font-weight: 700; }
         .btn-rm {
             background: var(--btn-rm-bg); color: var(--red); border: none; border-radius: 8px;
             padding: 0; height: 46px; width: 46px; font-size: 20px; cursor: pointer;
@@ -1270,7 +1271,15 @@
             font-size: 13px; font-weight: 600;
         }
 
-        /* ── EOS ROWS ── */
+
+        /* ── EOS ROW INPUT ── */
+        .eos-row { display: flex; gap: 8px; align-items: center; }
+        .eos-row .eos-label { flex-shrink: 0; }
+        .eos-row .eos-amt, .eos-row input.item-amt {
+            flex: 1 !important; width: auto !important;
+            min-width: 80px; max-width: 100%; font-weight: 700;
+        }
+        /* ── EOS LABEL ── */
         .eos-label {
             font-size: 12px; font-weight: 800; color: var(--muted);
             white-space: nowrap; flex-shrink: 0; min-width: 38px;
@@ -1447,7 +1456,7 @@
         <div class="card">
             <h2>💳 End of Shift <button id="addEftposBtn" class="btn btn-add" type="button">+ Add</button></h2>
             <div id="eftposContainer"></div>
-            <div class="subtotal">Subtotal: <strong id="eftposSectionTotal">$0.00</strong></div>
+            <div class="subtotal">EOS Total: <strong id="eftposSectionTotal">$0.00</strong></div>
         </div>
 
         <div class="card">
@@ -2390,7 +2399,7 @@ function createEOSRow(container, initAmt = '') {
     div.className = 'drow eos-row';
     div.innerHTML = `
         <span class="eos-label">EOS ${num}</span>
-        <input type="number" placeholder="$0.00" class="item-amt" value="${initAmt}" step="0.01" autocomplete="off" inputmode="decimal" style="flex:1;">
+        <input type="text" placeholder="0.00" class="item-amt eos-amt" value="${initAmt}" autocomplete="off" inputmode="decimal" pattern="[0-9]*\.?[0-9]*">
         <button type="button" class="btn-rm">×</button>`;
     div.querySelector('.btn-rm').onclick = () => {
         haptic('light'); div.remove();
@@ -2403,6 +2412,10 @@ function createEOSRow(container, initAmt = '') {
     };
     div.querySelector('.item-amt').oninput = updateCalc;
     container.appendChild(div);
+    // Focus the new input (only when adding manually, not on restore)
+    if (!initAmt) {
+        requestAnimationFrame(() => div.querySelector('.item-amt').focus());
+    }
     return div;
 }
 
@@ -2411,7 +2424,7 @@ function createDynRow(container, placeholder, initName = '', initAmt = '') {
     div.className = 'drow';
     div.innerHTML = `
         <input type="text" placeholder="${placeholder}" class="item-name" value="${initName}" spellcheck="false" autocomplete="off" inputmode="text">
-        <input type="number" placeholder="$0.00" class="item-amt" value="${initAmt}" step="0.01" autocomplete="off" inputmode="decimal">
+        <input type="text" placeholder="0.00" class="item-amt" value="${initAmt}" autocomplete="off" inputmode="decimal" pattern="[0-9]*\.?[0-9]*">
         <button type="button" class="btn-rm">×</button>`;
     div.querySelector('.btn-rm').onclick = () => { haptic('light'); div.remove(); updateCalc(); };
     div.querySelectorAll('input').forEach(i => i.oninput = updateCalc);
@@ -4153,28 +4166,54 @@ const CHANGELOG = [
 
 /* ── VERSION RENDER ── */
 function renderVersionInfo() {
-    const badge = document.getElementById('versionBadge');
-    const profBadge = document.getElementById('profileVersionBadge');
+    var badge = document.getElementById('versionBadge');
+    var profBadge = document.getElementById('profileVersionBadge');
     if (badge) badge.textContent = 'v' + APP_VERSION;
     if (profBadge) profBadge.textContent = 'v' + APP_VERSION + ' · ' + APP_BUILD;
 
-    const list = document.getElementById('changelogList');
+    var list = document.getElementById('changelogList');
     if (!list) return;
     list.innerHTML = '';
-    CHANGELOG.forEach((entry, idx) => {
-        const isLatest = idx === 0;
-        const div = document.createElement('div');
-        div.style.cssText = 'margin-bottom:14px;padding-bottom:14px;' + (idx < CHANGELOG.length-1 ? 'border-bottom:1px solid var(--border);' : '');
-        div.innerHTML = \`
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-                <span style="font-size:13px;font-weight:900;color:var(--primary);">v\${entry.version}</span>
-                \${isLatest ? '<span style="background:var(--green);color:#001f0a;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;">LATEST</span>' : ''}
-                <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:auto;">\${entry.date}</span>
-            </div>
-            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;">
-                \${entry.changes.map(ch => \`<li style="font-size:12px;color:var(--muted);font-weight:500;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--green);">·</span>\${ch}</li>\`).join('')}
-            </ul>
-        \`;
+
+    CHANGELOG.forEach(function(entry, idx) {
+        var isLatest = idx === 0;
+        var div = document.createElement('div');
+        div.style.marginBottom = '14px';
+        div.style.paddingBottom = '14px';
+        if (idx < CHANGELOG.length - 1) div.style.borderBottom = '1px solid var(--border)';
+
+        // Header row
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+
+        var verSpan = document.createElement('span');
+        verSpan.style.cssText = 'font-size:13px;font-weight:900;color:var(--primary);';
+        verSpan.textContent = 'v' + entry.version;
+        hdr.appendChild(verSpan);
+
+        if (isLatest) {
+            var latestBadge = document.createElement('span');
+            latestBadge.style.cssText = 'background:var(--green);color:#001f0a;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;';
+            latestBadge.textContent = 'LATEST';
+            hdr.appendChild(latestBadge);
+        }
+
+        var dateSpan = document.createElement('span');
+        dateSpan.style.cssText = 'font-size:11px;color:var(--muted);font-weight:500;margin-left:auto;';
+        dateSpan.textContent = entry.date;
+        hdr.appendChild(dateSpan);
+        div.appendChild(hdr);
+
+        // Changes list
+        var ul = document.createElement('ul');
+        ul.style.cssText = 'list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;';
+        entry.changes.forEach(function(ch) {
+            var li = document.createElement('li');
+            li.style.cssText = 'font-size:12px;color:var(--muted);font-weight:500;padding-left:14px;position:relative;';
+            li.innerHTML = '<span style="position:absolute;left:0;color:var(--green);">·</span>' + ch;
+            ul.appendChild(li);
+        });
+        div.appendChild(ul);
         list.appendChild(div);
     });
 }
