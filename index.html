@@ -334,7 +334,7 @@
         .tab-btn-center.active .tab-center-label { color: var(--green); font-weight: 900; }
 
         /* ── PAGES ── */
-        .page { display: none; flex-direction: column; gap: 14px; padding-bottom: 16px; }
+        .page { display: none; flex-direction: column; gap: 14px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
         .page.active { display: flex; animation: pageIn 0.25s cubic-bezier(0.22,1,0.36,1); }
         @keyframes pageIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -1252,25 +1252,7 @@
             .tab-btn-center { width: 76px; }
         }
 
-        @media (min-width: 900px) {
-            body { padding-top: 32px; padding-left: 0; padding-right: 0; }
-            .app { max-width: 640px; }
-            /* Desktop tab bar — wider pill */
-            .tab-bar-inner { padding: 8px 24px; gap: 8px; }
-            .tab-btn { width: 88px; height: 52px; font-size: 10px; }
-            .tab-btn-center { width: 88px; }
-            .tab-center-pill { width: 56px; height: 56px; font-size: 26px; }
-            /* Larger cards on desktop */
-            .card { padding: 22px 24px; }
-            /* Inputs */
-            input[type="number"], input[type="text"], input[type="date"], select {
-                font-size: 15px;
-            }
-            /* Island panel — prevent overflow on desktop */
-            .island-panel { min-width: 300px; }
-            /* Wider modal */
-            .modal-box { max-width: 520px; }
-        }
+
 
         /* Landscape phone fix */
         @media (max-height: 500px) and (orientation: landscape) {
@@ -1481,8 +1463,20 @@
 
         <div class="card">
             <h2>⛽ Fuel Cost</h2>
-            <label style="margin-top:0;">Amount ($)</label>
-            <input type="number" id="fuel" step="0.01" placeholder="0.00" autocomplete="off" inputmode="decimal">
+            <div style="display:flex;gap:8px;align-items:flex-end;">
+                <div style="flex:1;">
+                    <label style="margin-top:0;">Amount ($)</label>
+                    <input type="number" id="fuel" step="0.01" placeholder="0.00" autocomplete="off" inputmode="decimal" style="margin-bottom:0;">
+                </div>
+                <div style="flex:1;">
+                    <label style="margin-top:0;">Fuel Type</label>
+                    <select id="fuelType" onchange="updateCalc()" style="margin-bottom:0;">
+                        <option value="Diesel">⛽ Diesel</option>
+                        <option value="Petrol">⛽ Petrol</option>
+                        <option value="LPG">⛽ LPG</option>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="card">
@@ -1680,7 +1674,7 @@
                 <div class="fuel-pill"><div class="fuel-pill-val" id="fuelTrackAvg">$0</div><div class="fuel-pill-label">Avg / Fill</div></div>
             </div>
             <table class="fuel-track-table">
-                <thead><tr><th>Date</th><th class="fuel-amt-cell">Amount</th></tr></thead>
+                <thead><tr><th>Date</th><th>Type</th><th class="fuel-amt-cell">Amount</th></tr></thead>
                 <tbody id="fuelTrackBody"></tbody>
             </table>
             <div class="fuel-total-row" id="fuelTotalRow" style="display:none;">
@@ -2252,6 +2246,7 @@ function saveCalcState() {
             shiftDate: document.getElementById('shiftDate').value,
             runCount: document.getElementById('runCount').value,
             fuel: document.getElementById('fuel').value,
+            fuelType: document.getElementById('fuelType')?.value || 'Diesel',
             eftposRows: [], cashRows: [], accountRows: [],
             eosData: eosPreviewContainer.dataset.fileData || '',
             eosFileName: eosFileText.textContent
@@ -2271,6 +2266,7 @@ function loadCalcState() {
         if (s.shiftDate) document.getElementById('shiftDate').value = s.shiftDate;
         document.getElementById('runCount').value = s.runCount || '';
         document.getElementById('fuel').value = s.fuel || '';
+        if (s.fuelType) { const ft = document.getElementById('fuelType'); if(ft) ft.value = s.fuelType; }
         (s.eftposRows || []).forEach(r => createDynRow(eftposContainer, 'Terminal / Ref', r.name, r.amt));
         (s.cashRows || []).forEach(r => createDynRow(cashContainer, 'Payer Name', r.name, r.amt));
         (s.accountRows || []).forEach(r => createDynRow(accountsContainer, 'Account Name', r.name, r.amt));
@@ -2362,7 +2358,8 @@ function _doUpdateCalc() {
         if (accountStrings.length > 0) msg += ` (${accountStrings.join(', ')})`;
         msg += `\n`;
     }
-    if (fuel > 0) msg += `⛽ *Fuel Cost:* $${fuel.toFixed(2)}\n`;
+    const fuelType = document.getElementById('fuelType')?.value || 'Fuel';
+    if (fuel > 0) msg += `⛽ *${fuelType}:* $${fuel.toFixed(2)}\n`;
     msg += `\n💰 *TOTAL EARNINGS: $${totalEarnings.toFixed(2)}*`;
 
     hiddenCopy.value = msg;
@@ -2467,7 +2464,8 @@ function submitToTracker() {
     recordCashForDate(dateStr);
     storeReceiptForDate(dateStr);
     const fuelAmt = parseFloat(document.getElementById('fuel').value) || 0;
-    if (fuelAmt > 0) recordFuelForDate(dateStr, fuelAmt);
+    const fuelTyp = document.getElementById('fuelType')?.value || 'Fuel';
+    if (fuelAmt > 0) recordFuelForDate(dateStr, fuelAmt, fuelTyp);
     const existingIndex = entries.findIndex(e => e.date === dateStr);
     if (existingIndex >= 0) entries[existingIndex].amount = totalRaw;
     else entries.push({ date: dateStr, amount: totalRaw });
@@ -2689,12 +2687,13 @@ let fuelFilter = 'week';
 
 function saveFuelLog() { localStorage.setItem('d2e_fuel_log_v1', JSON.stringify(fuelLog)); autoSync('d2e_fuel_log_v1', fuelLog); }
 
-function recordFuelForDate(ds, amount) {
+function recordFuelForDate(ds, amount, fuelType) {
     if (amount > 0) {
-        // If there's already a fuel entry for this date, add to it
-        fuelLog[ds] = parseFloat(((fuelLog[ds] || 0) + amount).toFixed(2));
+        const existing = fuelLog[ds];
+        // Support both old format (number) and new format (object)
+        const prevAmt = typeof existing === 'object' ? existing.amount : (existing || 0);
+        fuelLog[ds] = { amount: parseFloat((prevAmt + amount).toFixed(2)), type: fuelType || 'Fuel' };
     } else if (fuelLog[ds]) {
-        // If fuel is cleared to 0, remove
         delete fuelLog[ds];
     }
     saveFuelLog();
@@ -2711,22 +2710,24 @@ function setFuelFilter(f, btn) {
 function renderFuelTracker() {
     const {start, end} = getPeriodRange(fuelFilter);
     const filtered = Object.entries(fuelLog)
-        .filter(([d]) => d >= start && d <= end && fuelLog[d] > 0)
+        .filter(([d]) => { const e = fuelLog[d]; const amt = typeof e === 'object' ? e.amount : e; return d >= start && d <= end && amt > 0; })
         .sort(([a],[b]) => b.localeCompare(a));
     const tbody = document.getElementById('fuelTrackBody'); if (!tbody) return;
     tbody.innerHTML = '';
     let total = 0;
-    filtered.forEach(([date, amt]) => {
+    filtered.forEach(([date, entry]) => {
+        const amt  = typeof entry === 'object' ? entry.amount : entry;
+        const type = typeof entry === 'object' ? entry.type   : 'Fuel';
         total += amt;
         const d = new Date(date.replace(/-/g,'/')), lbl = d.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'});
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${lbl}</td><td class="fuel-amt-cell">$${amt.toFixed(2)}</td>`;
+        tr.innerHTML = `<td>${lbl}</td><td style="font-size:11px;color:var(--muted);font-weight:600;">${type}</td><td class="fuel-amt-cell">$${amt.toFixed(2)}</td>`;
         tbody.appendChild(tr);
     });
     if (!filtered.length) tbody.innerHTML = '<tr><td colspan="2" class="empty-state">No fuel entries in this period</td></tr>';
     const e1 = document.getElementById('fuelTrackDays'); if(e1) e1.textContent = filtered.length;
     const e2 = document.getElementById('fuelTrackTotal'); if(e2) e2.textContent = `$${total.toFixed(2)}`;
-    const e3 = document.getElementById('fuelTrackAvg'); if(e3) e3.textContent = filtered.length ? `$${(total/filtered.length).toFixed(2)}` : '$0';
+    const e3 = document.getElementById('fuelTrackAvg'); if(e3) e3.textContent = filtered.length ? `$${(total/filtered.length).toFixed(2)}` : '$0.00';
     const tr2 = document.getElementById('fuelTotalRow'); if(tr2) tr2.style.display = filtered.length ? 'flex' : 'none';
     const gt = document.getElementById('fuelGrandTotal'); if(gt) gt.textContent = `$${total.toFixed(2)}`;
 }
@@ -2735,11 +2736,11 @@ function exportFuelCSV() {
     haptic('medium');
     const {start, end} = getPeriodRange(fuelFilter);
     const filtered = Object.entries(fuelLog)
-        .filter(([d]) => d >= start && d <= end && fuelLog[d] > 0)
+        .filter(([d]) => { const e = fuelLog[d]; const amt = typeof e === 'object' ? e.amount : e; return d >= start && d <= end && amt > 0; })
         .sort(([a],[b]) => a.localeCompare(b));
     if (!filtered.length) return showToast('⚠️ No fuel entries in this period');
-    let csv = 'Date,Amount\n', total = 0;
-    filtered.forEach(([date, amt]) => { csv += `${date},$${amt.toFixed(2)}\n`; total += amt; });
+    let csv = 'Date,Type,Amount\n', total = 0;
+    filtered.forEach(([date, entry]) => { const amt = typeof entry === 'object' ? entry.amount : entry; const type = typeof entry === 'object' ? entry.type : 'Fuel'; csv += `${date},${type},$${amt.toFixed(2)}\n`; total += amt; });
     csv += `\nTotal,$${total.toFixed(2)}\n`;
     const a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));
@@ -3133,28 +3134,47 @@ async function shareAndThenSave() {
     if (!validateTrips()) return;
     if (!validateReceipts()) return;
     const text = document.getElementById('hiddenCopy').value;
-    let shareData = { text, title: 'Shift Report' };
-    try {
-        const fileData = eosPreviewContainer.dataset.fileData;
-        const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
-        let ef = null;
-        if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
-            ef = eosReceiptFile.files[0];
-        } else if (fileData) { ef = dataURLtoFile(fileData, fileName); }
-        if (ef) shareData.files = [ef];
-        if (navigator.share) {
-            try {
-                const canShare = !navigator.canShare || navigator.canShare(shareData);
-                await navigator.share(canShare ? shareData : { text, title: 'Shift Report' });
-            } catch(e) {
-                if (e.name === 'AbortError') return; // user cancelled
-                window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+
+    // Step 1: Share the text message to WhatsApp
+    const waUrl = 'https://wa.me/?text=' + encodeURIComponent(text);
+    const textShared = await _shareText(text);
+
+    // Step 2: If a receipt is attached, offer to share it separately
+    const fileData = eosPreviewContainer.dataset.fileData;
+    const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
+    let ef = null;
+    if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
+        ef = eosReceiptFile.files[0];
+    } else if (fileData) {
+        ef = dataURLtoFile(fileData, fileName);
+    }
+    if (ef && navigator.share) {
+        try {
+            const fileShareData = { files: [ef], title: 'EOS Receipt' };
+            if (navigator.canShare && navigator.canShare(fileShareData)) {
+                await navigator.share(fileShareData);
             }
-        } else {
-            window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+        } catch(e) {
+            if (e.name === 'AbortError') {/* user cancelled receipt share — ok */}
         }
-    } catch(e) { console.warn('Share error:', e); }
+    }
     document.getElementById('afterSaveModal').classList.add('show');
+}
+
+async function _shareText(text) {
+    // Try native share for text first
+    if (navigator.share) {
+        try {
+            await navigator.share({ text, title: 'Shift Report' });
+            return true;
+        } catch(e) {
+            if (e.name === 'AbortError') return false;
+            // Fall through to WhatsApp
+        }
+    }
+    // Fallback: open WhatsApp
+    window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
+    return true;
 }
 
 function closeAfterSaveModal(saveIt) {
