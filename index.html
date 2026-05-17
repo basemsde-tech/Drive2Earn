@@ -3135,46 +3135,39 @@ async function shareAndThenSave() {
     if (!validateReceipts()) return;
     const text = document.getElementById('hiddenCopy').value;
 
-    // Step 1: Share the text message to WhatsApp
-    const waUrl = 'https://wa.me/?text=' + encodeURIComponent(text);
-    const textShared = await _shareText(text);
-
-    // Step 2: If a receipt is attached, offer to share it separately
-    const fileData = eosPreviewContainer.dataset.fileData;
-    const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
+    // Build file attachment if receipt exists
     let ef = null;
-    if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
-        ef = eosReceiptFile.files[0];
-    } else if (fileData) {
-        ef = dataURLtoFile(fileData, fileName);
-    }
-    if (ef && navigator.share) {
-        try {
-            const fileShareData = { files: [ef], title: 'EOS Receipt' };
-            if (navigator.canShare && navigator.canShare(fileShareData)) {
-                await navigator.share(fileShareData);
-            }
-        } catch(e) {
-            if (e.name === 'AbortError') {/* user cancelled receipt share — ok */}
+    try {
+        const fileData = eosPreviewContainer.dataset.fileData;
+        const fileName = eosFileText.textContent || 'EOS_Receipt.jpg';
+        if (eosReceiptFile && eosReceiptFile.files && eosReceiptFile.files[0]) {
+            ef = eosReceiptFile.files[0];
+        } else if (fileData) {
+            ef = dataURLtoFile(fileData, fileName);
         }
-    }
-    document.getElementById('afterSaveModal').classList.add('show');
-}
+    } catch(e) {}
 
-async function _shareText(text) {
-    // Try native share for text first
+    // Try to share text + file together (works on iOS & Android)
     if (navigator.share) {
         try {
-            await navigator.share({ text, title: 'Shift Report' });
-            return true;
+            let shareData = { text, title: 'Shift Report' };
+            // Only add file if canShare confirms it is supported
+            if (ef) {
+                const withFile = { text, title: 'Shift Report', files: [ef] };
+                shareData = (navigator.canShare && navigator.canShare(withFile)) ? withFile : shareData;
+            }
+            await navigator.share(shareData);
+            document.getElementById('afterSaveModal').classList.add('show');
+            return;
         } catch(e) {
-            if (e.name === 'AbortError') return false;
-            // Fall through to WhatsApp
+            if (e.name === 'AbortError') return; // user cancelled — do nothing
+            // Any other error: fall through to WhatsApp
         }
     }
-    // Fallback: open WhatsApp
+
+    // Fallback: WhatsApp link (text only — files not supported via URL)
     window.open('https://wa.me/?text=' + encodeURIComponent(text), '_blank');
-    return true;
+    document.getElementById('afterSaveModal').classList.add('show');
 }
 
 function closeAfterSaveModal(saveIt) {
