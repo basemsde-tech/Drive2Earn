@@ -1269,6 +1269,13 @@
             text-align: center; color: var(--muted); padding: 28px 0;
             font-size: 13px; font-weight: 600;
         }
+
+        /* ── EOS ROWS ── */
+        .eos-label {
+            font-size: 12px; font-weight: 800; color: var(--muted);
+            white-space: nowrap; flex-shrink: 0; min-width: 38px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
@@ -1374,7 +1381,7 @@
             font-size:15px;display:flex;align-items:center;justify-content:center;
             -webkit-tap-highlight-color:transparent;transition:transform .15s ease;
             color:var(--primary);flex-shrink:0;">👤</button>
-        <h1>Drive2<span>Earn</span></h1>
+        <h1>Drive2<span>Earn</span> <span id="versionBadge" style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:0.3px;vertical-align:middle;opacity:0.7;"></span></h1>
         <div class="island-wrap" id="islandWrap">
             <!-- The pill itself -->
             <div class="island" id="islandPill" onclick="toggleIslandPanel()">
@@ -1438,7 +1445,7 @@
         </div>
 
         <div class="card">
-            <h2>💳 Digital Income <button id="addEftposBtn" class="btn btn-add" type="button">+ Add</button></h2>
+            <h2>💳 End of Shift <button id="addEftposBtn" class="btn btn-add" type="button">+ Add</button></h2>
             <div id="eftposContainer"></div>
             <div class="subtotal">Subtotal: <strong id="eftposSectionTotal">$0.00</strong></div>
         </div>
@@ -1892,6 +1899,15 @@
                 </div>
             </div>
 
+            <!-- Version & Changelog -->
+            <div class="card" style="margin-bottom:14px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                    <h2 style="margin-bottom:0;">🔖 Version</h2>
+                    <span id="profileVersionBadge" style="font-size:13px;font-weight:800;color:var(--blue);"></span>
+                </div>
+                <div id="changelogList" style="max-height:320px;overflow-y:auto;"></div>
+            </div>
+
             <!-- Data overview -->
             <div class="card" style="margin-bottom:14px;">
                 <h2>📊 Your Data</h2>
@@ -2251,7 +2267,7 @@ function saveCalcState() {
             eosData: eosPreviewContainer.dataset.fileData || '',
             eosFileName: eosFileText.textContent
         };
-        eftposContainer.querySelectorAll('.drow').forEach(r => state.eftposRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
+        eftposContainer.querySelectorAll('.drow').forEach(r => state.eftposRows.push({ name: '', amt: r.querySelector('.item-amt')?.value || '' }));
         cashContainer.querySelectorAll('.drow').forEach(r => state.cashRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
         accountsContainer.querySelectorAll('.drow').forEach(r => state.accountRows.push({ name: r.querySelector('.item-name').value, amt: r.querySelector('.item-amt').value }));
         localStorage.setItem('shiftCalcState_Simple', JSON.stringify(state));
@@ -2267,7 +2283,7 @@ function loadCalcState() {
         document.getElementById('runCount').value = s.runCount || '';
         document.getElementById('fuel').value = s.fuel || '';
         if (s.fuelType) { const ft = document.getElementById('fuelType'); if(ft) ft.value = s.fuelType; }
-        (s.eftposRows || []).forEach(r => createDynRow(eftposContainer, 'Terminal / Ref', r.name, r.amt));
+        (s.eftposRows || []).forEach(r => createEOSRow(eftposContainer, r.amt));
         (s.cashRows || []).forEach(r => createDynRow(cashContainer, 'Payer Name', r.name, r.amt));
         (s.accountRows || []).forEach(r => createDynRow(accountsContainer, 'Account Name', r.name, r.amt));
         const PDF_ICON = `data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2394a3b8"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>`;
@@ -2292,10 +2308,9 @@ function _doUpdateCalc() {
     const fuel = parseFloat(document.getElementById('fuel').value) || 0;
 
     let totalEftpos = 0, eftposStrings = [];
-    eftposContainer.querySelectorAll('.drow').forEach(r => {
-        const name = r.querySelector('.item-name').value.trim();
-        const amt = parseFloat(r.querySelector('.item-amt').value) || 0;
-        if (amt > 0) { totalEftpos += amt; eftposStrings.push(`${name || 'Machine'} $${amt.toFixed(2)}`); }
+    eftposContainer.querySelectorAll('.drow').forEach((r, i) => {
+        const amt = parseFloat(r.querySelector('.item-amt')?.value) || 0;
+        if (amt > 0) { totalEftpos += amt; eftposStrings.push(`EOS ${i + 1}: $${amt.toFixed(2)}`); }
     });
     document.getElementById('eftposSectionTotal').textContent = `$${totalEftpos.toFixed(2)}`;
 
@@ -2343,9 +2358,11 @@ function _doUpdateCalc() {
 
     let msg = `*Shift Report: ${dateStr}*\n\n`;
     if (totalEftpos > 0) {
-        msg += `💳 *EFTPOS:* $${totalEftpos.toFixed(2)}`;
-        if (eftposStrings.length > 1 || eftposStrings.some(s => !s.startsWith('Machine $'))) msg += ` (${eftposStrings.join(', ')})`;
-        msg += `\n`;
+        if (eftposStrings.length === 1) {
+            msg += `💳 *EOS:* $${totalEftpos.toFixed(2)}\n`;
+        } else {
+            msg += `💳 *EOS Total:* $${totalEftpos.toFixed(2)} (${eftposStrings.join(', ')})\n`;
+        }
     }
     if (totalCash > 0) {
         msg += `💵 *Cash:* $${totalCash.toFixed(2)}`;
@@ -2365,6 +2382,28 @@ function _doUpdateCalc() {
     hiddenCopy.value = msg;
     document.getElementById('messagePreview').textContent = msg;
     saveCalcState();
+}
+
+function createEOSRow(container, initAmt = '') {
+    const num = container.querySelectorAll('.eos-row').length + 1;
+    const div = document.createElement('div');
+    div.className = 'drow eos-row';
+    div.innerHTML = `
+        <span class="eos-label">EOS ${num}</span>
+        <input type="number" placeholder="$0.00" class="item-amt" value="${initAmt}" step="0.01" autocomplete="off" inputmode="decimal" style="flex:1;">
+        <button type="button" class="btn-rm">×</button>`;
+    div.querySelector('.btn-rm').onclick = () => {
+        haptic('light'); div.remove();
+        // Renumber remaining rows
+        container.querySelectorAll('.eos-row').forEach((r, i) => {
+            const lbl = r.querySelector('.eos-label');
+            if (lbl) lbl.textContent = 'EOS ' + (i + 1);
+        });
+        updateCalc();
+    };
+    div.querySelector('.item-amt').oninput = updateCalc;
+    container.appendChild(div);
+    return div;
 }
 
 function createDynRow(container, placeholder, initName = '', initAmt = '') {
@@ -2490,7 +2529,7 @@ document.getElementById('shiftDate').addEventListener('change', function() {
         }
     }
 });
-document.getElementById('addEftposBtn').onclick = () => { haptic('light'); createDynRow(eftposContainer, 'Terminal / Ref'); };
+document.getElementById('addEftposBtn').onclick = () => { haptic('light'); createEOSRow(eftposContainer); };
 document.getElementById('addCashBtn').onclick = () => { haptic('light'); createDynRow(cashContainer, 'Payer Name'); };
 document.getElementById('addAccountBtn').onclick = () => { haptic('light'); createDynRow(accountsContainer, 'Account Name'); };
 
@@ -2500,7 +2539,7 @@ if (!loadCalcState()) {
     document.getElementById('addCashBtn').click();
     updateCalc();
 } else {
-    if (eftposContainer.children.length === 0) document.getElementById('addEftposBtn').click();
+    if (eftposContainer.querySelectorAll('.eos-row').length === 0) document.getElementById('addEftposBtn').click();
     if (cashContainer.children.length === 0) document.getElementById('addCashBtn').click();
     updateCalc();
 }
@@ -3989,6 +4028,7 @@ function switchToProfile() {
     document.getElementById('tab-profile').classList.add('active');
     showProfileSection();
     updateDataOverview();
+    renderVersionInfo();
     // Hide slider
     const slider = document.getElementById('tabSlider');
     if (slider) slider.style.opacity = '0';
@@ -4005,6 +4045,140 @@ window.addEventListener('load', () => {
     showProfileSection();
 });
 
+
+/* =====================================================================
+   APP VERSION
+===================================================================== */
+const APP_VERSION = '1.9';
+const APP_BUILD   = '2025-05-17';
+const CHANGELOG = [
+    {
+        version: '1.9',
+        date: '17 May 2025',
+        changes: [
+            'Fuel type dropdown (Diesel / Petrol / LPG) shown in shift message',
+            'Fuel tracker now stores and displays fuel type per entry',
+            'Share fixed — message and receipt photo sent together in one share sheet',
+            'Mobile-only optimisation — removed desktop breakpoints',
+            'Data safety confirmed — localStorage never touched on updates',
+        ]
+    },
+    {
+        version: '1.8',
+        date: '16 May 2025',
+        changes: [
+            'Instant sync engine — push in 300ms, shift saves push immediately',
+            'Smart refresh — only re-renders the view that changed',
+            'Receipts now sync in real-time across devices',
+            'Echo prevention — ignores own writes to avoid flicker',
+            'Auto-retry on network failure',
+        ]
+    },
+    {
+        version: '1.7',
+        date: '15 May 2025',
+        changes: [
+            'User profile & Firebase authentication (Google + Email/Password)',
+            'Real-time cross-device sync via Firestore',
+            'Profile page with avatar, display name, sync status',
+            'Data overview in profile',
+        ]
+    },
+    {
+        version: '1.6',
+        date: '14 May 2025',
+        changes: [
+            'Work Schedule — calendar view with month navigation',
+            'Tap or hold any day to set Working / Day Off',
+            'Schedule popover with live earnings display',
+            'Share schedule screenshot',
+            'Floating Dynamic Island with live weather & timezone',
+        ]
+    },
+    {
+        version: '1.5',
+        date: '13 May 2025',
+        changes: [
+            'Liquid glass design system — frosted cards, mesh gradient background',
+            'Floating glass tab bar with spring-physics slider',
+            'Center Shift button — elevated glowing pill',
+            'Tab order: Weekly | Docs | Shift | Planner | Reports',
+        ]
+    },
+    {
+        version: '1.4',
+        date: '12 May 2025',
+        changes: [
+            'Receipts archive tab — auto-stores EOS receipt on save',
+            'Select mode with select-all and bulk delete',
+            'Receipt viewer modal with download',
+            'Today / Yesterday quick date buttons',
+            'Fuel tracker with period filters and CSV export',
+        ]
+    },
+    {
+        version: '1.3',
+        date: '11 May 2025',
+        changes: [
+            'Cash Income Tracker in Reports tab',
+            'Passenger Service Levy tracker ($1.20/trip)',
+            'BAS Gross Earnings with date range filter',
+            'Hail trips mandatory before sharing',
+            'Timezone selector in header island',
+        ]
+    },
+    {
+        version: '1.2',
+        date: '10 May 2025',
+        changes: [
+            'DD/MM/YYYY date format throughout',
+            'Weekly auto-credit (Fri/Sat/Sun pay day detection)',
+            'Schedule view in planner — calendar + summary',
+            'Share schedule screenshot',
+        ]
+    },
+    {
+        version: '1.1',
+        date: '9 May 2025',
+        changes: [
+            'Daily Shift calculator with EFTPOS / Cash / Runs / Accounts',
+            'Weekly earnings tracker (Thu–Wed week)',
+            'Manual edit for weekly entries',
+            'WhatsApp share shift report',
+            'Light / Dark theme toggle',
+        ]
+    },
+];
+
+
+/* ── VERSION RENDER ── */
+function renderVersionInfo() {
+    const badge = document.getElementById('versionBadge');
+    const profBadge = document.getElementById('profileVersionBadge');
+    if (badge) badge.textContent = 'v' + APP_VERSION;
+    if (profBadge) profBadge.textContent = 'v' + APP_VERSION + ' · ' + APP_BUILD;
+
+    const list = document.getElementById('changelogList');
+    if (!list) return;
+    list.innerHTML = '';
+    CHANGELOG.forEach((entry, idx) => {
+        const isLatest = idx === 0;
+        const div = document.createElement('div');
+        div.style.cssText = 'margin-bottom:14px;padding-bottom:14px;' + (idx < CHANGELOG.length-1 ? 'border-bottom:1px solid var(--border);' : '');
+        div.innerHTML = \`
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                <span style="font-size:13px;font-weight:900;color:var(--primary);">v\${entry.version}</span>
+                \${isLatest ? '<span style="background:var(--green);color:#001f0a;font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;letter-spacing:0.5px;">LATEST</span>' : ''}
+                <span style="font-size:11px;color:var(--muted);font-weight:500;margin-left:auto;">\${entry.date}</span>
+            </div>
+            <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:4px;">
+                \${entry.changes.map(ch => \`<li style="font-size:12px;color:var(--muted);font-weight:500;padding-left:14px;position:relative;"><span style="position:absolute;left:0;color:var(--green);">·</span>\${ch}</li>\`).join('')}
+            </ul>
+        \`;
+        list.appendChild(div);
+    });
+}
+
 renderTrackerTable();
 autoCreditPreviousWeeks();
 renderReceiptArchive();
@@ -4018,6 +4192,7 @@ updateTZDisplay();
 setInterval(updateTZDisplay, 1000);
 checkPayDayPopup();
 initSchedule();
+renderVersionInfo();
 requestAnimationFrame(initTabSlider);
 // Island init
 fetchWeather();
