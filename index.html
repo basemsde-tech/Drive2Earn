@@ -205,7 +205,7 @@
             background: var(--bg);
             background-image: var(--bg-mesh);
             color: var(--primary);
-            padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 24px + env(safe-area-inset-bottom)), 100px) 14px;
+            padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 20px + env(safe-area-inset-bottom)), 100px) 14px;
             display: flex; justify-content: center;
             overscroll-behavior: none; -webkit-overflow-scrolling: touch;
             transition: background 0.4s ease, color 0.32s ease;
@@ -215,36 +215,35 @@
         .app { width: 100%; max-width: 500px; }
 
         /* ════════════════════════════════════════
-           LIQUID GLASS TAB BAR
+           LIQUID GLASS TAB BAR — 5 TABS, SHIFT CENTRE
         ════════════════════════════════════════ */
-        :root { --tab-h: 76px; }
+        :root { --tab-h: 74px; }
+
         .tab-bar {
             position: fixed; bottom: 0; left: 0; width: 100%;
             z-index: 1000;
-            padding-bottom: env(safe-area-inset-bottom);
             height: calc(var(--tab-h) + env(safe-area-inset-bottom));
             display: flex; align-items: center; justify-content: center;
-            /* No background — the inner pill is the glass element */
             background: transparent;
         }
 
-        /* The floating glass pill that holds all tabs */
+        /* Glass pill — holds all 5 tabs */
         .tab-bar-inner {
             display: flex; align-items: center;
-            margin-bottom: calc(env(safe-area-inset-bottom) + 10px);
+            margin-bottom: calc(env(safe-area-inset-bottom) + 8px);
             background: var(--tab-bg);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             border: 1px solid var(--tab-border);
             border-radius: 100px;
-            padding: 6px 6px;
+            padding: 5px 6px;
             gap: 1px;
-            max-width: calc(100vw - 24px);
+            max-width: calc(100vw - 16px);
             box-shadow:
                 0 8px 32px rgba(0,0,0,0.18),
                 0 2px 8px rgba(0,0,0,0.10),
-                0 0 0 1px rgba(255,255,255,0.06) inset,
-                0 1px 0 rgba(255,255,255,0.12) inset;
+                0 0 0 1px rgba(255,255,255,0.07) inset,
+                0 1px 0 rgba(255,255,255,0.14) inset;
             position: relative;
             transition: background 0.32s ease, border-color 0.32s ease;
         }
@@ -252,87 +251,78 @@
             box-shadow:
                 0 8px 32px rgba(15,23,42,0.14),
                 0 2px 8px rgba(15,23,42,0.08),
-                0 0 0 1px rgba(255,255,255,0.5) inset,
+                0 0 0 1px rgba(255,255,255,0.6) inset,
                 0 1px 0 rgba(255,255,255,0.9) inset;
         }
 
-        /* Sliding active indicator — glass morphism blob */
+        /* Slider — glides under active tab */
         .tab-bar-slider {
-            position: absolute; top: 6px; bottom: 6px;
+            position: absolute; top: 5px; bottom: 5px;
             border-radius: 100px; z-index: 0;
-            background: rgba(255,255,255,0.14);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.12) inset;
-            transition: left 0.38s cubic-bezier(0.34,1.42,0.64,1), width 0.38s cubic-bezier(0.34,1.42,0.64,1);
+            background: rgba(255,255,255,0.13);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.18), 0 0 0 1px rgba(255,255,255,0.14) inset;
+            transition: left 0.36s cubic-bezier(0.34,1.42,0.64,1), width 0.36s cubic-bezier(0.34,1.42,0.64,1);
             pointer-events: none;
         }
         [data-theme="light"] .tab-bar-slider {
-            background: rgba(255,255,255,0.72);
-            box-shadow: 0 2px 12px rgba(15,23,42,0.12), 0 0 0 1px rgba(255,255,255,0.9) inset;
+            background: rgba(255,255,255,0.78);
+            box-shadow: 0 2px 14px rgba(15,23,42,0.12), 0 0 0 1px rgba(255,255,255,0.95) inset;
         }
 
-        /* Regular tabs */
+        /* Regular tab buttons */
         .tab-btn {
-            flex-shrink: 0; width: 58px; height: 48px;
+            flex-shrink: 0; width: 58px; height: 52px;
             border: none; background: transparent;
-            font-size: 9px; font-weight: 700; color: var(--muted);
+            font-size: 8.5px; font-weight: 700; color: var(--muted);
             display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
-            cursor: pointer; transition: color 0.22s ease; position: relative; z-index: 1;
+            cursor: pointer; transition: color 0.2s ease; position: relative; z-index: 1;
             -webkit-tap-highlight-color: transparent;
             letter-spacing: 0.5px; text-transform: uppercase;
             border-radius: 100px; touch-action: manipulation;
         }
         .tab-btn.active { color: var(--primary); }
         .tab-icon {
-            font-size: 18px;
-            transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1);
-            display: block; line-height: 1;
+            font-size: 18px; transition: transform 0.26s cubic-bezier(0.34,1.56,0.64,1);
+            display: flex; align-items: center; justify-content: center; line-height: 1;
         }
-        .tab-btn.active .tab-icon { transform: scale(1.18) translateY(-1px); }
-        .tab-btn:active .tab-icon { transform: scale(0.9); }
-        /* No more .tab-indicator — slider handles it */
+        .tab-btn.active .tab-icon { transform: scale(1.14) translateY(-1px); }
+        .tab-btn:active .tab-icon { transform: scale(0.88); }
         .tab-indicator { display: none; }
 
-        /* Center SHIFT button — elevated glowing pill */
+        /* Centre SHIFT button — same height as others but taller pill */
         .tab-btn-center {
-            flex-shrink: 0; width: 64px; height: 56px;
+            flex-shrink: 0; width: 66px; height: 52px;
             border: none; background: transparent;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
             cursor: pointer; -webkit-tap-highlight-color: transparent;
-            position: relative; z-index: 1;
+            position: relative; z-index: 2; touch-action: manipulation;
         }
         .tab-center-pill {
-            width: 52px; height: 52px; border-radius: 50%;
+            width: 46px; height: 46px; border-radius: 16px;
             background: linear-gradient(145deg, var(--blue), #6366f1);
             display: flex; align-items: center; justify-content: center;
-            font-size: 24px; line-height: 1;
-            box-shadow:
-                0 0 0 3px rgba(255,255,255,0.12),
-                0 4px 20px var(--blue-glow),
-                0 8px 32px rgba(79,142,247,0.25);
-            transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+            box-shadow: 0 4px 16px var(--blue-glow), 0 0 0 1px rgba(255,255,255,0.18) inset;
+            transition: all 0.28s cubic-bezier(0.34,1.56,0.64,1);
             position: relative; overflow: hidden;
         }
         .tab-center-pill::before {
-            content: ''; position: absolute; inset: 0; border-radius: 50%;
-            background: linear-gradient(145deg, rgba(255,255,255,0.25) 0%, transparent 60%);
+            content: ''; position: absolute; inset: 0; border-radius: 16px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.26) 0%, transparent 55%);
             pointer-events: none;
         }
         .tab-btn-center.active .tab-center-pill {
             background: linear-gradient(145deg, var(--green), #00b377);
-            box-shadow:
-                0 0 0 3px rgba(255,255,255,0.14),
-                0 4px 20px var(--green-glow),
-                0 8px 32px rgba(0,214,143,0.3);
-            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 4px 18px var(--green-glow), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            transform: scale(1.05);
         }
-        .tab-btn-center:active .tab-center-pill { transform: scale(0.9) translateY(0); }
+        .tab-btn-center:active .tab-center-pill { transform: scale(0.9) !important; }
         .tab-center-label {
-            font-size: 9px; font-weight: 800; letter-spacing: 0.6px;
+            font-size: 8.5px; font-weight: 800; letter-spacing: 0.5px;
             text-transform: uppercase; color: var(--muted);
-            transition: color 0.22s ease; line-height: 1;
+            transition: color 0.2s ease; line-height: 1;
         }
-        .tab-btn-center.active .tab-center-label { color: var(--green); font-weight: 900; }
+        .tab-btn-center.active .tab-center-label { color: var(--green); }
 
         /* ── PAGES ── */
         .page { display: none; flex-direction: column; gap: 14px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; }
@@ -655,7 +645,8 @@
         [data-theme="dark"] .credit-btn.credited { background: #052e16; color: #4ade80; }
         .credit-btn:active { transform: scale(0.95); }
 
-        #captureArea { background: var(--surface); padding: 20px; border-radius: 14px; transition: background 0.28s ease; }
+        #captureArea { background: #ffffff; padding: 20px 18px; border-radius: 14px; }
+        [data-theme="dark"] #captureArea { background: #111827; }
         #photoHeader { transition: color 0.28s ease; }
 
         .row-action-btn {
@@ -1501,17 +1492,24 @@
             Docs
         </button>
         <button class="tab-btn-center active" onclick="switchTab('tab-calc', this)" id="tabShift">
-            <div class="tab-center-pill"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2" opacity="0.9"/>
-                <circle cx="12" cy="12" r="2" fill="white"/>
-                <line x1="12" y1="3" x2="12" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
-                <line x1="12" y1="17" x2="12" y2="21" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-                <line x1="3" y1="12" x2="7" y2="12" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-                <line x1="17" y1="12" x2="21" y2="12" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
-                <line x1="12" y1="10" x2="12" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
-                <line x1="12" y1="12" x2="15" y2="10" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
-            </svg></div>
+            <div class="tab-center-pill">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="6" width="18" height="3" rx="1.5" fill="white" opacity="0.9"/>
+                    <rect x="3" y="10.5" width="18" height="3" rx="1.5" fill="white" opacity="0.7"/>
+                    <rect x="3" y="15" width="12" height="3" rx="1.5" fill="white" opacity="0.5"/>
+                    <circle cx="19" cy="16.5" r="3" fill="white" opacity="0.9"/>
+                    <path d="M19 15v1.5l1 1" stroke="#4f8ef7" stroke-width="1.2" stroke-linecap="round"/>
+                </svg>
+            </div>
             <span class="tab-center-label">Shift</span>
+        </button>
+        <button class="tab-btn" onclick="refreshApp()" id="tabRefresh">
+            <span class="tab-icon tab-icon-svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 12C4 7.58 7.58 4 12 4c2.5 0 4.74 1.14 6.24 2.93L16 9h6V3l-2.2 2.2A9.95 9.95 0 0012 2C6.48 2 2 6.48 2 12s4.48 10 10 10c4.54 0 8.38-3.02 9.63-7.17l-1.93-.57C18.64 17.32 15.58 20 12 20c-4.42 0-8-3.58-8-8z" fill="#34d399"/>
+                </svg>
+            </span>
+            Refresh
         </button>
         <button class="tab-btn" onclick="switchTab('tab-tax', this)" id="tabReports">
             <span class="tab-icon tab-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1759,7 +1757,7 @@
                 <button class="week-nav-btn" onclick="changeWeek(1)">Next →</button>
             </div>
             <div id="captureArea">
-                <h3 style="margin-top:0; text-align:center; font-size: 16px; color: var(--primary); font-weight: 800;" id="photoHeader">Weekly Report</h3>
+                <h3 style="margin-top:0; text-align:center; font-size: 17px; color: #0c1929; font-weight: 800; margin-bottom: 12px;" id="photoHeader">Weekly Report</h3>
                 <table id="incomeTable">
                     <thead>
                         <tr>
@@ -2136,7 +2134,7 @@ function moveTabSlider(btn) {
     const slider = document.getElementById('tabSlider');
     const inner  = document.getElementById('tabBarInner');
     if (!slider || !inner) return;
-    if (btn.classList.contains('tab-btn-center')) {
+    if (!btn || btn.classList.contains('tab-btn-center') || btn.id === 'tabRefresh') {
         slider.style.opacity = '0'; return;
     }
     slider.style.opacity = '1';
@@ -2335,10 +2333,24 @@ async function shareWeeklyWhatsApp() {
     const message  = 'Taxi Income Report' + '\n' + 'Period: ' + startStr + ' to ' + endStr + '\n' + 'Total: $' + total;
     const isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-    // Force white background for clean screenshot
     const captureEl = document.getElementById('captureArea');
-    const origBg = captureEl.style.background;
-    captureEl.style.background = '#ffffff';
+
+    // Inject hard-coded solid-colour override styles so html2canvas
+    // renders crisp text instead of faded CSS-variable colors
+    const overrideStyle = document.createElement('style');
+    overrideStyle.id = 'capture-override';
+    overrideStyle.textContent = [
+        '#captureArea { background: #ffffff !important; color: #0c1929 !important; border-radius: 14px !important; }',
+        '#captureArea * { color: #0c1929 !important; border-color: #e2e8f0 !important; background: transparent !important; }',
+        '#captureArea h3 { color: #0c1929 !important; font-size: 17px !important; font-weight: 800 !important; margin-bottom: 14px !important; text-align: center !important; }',
+        '#captureArea table { width: 100% !important; border-collapse: collapse !important; }',
+        '#captureArea th { color: #64748b !important; font-size: 11px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.5px !important; padding: 8px 6px !important; border-bottom: 2px solid #e2e8f0 !important; }',
+        '#captureArea td { color: #0c1929 !important; font-weight: 600 !important; font-size: 14px !important; padding: 12px 6px !important; border-bottom: 1px solid #f1f5f9 !important; }',
+        '#captureArea td:last-of-type { color: #00b377 !important; font-weight: 800 !important; font-size: 16px !important; text-align: right !important; }',
+        '#captureArea .tracker-total-row { color: #0c1929 !important; font-size: 18px !important; font-weight: 800 !important; }',
+        '#captureArea .tracker-total-container { margin-top: 14px !important; padding-top: 12px !important; border-top: 2px dashed #e2e8f0 !important; display: flex !important; justify-content: space-between !important; align-items: center !important; }'
+    ].join(' ');
+    document.head.appendChild(overrideStyle);
 
     try {
         const canvas = await html2canvas(captureEl, {
@@ -2347,9 +2359,29 @@ async function shareWeeklyWhatsApp() {
             allowTaint: false,
             logging: false,
             backgroundColor: '#ffffff',
-            removeContainer: true
+            removeContainer: true,
+            onclone: function(doc) {
+                // Additional cleanup in the cloned doc
+                var el = doc.getElementById('captureArea');
+                if (el) {
+                    el.style.background = '#ffffff';
+                    el.style.padding = '20px 18px';
+                    // Fix all text colors in clone
+                    el.querySelectorAll('*').forEach(function(node) {
+                        var style = window.getComputedStyle(node);
+                        var color = style.color;
+                        // If color is near-transparent or very light, force dark
+                        if (color.includes('rgba') && color.includes('0.') || node.style.color === '') {
+                            node.style.color = '#0c1929';
+                        }
+                    });
+                }
+            }
         });
-        captureEl.style.background = origBg;
+
+        // Remove override
+        var ov = document.getElementById('capture-override');
+        if (ov) ov.remove();
 
         canvas.toBlob(async function(blob) {
             const file = new File([blob], 'Weekly_Report.png', { type: 'image/png' });
@@ -2393,7 +2425,8 @@ async function shareWeeklyWhatsApp() {
             setTimeout(function(){ window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank'); }, 400);
         }, 'image/png');
     } catch(err) {
-        captureEl.style.background = origBg;
+        var ov = document.getElementById('capture-override');
+        if (ov) ov.remove();
         showToast('Error generating screenshot');
     }
 }
@@ -2401,18 +2434,34 @@ async function shareWeeklyWhatsApp() {
 function generatePhoto() {
     haptic('light');
     const captureEl = document.getElementById('captureArea');
-    const origBg = captureEl.style.background;
-    captureEl.style.background = '#ffffff';
+
+    const overrideStyle = document.createElement('style');
+    overrideStyle.id = 'capture-override-gen';
+    overrideStyle.textContent = [
+        '#captureArea { background: #ffffff !important; color: #0c1929 !important; }',
+        '#captureArea * { color: #0c1929 !important; border-color: #e2e8f0 !important; background: transparent !important; }',
+        '#captureArea h3 { color: #0c1929 !important; font-weight: 800 !important; text-align: center !important; }',
+        '#captureArea th { color: #64748b !important; font-weight: 700 !important; border-bottom: 2px solid #e2e8f0 !important; }',
+        '#captureArea td { color: #0c1929 !important; font-weight: 600 !important; border-bottom: 1px solid #f1f5f9 !important; }',
+        '#captureArea td:last-of-type { color: #00b377 !important; font-weight: 800 !important; text-align: right !important; }',
+        '#captureArea .tracker-total-row { color: #0c1929 !important; font-weight: 800 !important; }'
+    ].join('');
+    document.head.appendChild(overrideStyle);
+
     html2canvas(captureEl, {
         scale: 2, useCORS: true, allowTaint: false,
         logging: false, backgroundColor: '#ffffff', removeContainer: true
     }).then(function(canvas) {
-        captureEl.style.background = origBg;
+        var ov = document.getElementById('capture-override-gen');
+        if (ov) ov.remove();
         const link = document.createElement('a');
-        link.download = 'Taxi_Income_' + document.getElementById('weekDisplay').innerText + '.png';
-        link.href = canvas.toDataURL('image/png'); link.click();
+        link.download = 'Taxi_Income_' + document.getElementById('weekDisplay').innerText.replace(/[^a-zA-Z0-9_\-]/g, '_') + '.png';
+        link.href = canvas.toDataURL('image/png', 1.0);
+        link.click();
+        showToast('📷 Photo saved!');
     }).catch(function() {
-        captureEl.style.background = origBg;
+        var ov = document.getElementById('capture-override-gen');
+        if (ov) ov.remove();
         showToast('Error generating photo');
     });
 }
@@ -4172,6 +4221,20 @@ function renderVersionInfo() {
 }
 
 buildRegoSelect();
+
+/* ── REFRESH / CLEAR CACHE ── */
+function refreshApp() {
+    haptic('medium');
+    if ('caches' in window) {
+        caches.keys().then(function(names) {
+            names.forEach(function(name) { caches.delete(name); });
+        });
+    }
+    showToast('🔄 Refreshing…', 1200);
+    setTimeout(function() {
+        window.location.reload(true);
+    }, 600);
+}
 renderTrackerTable();
 autoCreditPreviousWeeks();
 renderReceiptArchive();
