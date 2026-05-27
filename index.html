@@ -1457,6 +1457,19 @@
 </div>
 
 
+<!-- REFRESH CONFIRMATION MODAL -->
+<div id="refreshModal" class="modal-overlay" onclick="if(event.target===this)closeRefreshModal()">
+    <div class="modal-box">
+        <div class="modal-handle"></div>
+        <h3>🔄 Refresh App?</h3>
+        <p>This will clear the cache and reload the app.<br>Your data is safe — it stays in your account.</p>
+        <div class="btn-pair">
+            <button class="btn btn-copy" onclick="closeRefreshModal()">Cancel</button>
+            <button class="btn btn-submit" onclick="confirmRefresh()" style="margin-top:0;margin-bottom:0;">Refresh</button>
+        </div>
+    </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <!-- SCHEDULE DAY POPOVER -->
@@ -4224,7 +4237,18 @@ buildRegoSelect();
 
 /* ── REFRESH / CLEAR CACHE ── */
 function refreshApp() {
+    haptic('light');
+    document.getElementById('refreshModal').classList.add('show');
+}
+
+function closeRefreshModal() {
+    haptic('light');
+    document.getElementById('refreshModal').classList.remove('show');
+}
+
+function confirmRefresh() {
     haptic('medium');
+    closeRefreshModal();
     if ('caches' in window) {
         caches.keys().then(function(names) {
             names.forEach(function(name) { caches.delete(name); });
@@ -4233,7 +4257,7 @@ function refreshApp() {
     showToast('🔄 Refreshing…', 1200);
     setTimeout(function() {
         window.location.reload(true);
-    }, 600);
+    }, 800);
 }
 renderTrackerTable();
 autoCreditPreviousWeeks();
