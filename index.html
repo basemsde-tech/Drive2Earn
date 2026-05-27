@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Drive2Earn v1.10 | 2025-05-27 | Changes: Rego dropdown, receipt fix, planner removed, iOS share fix, weekly screenshot fix -->
 <html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
@@ -1341,11 +1342,7 @@
             <div class="tab-center-pill">🧮</div>
             <span class="tab-center-label">Shift</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('tab-schedule', this)" id="tabSchedule">
-            <span class="tab-icon">📅</span>
-            Planner
-            <span class="tab-pip" id="pipSchedule"></span>
-        </button>
+
         <button class="tab-btn" onclick="switchTab('tab-tax', this)" id="tabReports">
             <span class="tab-icon">🏛️</span>
             Reports
@@ -1437,6 +1434,22 @@
         </div>
 
         <div class="card">
+            <h2>🚐 Vehicle Rego <span style="color:var(--red);font-size:13px;">*</span></h2>
+            <div class="rego-row">
+                <select id="regoSelect" onchange="updateCalc()">
+                    <option value="">— Select Rego —</option>
+                </select>
+                <button type="button" class="btn-add" onclick="showRegoAdd()" style="flex-shrink:0;padding:10px 14px;">＋ Rego</button>
+            </div>
+            <div class="rego-required" id="regoRequired">⚠️ Select a rego before sharing</div>
+            <div id="regoAddRow" class="rego-add-row" style="display:none;">
+                <input type="text" id="regoInput" placeholder="e.g. ABC123" maxlength="10" autocomplete="off" style="text-transform:uppercase;">
+                <button type="button" class="btn-add" onclick="saveNewRego()" style="flex-shrink:0;padding:10px 14px;">Save</button>
+                <button type="button" class="btn-rm" onclick="hideRegoAdd()" style="width:40px;height:42px;">×</button>
+            </div>
+        </div>
+
+        <div class="card">
             <label id="shiftDateLabel" style="margin-top:0;">Shift Date</label>
             <!-- Quick date buttons -->
             <div class="date-quick-strip">
@@ -1469,7 +1482,7 @@
             <h2>🚗 Runs & Accounts</h2>
             <label style="margin-top:0;">Run Count (× $5 each)</label>
             <div class="run-row">
-                <input type="text" id="runCount" placeholder="0" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
+                <input type="number" id="runCount" placeholder="0" autocomplete="off" inputmode="numeric">
                 <span class="run-multiplier">= <strong id="runTotal" style="color: var(--primary);">$0.00</strong></span>
             </div>
             <div class="section-divider" style="margin-top: 18px;">Accounts</div>
@@ -1518,7 +1531,7 @@
             <h2>🚕 Hail Trips <span style="font-size:11px;font-weight:600;color:var(--muted);text-transform:none;">$1.20 levy / trip</span></h2>
             <label style="margin-top:0;">Number of Hail Trips Today <span style="color:var(--red)">*</span></label>
             <div class="trips-input-row">
-                <input type="text" id="hailTrips" placeholder="0" inputmode="numeric" pattern="[0-9]*" autocomplete="off" oninput="updateLevyPreview()">
+                <input type="number" id="hailTrips" placeholder="0" inputmode="numeric" autocomplete="off" oninput="updateLevyPreview()">
                 <div class="trips-badge">levy: <strong id="levyPreviewAmt">$0.00</strong></div>
             </div>
             <div id="tripsMandatoryHint">⚠️ Trip count is required before sharing</div>
@@ -1778,121 +1791,70 @@
     </div>
 
     <!-- ══════════════════════════════════════════
-         TAB 5: WORK SCHEDULE
-    ══════════════════════════════════════════ -->
-    <div id="tab-schedule" class="page">
-
-        <!-- SCHEDULE TOGGLE -->
-        <div class="card">
-            <div style="display:flex;align-items:center;justify-content:space-between;">
-                <div>
-                    <div style="font-size:15px;font-weight:800;color:var(--primary);">Work Schedule</div>
-                    <div style="font-size:12px;color:var(--muted);font-weight:500;margin-top:3px;" id="scheduleStatusLabel">Schedule is off — app works normally</div>
-                </div>
-                <label class="sched-toggle-wrap">
-                    <input type="checkbox" id="scheduleEnabled" onchange="toggleSchedule(this.checked)">
-                    <span class="sched-toggle-knob"></span>
-                </label>
-            </div>
-            <div id="scheduleActiveHint" style="display:none;margin-top:12px;padding:10px 12px;background:var(--btn-add-bg);border-radius:10px;font-size:12px;color:var(--blue);font-weight:600;">
-                📅 Schedule is active · Shift date & reminders linked to your plan
-            </div>
-        </div>
-
-        <!-- VIEW SWITCHER -->
-        <div class="sched-view-strip">
-            <button class="sched-view-btn active" data-view="calendar" onclick="setSchedView('calendar',this)">📆 Calendar</button>
-            <button class="sched-view-btn" data-view="summary" onclick="setSchedView('summary',this)">📊 Week Summary</button>
-        </div>
-
-        <!-- WEEK NAV -->
-        <div class="card" style="padding:14px;" id="schedWeekCard">
-            <div class="week-nav" style="margin-bottom:10px;">
-                <button class="week-nav-btn" onclick="changeSchedMonth(-1)">← Prev</button>
-                <span class="week-display-label" id="schedWeekLabel">–</span>
-                <button class="week-nav-btn" onclick="changeSchedMonth(1)">Next →</button>
-            </div>
-
-            <!-- CALENDAR VIEW -->
-            <div id="schedCalendarView">
-                <div class="sched-cal-grid" id="schedCalGrid"></div>
-            </div>
-
-<!-- SUMMARY VIEW -->
-            <div id="schedSummaryView" style="display:none;">
-                <div id="schedSummaryContent"></div>
-            </div>
-        </div>
-
-        <!-- SHARE BUTTON -->
-        <button class="btn btn-copy" id="schedShareBtn" onclick="shareScheduleScreenshot()">📤 Share This Week's Schedule</button>
-
-        <!-- HIDDEN SHARE CANVAS -->
-        <div id="schedShareCapture" style="position:fixed;left:-9999px;top:-9999px;background:white;padding:20px;border-radius:12px;min-width:340px;"></div>
-
-        <div class="spacer"></div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
          PROFILE & SYNC
     ══════════════════════════════════════════ -->
     <div id="tab-profile" class="page">
 
-        <!-- FIREBASE SETUP (shown when not configured) -->
-        <div class="card" id="fbSetupCard" style="display:none;">
-            <h2>⚙️ Firebase Setup</h2>
-            <p class="info-text">To sync across devices, connect your Firebase project. This is a one-time setup.</p>
-            <a href="https://console.firebase.google.com" target="_blank" style="display:block;text-align:center;font-size:13px;font-weight:700;color:var(--blue);margin-bottom:14px;">📖 How to get your config →</a>
-            <label style="margin-top:0;">Firebase Config (JSON)</label>
-            <textarea id="fbConfigInput" rows="6" style="width:100%;padding:12px;font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--input-bg);color:var(--primary);font-family:monospace;resize:vertical;" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}'></textarea>
-            <button class="btn btn-submit" style="margin-top:12px;" onclick="saveFirebaseConfig()">💾 Connect Firebase</button>
+        <!-- FIREBASE SETUP -->
+        <div id="fbSetupCard" style="display:none;">
+            <div class="profile-hero">
+                <div class="profile-hero-icon">🔥</div>
+                <div class="profile-hero-title">Connect Firebase</div>
+                <div class="profile-hero-sub">One-time setup to sync your data across all devices</div>
+            </div>
+            <div class="card">
+                <label style="margin-top:0;">Firebase Config (JSON)</label>
+                <textarea id="fbConfigInput" rows="5" style="width:100%;padding:12px;font-size:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);background:var(--input-bg);color:var(--primary);font-family:monospace;resize:none;margin-top:6px;line-height:1.5;" placeholder='{"apiKey":"...","authDomain":"...","projectId":"...","storageBucket":"...","messagingSenderId":"...","appId":"..."}'></textarea>
+                <button class="btn btn-submit" style="margin-top:12px;margin-bottom:0;" onclick="saveFirebaseConfig()">Connect Firebase</button>
+                <a href="https://console.firebase.google.com" target="_blank" style="display:block;text-align:center;font-size:12px;font-weight:600;color:var(--blue);margin-top:12px;padding:4px;">Get your config from Firebase Console →</a>
+                <button onclick="resetFirebaseConfig()" style="background:none;border:none;width:100%;text-align:center;font-size:12px;color:var(--red);font-weight:600;cursor:pointer;margin-top:4px;padding:4px;-webkit-tap-highlight-color:transparent;">⚙️ Re-enter Firebase config</button>
+            </div>
         </div>
 
         <!-- NOT SIGNED IN -->
         <div id="authCard" style="display:none;">
-            <div class="card" style="margin-bottom:14px;">
-                <div style="text-align:center;margin-bottom:20px;">
-                    <div style="font-size:48px;">👤</div>
-                    <div style="font-size:18px;font-weight:800;color:var(--primary);margin-top:8px;">Sign in to Drive2Earn</div>
-                    <div style="font-size:13px;color:var(--muted);margin-top:4px;font-weight:500;">Your data syncs automatically across all your devices</div>
-                </div>
-                <button class="btn btn-submit" onclick="signInGoogle()" style="background:linear-gradient(135deg,#4285f4,#0f9d58);margin-bottom:12px;">
-                    <img src="https://www.google.com/favicon.ico" style="width:16px;height:16px;border-radius:3px;"> Continue with Google
-                </button>
-                <div class="section-divider" style="margin:4px 0 12px;">or email</div>
+            <div class="profile-hero">
+                <div class="profile-hero-avatar">🚕</div>
+                <div class="profile-hero-title">Drive2Earn</div>
+                <div class="profile-hero-sub">Sign in to sync your data across all your devices automatically</div>
+            </div>
+            <button class="btn profile-google-btn" onclick="signInGoogle()">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.706A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+            </button>
+            <div class="profile-or-divider"><span>or sign in with email</span></div>
+            <div class="card">
                 <label style="margin-top:0;">Email</label>
-                <input type="email" id="authEmail" placeholder="you@email.com" inputmode="email" autocomplete="email">
+                <input type="email" id="authEmail" placeholder="you@email.com" inputmode="email" autocomplete="email" style="margin-bottom:0;">
                 <label>Password</label>
-                <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password">
-                <div class="btn-pair" style="margin-top:12px;">
+                <input type="password" id="authPassword" placeholder="••••••••" autocomplete="current-password" style="margin-bottom:0;">
+                <div class="btn-pair" style="margin-top:14px;">
                     <button class="btn btn-submit" onclick="signInEmail()" style="margin-bottom:0;">Sign In</button>
-                    <button class="btn btn-copy" onclick="signUpEmail()" style="margin-bottom:0;">Create Account</button>
+                    <button class="btn btn-copy" onclick="signUpEmail()" style="margin-bottom:0;">Register</button>
                 </div>
-                <button onclick="resetPassword()" style="background:none;border:none;width:100%;text-align:center;font-size:13px;color:var(--blue);font-weight:600;cursor:pointer;margin-top:10px;padding:6px;">Forgot password?</button>
+                <button onclick="resetPassword()" style="background:none;border:none;width:100%;text-align:center;font-size:13px;color:var(--blue);font-weight:600;cursor:pointer;margin-top:12px;padding:4px;-webkit-tap-highlight-color:transparent;">Forgot password?</button>
+                <button onclick="resetFirebaseConfig()" style="background:none;border:none;width:100%;text-align:center;font-size:12px;color:var(--red);font-weight:600;cursor:pointer;margin-top:4px;padding:4px;-webkit-tap-highlight-color:transparent;">⚙️ Re-enter Firebase config</button>
             </div>
         </div>
 
         <!-- SIGNED IN -->
         <div id="profileCard" style="display:none;">
-            <!-- Avatar & name -->
-            <div class="card" style="margin-bottom:14px;">
-                <div style="display:flex;align-items:center;gap:14px;">
-                    <div id="profileAvatar" style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--blue),#6366f1);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:white;flex-shrink:0;">D</div>
-                    <div style="flex:1;min-width:0;">
-                        <div id="profileName" style="font-size:16px;font-weight:800;color:var(--primary);">Driver</div>
-                        <div id="profileEmail" style="font-size:12px;color:var(--muted);font-weight:500;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
-                        <div id="profileUid" style="font-size:10px;color:var(--muted);margin-top:2px;opacity:0.6;font-family:monospace;"></div>
-                    </div>
-                    <button onclick="fbSignOut()" style="background:var(--btn-rm-bg);border:none;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;color:var(--red);cursor:pointer;flex-shrink:0;-webkit-tap-highlight-color:transparent;">Sign Out</button>
+            <div class="profile-signed-hero">
+                <div id="profileAvatar" class="profile-big-avatar">D</div>
+                <div style="flex:1;min-width:0;">
+                    <div id="profileName" class="profile-signed-name">Driver</div>
+                    <div id="profileEmail" class="profile-signed-email"></div>
+                    <div id="profileUid" class="profile-signed-uid"></div>
                 </div>
-                <!-- Edit display name -->
-                <div style="margin-top:14px;display:flex;gap:8px;">
-                    <input type="text" id="profileNameInput" placeholder="Display name" style="flex:1;margin-bottom:0;">
-                    <button onclick="updateDisplayName()" style="background:var(--btn-add-bg);border:none;border-radius:10px;padding:0 14px;font-size:13px;font-weight:700;color:var(--blue);cursor:pointer;flex-shrink:0;">Save</button>
+                <button onclick="fbSignOut()" class="profile-signout-btn">Sign Out</button>
+            </div>
+            <div class="card" style="margin-bottom:14px;">
+                <label style="margin-top:0;">Display Name</label>
+                <div style="display:flex;gap:8px;margin-top:6px;">
+                    <input type="text" id="profileNameInput" placeholder="Your name" style="flex:1;margin-bottom:0;">
+                    <button onclick="updateDisplayName()" class="profile-save-btn">Save</button>
                 </div>
             </div>
-
-            <!-- Sync status -->
             <div class="card" style="margin-bottom:14px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
                     <h2 style="margin-bottom:0;">☁️ Sync</h2>
@@ -1907,8 +1869,10 @@
                     <button class="btn btn-copy" onclick="pullAllData()" style="margin-bottom:0;font-size:13px;">⬇ Pull</button>
                 </div>
             </div>
-
-            <!-- Version & Changelog -->
+            <div class="card" style="margin-bottom:14px;">
+                <h2>📊 Your Data</h2>
+                <div id="dataOverview" style="font-size:13px;color:var(--muted);font-weight:500;line-height:2;"></div>
+            </div>
             <div class="card" style="margin-bottom:14px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
                     <h2 style="margin-bottom:0;">🔖 Version</h2>
@@ -1916,17 +1880,8 @@
                 </div>
                 <div id="changelogList" style="max-height:320px;overflow-y:auto;"></div>
             </div>
-
-            <!-- Data overview -->
-            <div class="card" style="margin-bottom:14px;">
-                <h2>📊 Your Data</h2>
-                <div id="dataOverview" style="font-size:13px;color:var(--muted);font-weight:500;line-height:1.8;"></div>
-            </div>
-
-            <!-- Danger zone -->
-            <div class="card" style="border-color:rgba(239,68,68,0.2);">
-                <h2 style="color:var(--red);">⚠️ Danger Zone</h2>
-                <button class="btn btn-danger-soft" onclick="disconnectFirebase()" style="margin-bottom:8px;font-size:13px;">🔌 Disconnect Firebase (keep local data)</button>
+            <div class="card" style="border-color:rgba(239,68,68,0.18);margin-bottom:0;">
+                <button class="btn btn-danger-soft" onclick="disconnectFirebase()" style="margin-bottom:0;font-size:13px;">🔌 Disconnect Firebase</button>
             </div>
         </div>
 
@@ -1999,7 +1954,6 @@ function switchTab(tabId, btnElement) {
     if (tabId === 'tab-tracker') renderTrackerTable();
     if (tabId === 'tab-tax') { renderCashTracker(); renderLevyReport(); renderFuelTracker(); calcBASGross(); updateTZDisplay(); }
     if (tabId === 'tab-receipts') { renderReceiptArchive(); }
-    if (tabId === 'tab-schedule') { renderSchedule(); }
 }
 
 function moveTabSlider(btn) {
@@ -2134,8 +2088,9 @@ function renderTrackerTable() {
         total += entry.amount; shifts++;
         if (entry.amount > best) best = entry.amount;
         const tr = document.createElement('tr');
+        const regoTag = entry.rego ? '<span style="font-size:10px;font-weight:700;color:var(--muted);background:var(--surface2);padding:2px 6px;border-radius:6px;margin-left:4px;">' + entry.rego + '</span>' : '';
         tr.innerHTML = `
-            <td>${new Date(entry.date.replace(/-/g,'/')).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}</td>
+            <td>${new Date(entry.date.replace(/-/g,'/')).toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' })}${regoTag}</td>
             <td style="text-align: right; font-weight: 800; color: var(--green);">$${entry.amount.toFixed(2)}</td>
             <td data-html2canvas-ignore style="text-align: right; white-space: nowrap;">
                 <button class="row-action-btn" style="color: var(--row-action-edit);" onclick="editEntry('${entry.date}')">✎</button>
@@ -2197,31 +2152,93 @@ function quickManualAdd() {
 async function shareWeeklyWhatsApp() {
     haptic('medium');
     const { start, end } = getWeekBoundaries();
-    const total = document.getElementById('weeklyTotal').dataset.total;
+    const totalEl = document.getElementById('weeklyTotal');
+    const total = totalEl ? (totalEl.dataset.total || '0.00') : '0.00';
     const startStr = start.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const endStr = end.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    const message = `Taxi Income Report\nPeriod: ${startStr} to ${endStr}\nTotal Amount: $${total}`;
+    const endStr   = end.toLocaleDateString('en-GB',   { day: '2-digit', month: 'short', year: 'numeric' });
+    const message  = 'Taxi Income Report' + '\n' + 'Period: ' + startStr + ' to ' + endStr + '\n' + 'Total: $' + total;
+    const isIOS    = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    // Force white background for clean screenshot
+    const captureEl = document.getElementById('captureArea');
+    const origBg = captureEl.style.background;
+    captureEl.style.background = '#ffffff';
+
     try {
-        const canvas = await html2canvas(document.getElementById('captureArea'), { useCORS: true, allowTaint: false, scale: window.devicePixelRatio || 2, logging: false, scale: 2, backgroundColor: '#ffffff' });
-        canvas.toBlob(async (blob) => {
+        const canvas = await html2canvas(captureEl, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: false,
+            logging: false,
+            backgroundColor: '#ffffff',
+            removeContainer: true
+        });
+        captureEl.style.background = origBg;
+
+        canvas.toBlob(async function(blob) {
             const file = new File([blob], 'Weekly_Report.png', { type: 'image/png' });
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                try { await navigator.share({ text: message, files: [file], title: 'Weekly Report' }); } catch(e) {}
-            } else {
-                const link = document.createElement('a'); link.download = file.name; link.href = URL.createObjectURL(blob); link.click();
-                window.location.href = `whatsapp://send?text=${encodeURIComponent(message)}`;
+
+            if (isIOS && navigator.share) {
+                // iOS: copy message to clipboard, then share image
+                try { await navigator.clipboard.writeText(message); } catch(e) {
+                    const ta = document.getElementById('hiddenCopy');
+                    ta.value = message; ta.select(); ta.setSelectionRange(0,9999);
+                    try { document.execCommand('copy'); } catch(e2){}
+                }
+                try {
+                    const sd = { files: [file], title: 'Weekly Report' };
+                    if (navigator.canShare && navigator.canShare(sd)) {
+                        showToast('Message copied — paste it in WhatsApp', 4000);
+                        await navigator.share(sd);
+                        return;
+                    }
+                } catch(e) {
+                    if (e.name === 'AbortError') return;
+                }
+                // Fallback: download image + open WhatsApp
+                const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Weekly_Report.png'; a.click();
+                setTimeout(function(){ window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank'); }, 500);
+                return;
             }
+
+            // Android / Desktop: try text + file together
+            if (navigator.share) {
+                try {
+                    const sd = { text: message, files: [file], title: 'Weekly Report' };
+                    const canShare = !navigator.canShare || navigator.canShare(sd);
+                    await navigator.share(canShare ? sd : { text: message, title: 'Weekly Report' });
+                    return;
+                } catch(e) {
+                    if (e.name === 'AbortError') return;
+                }
+            }
+            // Fallback: download + WhatsApp
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'Weekly_Report.png'; a.click();
+            setTimeout(function(){ window.open('https://wa.me/?text=' + encodeURIComponent(message), '_blank'); }, 400);
         }, 'image/png');
-    } catch (err) { showToast('❌ Error generating photo'); }
+    } catch(err) {
+        captureEl.style.background = origBg;
+        showToast('Error generating screenshot');
+    }
 }
 
 function generatePhoto() {
     haptic('light');
-    html2canvas(document.getElementById('captureArea'), { scale: 2, backgroundColor: '#ffffff' }).then(canvas => {
+    const captureEl = document.getElementById('captureArea');
+    const origBg = captureEl.style.background;
+    captureEl.style.background = '#ffffff';
+    html2canvas(captureEl, {
+        scale: 2, useCORS: true, allowTaint: false,
+        logging: false, backgroundColor: '#ffffff', removeContainer: true
+    }).then(function(canvas) {
+        captureEl.style.background = origBg;
         const link = document.createElement('a');
-        link.download = `Taxi_Income_${document.getElementById('weekDisplay').innerText}.png`;
+        link.download = 'Taxi_Income_' + document.getElementById('weekDisplay').innerText + '.png';
         link.href = canvas.toDataURL('image/png'); link.click();
-    }).catch(() => showToast('❌ Error generating photo'));
+    }).catch(function() {
+        captureEl.style.background = origBg;
+        showToast('Error generating photo');
+    });
 }
 
 /* SECTION 5 REPLACED */ /* =======================================================================
@@ -2364,7 +2381,10 @@ function _doUpdateCalc() {
     const gd=document.getElementById('glanceDay'); if(gd) gd.textContent=dayName;
     document.getElementById('headerDateBadge').textContent = `${dayName.slice(0, 3)} ${dd}/${mm}`;
 
-    let msg = `*Shift Report: ${dateStr}*\n\n`;
+    const currentRego = getCurrentRego();
+    let msg = `*Shift Report: ${dateStr}*\n`;
+    if (currentRego) msg += `🚐 *Rego: ${currentRego}*\n`;
+    msg += `\n`;
     if (totalEftpos > 0) {
         if (eftposStrings.length === 1) {
             msg += `💳 *EOS:* $${totalEftpos.toFixed(2)}\n`;
@@ -2509,6 +2529,8 @@ document.getElementById('clearBtn').onclick = () => {
 function submitToTracker() {
     haptic('success');
     const dateStr = document.getElementById('shiftDate').value;
+    const rego = getCurrentRego();
+    if (rego) localStorage.setItem('d2e_last_rego', rego);
     const totalRaw = parseFloat(document.getElementById('totalDisplay').dataset.raw);
     if (!dateStr) return showToast('⚠️ Please select a date first');
     saveShiftTrips();
@@ -2518,8 +2540,8 @@ function submitToTracker() {
     const fuelTyp = document.getElementById('fuelType')?.value || 'Fuel';
     if (fuelAmt > 0) recordFuelForDate(dateStr, fuelAmt, fuelTyp);
     const existingIndex = entries.findIndex(e => e.date === dateStr);
-    if (existingIndex >= 0) entries[existingIndex].amount = totalRaw;
-    else entries.push({ date: dateStr, amount: totalRaw });
+    if (existingIndex >= 0) { entries[existingIndex].amount = totalRaw; if (rego) entries[existingIndex].rego = rego; }
+    else entries.push({ date: dateStr, amount: totalRaw, rego: rego || ''  });
     localStorage.setItem('taxi_income_data_v2', JSON.stringify(entries));
     autoSync('taxi_income_data_v2', entries);
     autoCreditPreviousWeeks();
@@ -2535,12 +2557,7 @@ document.getElementById('shiftDate').addEventListener('change', function() {
     updateDateQuickBtns(this.value);
     loadTripsForDate(this.value);
     updateCalc();
-    if (schedEnabled) {
-        const ds = this.value;
-        if (ds && !schedule[ds]?.working) {
-            showToast('Not a scheduled work day', 3500);
-        }
-    }
+
 });
 document.getElementById('addEftposBtn').onclick = () => { haptic('light'); createEOSRow(eftposContainer); };
 document.getElementById('addCashBtn').onclick = () => { haptic('light'); createDynRow(cashContainer, 'Payer Name'); };
@@ -2818,19 +2835,49 @@ function saveReceiptArchive() {
     autoSync('d2e_receipt_archive_v1', receiptArchive);
 }
 
-// Called from submitToTracker when a receipt exists
+// Called from submitToTracker — stores receipt with proper base64 handling
 function storeReceiptForDate(ds) {
-    const fileData = eosPreviewContainer.dataset.fileData;
-    const fileName = eosFileText.textContent || 'receipt';
-    if (!fileData || !fileData.startsWith('data:')) return;
-    const fileType = fileData.startsWith('data:application/pdf') ? 'pdf' : 'image';
-    if (!receiptArchive[ds]) receiptArchive[ds] = [];
-    // Overwrite if same date already exists (one receipt per shift)
-    const existing = receiptArchive[ds].findIndex(r => r.shiftReceipt);
-    const label = 'EOS — ' + ds; const entry = { id: Date.now(), fileName: fileName !== 'receipt' ? fileName : label, fileData, fileType, savedAt: new Date().toISOString(), shiftReceipt: true };
-    if (existing >= 0) receiptArchive[ds][existing] = entry;
-    else receiptArchive[ds].push(entry);
-    saveReceiptArchive();
+    const container = document.getElementById('eosPreviewContainer');
+    if (!container) return;
+    const fileData = container.dataset.fileData;
+    const fileName = (document.getElementById('eosFileText') || {}).textContent || 'EOS Receipt';
+
+    function doStore(data) {
+        if (!data || !data.startsWith('data:')) return;
+        const fileType = data.startsWith('data:application/pdf') ? 'pdf' : 'image';
+        if (!receiptArchive[ds]) receiptArchive[ds] = [];
+        const existing = receiptArchive[ds].findIndex(function(r){ return r.shiftReceipt; });
+        const label = 'EOS — ' + ds;
+        const entry = {
+            id: Date.now(),
+            fileName: (fileName && fileName !== 'receipt' && fileName !== 'Attached') ? fileName : label,
+            fileData: data,
+            fileType: fileType,
+            savedAt: new Date().toISOString(),
+            shiftReceipt: true
+        };
+        if (existing >= 0) receiptArchive[ds][existing] = entry;
+        else receiptArchive[ds].push(entry);
+        saveReceiptArchive();
+        showToast('📁 Receipt saved to Docs');
+    }
+
+    // Case 1: already have base64 in dataset
+    if (fileData && fileData.startsWith('data:')) {
+        doStore(fileData);
+        return;
+    }
+
+    // Case 2: file picked via input — read it as base64 now
+    const fileInput = document.getElementById('eosReceiptFile');
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) { doStore(e.target.result); };
+        reader.readAsDataURL(fileInput.files[0]);
+        return;
+    }
+
+    // No receipt attached — skip silently
 }
 
 /* ── FILTER ── */
@@ -3013,6 +3060,115 @@ function deleteViewerReceipt() {
     showToast('🗑 Receipt deleted');
 }
 
+
+/* =====================================================================
+   REGO ENGINE
+===================================================================== */
+let regoList = JSON.parse(localStorage.getItem('d2e_regos') || '[]');
+
+function saveRegoList() {
+    localStorage.setItem('d2e_regos', JSON.stringify(regoList));
+}
+
+function buildRegoSelect() {
+    const sel = document.getElementById('regoSelect');
+    if (!sel) return;
+    const current = sel.value;
+    sel.innerHTML = '<option value="">— Select Rego —</option>';
+    regoList.forEach(function(r) {
+        const opt = document.createElement('option');
+        opt.value = r; opt.textContent = r;
+        if (r === current) opt.selected = true;
+        sel.appendChild(opt);
+    });
+    // Also try to restore saved rego for today
+    const saved = localStorage.getItem('d2e_last_rego');
+    if (saved && !current && regoList.includes(saved)) sel.value = saved;
+}
+
+function showRegoAdd() {
+    document.getElementById('regoAddRow').style.display = 'flex';
+    document.getElementById('regoInput').focus();
+}
+function hideRegoAdd() {
+    document.getElementById('regoAddRow').style.display = 'none';
+    document.getElementById('regoInput').value = '';
+}
+function saveNewRego() {
+    const input = document.getElementById('regoInput');
+    const val = input.value.trim().toUpperCase();
+    if (!val) return showToast('Enter a rego plate');
+    if (regoList.includes(val)) return showToast('Rego already exists');
+    regoList.push(val);
+    saveRegoList();
+    buildRegoSelect();
+    document.getElementById('regoSelect').value = val;
+    localStorage.setItem('d2e_last_rego', val);
+    hideRegoAdd();
+    updateCalc();
+    showToast('✅ Rego ' + val + ' added');
+}
+function getCurrentRego() {
+    const sel = document.getElementById('regoSelect');
+    return sel ? sel.value : '';
+}
+function validateRego() {
+    const r = getCurrentRego();
+    const hint = document.getElementById('regoRequired');
+    if (!r) {
+        if (hint) hint.style.display = 'block';
+        showToast('Select a vehicle rego first');
+        return false;
+    }
+    if (hint) hint.style.display = 'none';
+    return true;
+}
+
+
+/* ── SHIFT DATE QUICK SELECT ── */
+function setShiftDate(preset) {
+    haptic('light');
+    const el = document.getElementById('shiftDate');
+    const today = todayStrInTZ();
+    let target;
+    if (preset === 'today') {
+        target = today;
+    } else if (preset === 'yesterday') {
+        const d = nowInTZ(); d.setDate(d.getDate() - 1);
+        target = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    } else {
+        target = preset;
+    }
+    el.value = target;
+    updateDateQuickBtns(target);
+    loadTripsForDate(target);
+    updateCalc();
+}
+
+function openDatePicker() {
+    const el = document.getElementById('shiftDate');
+    try { if (el.showPicker) { el.showPicker(); } else { el.click(); } } catch(e) { el.click(); }
+}
+
+function updateDateQuickBtns(ds) {
+    const today = todayStrInTZ();
+    const d = nowInTZ(); d.setDate(d.getDate() - 1);
+    const yest = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+    const btnToday = document.getElementById('dateQToday');
+    const btnYest  = document.getElementById('dateQYest');
+    const btnPick  = document.getElementById('dateQPick');
+    if (!btnToday) return;
+    btnToday.classList.toggle('active', ds === today);
+    btnYest.classList.toggle('active',  ds === yest);
+    btnPick.classList.toggle('active',  ds !== today && ds !== yest);
+}
+
+function _fallbackCopy(text) {
+    const el = document.getElementById('hiddenCopy');
+    el.value = text; el.select(); el.setSelectionRange(0, 99999);
+    try { document.execCommand('copy'); } catch(e) {}
+}
+
 /* =====================================================================
    LEVY ENGINE
 ===================================================================== */
@@ -3190,6 +3346,7 @@ function copyBASGross() {
 ===================================================================== */
 async function shareAndThenSave() {
     haptic('success');
+    if (!validateRego()) return;
     if (!validateTrips()) return;
     if (!validateReceipts()) return;
     const text = document.getElementById('hiddenCopy').value;
@@ -3267,428 +3424,6 @@ function closeAfterSaveModal(saveIt) {
     document.getElementById('afterSaveModal').classList.remove('show');
     if (saveIt) submitToTracker();
     else switchTab('tab-tracker', document.getElementById('tabWeekly'));
-}
-
-
-/* =====================================================================
-   WORK SCHEDULE ENGINE
-===================================================================== */
-// schedule: { 'YYYY-MM-DD': { working: bool, goal: number } }
-let schedule      = JSON.parse(localStorage.getItem('d2e_schedule_v1') || '{}');
-let schedEnabled  = localStorage.getItem('d2e_sched_enabled') === '1';
-let schedView     = 'calendar';
-let schedOffset   = 0; // week offset from current week
-let schedEditDate = null; // currently editing date
-
-// ── DAYS in Thu–Wed week order
-const DOW_LABELS = ['Thu','Fri','Sat','Sun','Mon','Tue','Wed'];
-// Calendar week: Mon–Sun
-const CAL_HEADERS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-
-function saveSchedule() {
-    localStorage.setItem('d2e_schedule_v1', JSON.stringify(schedule));
-    autoSync('d2e_schedule_v1', schedule);
-}
-
-/* ── INIT ── */
-function initSchedule() {
-    const cb = document.getElementById('scheduleEnabled');
-    if (cb) cb.checked = schedEnabled;
-    updateScheduleStatus();
-    renderSchedule();
-    schedCheckReminders();
-}
-
-function toggleSchedule(on) {
-    haptic('medium');
-    schedEnabled = on;
-    localStorage.setItem('d2e_sched_enabled', on ? '1' : '0');
-    updateScheduleStatus();
-    renderSchedule();
-    // Update shiftDate picker restriction
-    syncShiftDateToSchedule();
-    showToast(on ? '📅 Schedule mode ON' : '⏹ Schedule mode OFF');
-}
-
-function updateScheduleStatus() {
-    const lbl  = document.getElementById('scheduleStatusLabel');
-    const hint = document.getElementById('scheduleActiveHint');
-    const pip  = document.getElementById('pipSchedule');
-    if (lbl) lbl.textContent = schedEnabled
-        ? 'Schedule is ON — shift dates & reminders are synced'
-        : 'Schedule is OFF — app works normally';
-    if (hint) hint.style.display = schedEnabled ? 'block' : 'none';
-    // Show pip on tab if schedule is on and there's a working day today
-    if (pip) {
-        const todayStr = todayStrInTZ();
-        const isWorkDay = schedEnabled && schedule[todayStr]?.working;
-        const earned = !!entries.find(e => e.date === todayStr);
-        pip.classList.toggle('show', isWorkDay && !earned);
-    }
-}
-
-/* ── WEEK BOUNDARIES ── */
-function getSchedWeekBounds() {
-    // Uses Thu–Wed week (same as earnings tracker)
-    let d = nowInTZ(); d.setDate(d.getDate() + schedOffset * 7);
-    let day = d.getDay(), diff = day >= 4 ? day - 4 : day + 3;
-    let start = new Date(d); start.setDate(d.getDate() - diff);
-    let end   = new Date(start); end.setDate(start.getDate() + 6);
-    return { start, end };
-}
-
-function changeSchedMonth(n) {
-    haptic('light'); schedOffset += n; renderSchedule();
-}
-
-/* ── VIEW SWITCH ── */
-function setSchedView(v, btn) {
-    haptic('light'); schedView = v;
-    document.querySelectorAll('.sched-view-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById('schedCalendarView').style.display  = v === 'calendar' ? 'block' : 'none';
-    document.getElementById('schedSummaryView').style.display   = v === 'summary'  ? 'block' : 'none';
-    renderSchedule();
-}
-
-/* ── MAIN RENDER ── */
-function renderSchedule() {
-    const { start, end } = getSchedWeekBounds();
-    const s0 = start.toISOString().split('T')[0];
-    const e0 = end.toISOString().split('T')[0];
-    const wlbl = `${start.toLocaleDateString('en-GB',{day:'2-digit',month:'short'})} – ${end.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'})}`;
-    document.getElementById('schedWeekLabel').textContent = wlbl;
-
-    if (schedView === 'calendar') renderSchedCalendar(start);
-    else if (schedView === 'week')  renderSchedWeekList(start);
-    else                            renderSchedSummary(start);
-
-    updateScheduleStatus();
-}
-
-/* ── CALENDAR VIEW ── */
-/* ── Local date string (avoids UTC offset bug) ── */
-function localDateStr(d) {
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-}
-
-/* ── Popover state ── */
-let schedPopoverDate = null;
-let schedPopoverLongTimer = null;
-
-function showSchedPopover(ds, targetEl) {
-    haptic('medium');
-    schedPopoverDate = ds;
-    const pop = document.getElementById('schedPopover');
-    const sched = schedule[ds] || {};
-    const earn = entries.find(e => e.date === ds);
-    const d = new Date(ds + 'T12:00:00');
-    const label = d.toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'short'});
-
-    document.getElementById('schedPopoverDate').textContent = label;
-    const earnTxt = earn ? `✅ $${earn.amount.toFixed(2)} earned` : (sched.working ? '⏳ No earnings yet' : '');
-    document.getElementById('schedPopoverEarn').textContent = earnTxt;
-
-    const onBtn  = document.getElementById('schedPopOn');
-    const offBtn = document.getElementById('schedPopOff');
-    onBtn.classList.toggle('active', !!sched.working);
-    offBtn.classList.toggle('active', !sched.working);
-
-    // Position popover above/below the tapped cell
-    pop.style.display = 'block';
-    const rect = targetEl.getBoundingClientRect();
-    const pw = pop.offsetWidth || 190;
-    const ph = pop.offsetHeight || 110;
-    let left = rect.left + rect.width/2 - pw/2;
-    let top  = rect.bottom + 10;
-    // Keep within viewport
-    left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
-    if (top + ph > window.innerHeight - 80) top = rect.top - ph - 10;
-    pop.style.left = left + 'px';
-    pop.style.top  = top  + 'px';
-    pop.style.display = 'flex';
-    pop.style.flexDirection = 'column';
-}
-
-function hideSchedPopover() {
-    document.getElementById('schedPopover').style.display = 'none';
-    schedPopoverDate = null;
-}
-
-function setDayStatus(working) {
-    if (!schedPopoverDate) return;
-    haptic('light');
-    if (!schedule[schedPopoverDate]) schedule[schedPopoverDate] = {};
-    schedule[schedPopoverDate].working = working;
-    saveSchedule();
-    renderSchedule();
-    updateScheduleStatus();
-    // Update button states in popover
-    document.getElementById('schedPopOn').classList.toggle('active', working);
-    document.getElementById('schedPopOff').classList.toggle('active', !working);
-    showToast(working ? '🟢 Work day set' : '⭕ Day off set');
-    setTimeout(hideSchedPopover, 600);
-}
-
-// Close popover on outside tap
-document.addEventListener('click', function(e) {
-    const pop = document.getElementById('schedPopover');
-    if (pop && pop.style.display !== 'none' && !pop.contains(e.target)) hideSchedPopover();
-}, true);
-
-function renderSchedCalendar(monthDate) {
-    const grid = document.getElementById('schedCalGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    const todayStr = todayStrInTZ();
-    const year  = monthDate.getFullYear();
-    const month = monthDate.getMonth();
-
-    // Day-of-week headers Mon–Sun
-    CAL_HEADERS.forEach(h => {
-        const hd = document.createElement('div');
-        hd.className = 'sched-cal-header'; hd.textContent = h;
-        grid.appendChild(hd);
-    });
-
-    // First cell = Monday of the week containing the 1st of this month
-    const first = new Date(year, month, 1);
-    const dowFirst = first.getDay() === 0 ? 6 : first.getDay() - 1; // Mon=0
-    const startDate = new Date(year, month, 1 - dowFirst);
-
-    // Determine rows needed: always show full weeks covering the month
-    const lastDay = new Date(year, month + 1, 0); // last day of month
-    const dowLast = lastDay.getDay() === 0 ? 6 : lastDay.getDay() - 1;
-    const totalDays = dowFirst + lastDay.getDate() + (6 - dowLast);
-    const rows = Math.ceil(totalDays / 7);
-
-    for (let i = 0; i < rows * 7; i++) {
-        const d = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + i);
-        const ds = localDateStr(d);
-        const sched = schedule[ds] || {};
-        const earnEntry = entries.find(e => e.date === ds);
-        const otherMonth = d.getMonth() !== month;
-        const isToday    = ds === todayStr;
-        const isWorking  = sched.working;
-        const hasEarning = !!earnEntry;
-
-        let cls = 'sched-cal-day';
-        if (otherMonth)  cls += ' other-month';
-        if (isToday)     cls += ' today';
-        if (isWorking)   cls += ' working';
-        if (hasEarning)  cls += ' has-earning';
-
-        const cell = document.createElement('div');
-        cell.className = cls;
-        cell.dataset.date = ds;
-
-        // Tap or hold → popover
-        let longTimer;
-        cell.addEventListener('pointerdown', () => {
-            longTimer = setTimeout(() => { haptic('medium'); showSchedPopover(ds, cell); }, 380);
-        });
-        cell.addEventListener('pointerup',    () => clearTimeout(longTimer));
-        cell.addEventListener('pointerleave', () => clearTimeout(longTimer));
-        cell.addEventListener('click', e => { e.stopPropagation(); showSchedPopover(ds, cell); });
-
-        // Cell content: number + indicator
-        let indicator = '';
-        if (hasEarning)      indicator = `<div class="sched-cal-day-amt">$${Math.round(earnEntry.amount)}</div>`;
-        else if (isWorking)  indicator = '<div class="sched-cal-dot green"></div>';
-
-        cell.innerHTML = `<div class="sched-cal-day-num">${d.getDate()}</div>${indicator}`;
-        grid.appendChild(cell);
-    }
-
-    // Legend — create fresh each time
-    let leg = document.getElementById('schedCalLegend');
-    if (!leg) {
-        leg = document.createElement('div');
-        leg.id = 'schedCalLegend';
-        leg.className = 'sched-legend';
-        grid.after(leg);
-    }
-    leg.innerHTML = `
-        <div class="sched-legend-item"><div class="sched-legend-dot" style="background:rgba(0,214,143,0.45)"></div>Work day</div>
-        <div class="sched-legend-item"><div class="sched-legend-dot" style="background:rgba(79,142,247,0.4)"></div>Earned</div>
-        <div class="sched-legend-item"><div class="sched-legend-dot" style="border:2px solid var(--blue);background:transparent"></div>Today</div>
-        <div class="sched-legend-item" style="color:var(--muted);font-size:10px;">Tap any day to set Working / Off</div>
-    `;
-}
-
-/* ── SUMMARY VIEW — shows full month stats ── */
-function renderSchedSummary(monthDate) {
-    const el = document.getElementById('schedSummaryContent');
-    if (!el) return;
-    el.innerHTML = '';
-    const year = monthDate.getFullYear();
-    const month = monthDate.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    let workDays = 0, earnedTotal = 0, daysWithEarnings = 0;
-
-    for (let day = 1; day <= daysInMonth; day++) {
-        const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-        const sched = schedule[ds] || {};
-        const earn  = entries.find(e => e.date === ds);
-        if (sched.working) workDays++;
-        if (earn) { earnedTotal += earn.amount; daysWithEarnings++; }
-    }
-
-    const monthLabel = monthDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-    const avg = daysWithEarnings ? earnedTotal / daysWithEarnings : 0;
-
-    const rows = [
-        { label: 'Month', val: monthLabel, cls: '' },
-        { label: 'Work Days Scheduled', val: workDays || '—', cls: '' },
-        { label: 'Days with Earnings', val: daysWithEarnings || '—', cls: '' },
-        { label: 'Total Earned', val: earnedTotal ? `$${earnedTotal.toFixed(2)}` : '—', cls: earnedTotal > 0 ? 'green' : '' },
-        { label: 'Avg per Shift', val: avg ? `$${avg.toFixed(2)}` : '—', cls: '' },
-    ];
-    rows.forEach(r => {
-        const row = document.createElement('div'); row.className = 'sched-summary-row';
-        row.innerHTML = `<span class="sched-summary-label">${r.label}</span><span class="sched-summary-val ${r.cls}">${r.val}</span>`;
-        el.appendChild(row);
-    });
-}
-
-/* openSchedDayEditor/updateSchedDay replaced by popover */
-
-/* ── SHIFT DATE SYNC ── */
-function syncShiftDateToSchedule() {
-    if (!schedEnabled) return;
-    // When schedule is on, suggest next scheduled work day if today is not a work day
-    const todayStr = todayStrInTZ();
-    const shiftDateEl = document.getElementById('shiftDate');
-    if (!shiftDateEl) return;
-    // If shiftDate is already set and it's a work day, leave it
-    const existing = shiftDateEl.value;
-    if (existing && schedule[existing]?.working) return;
-    // Default to today if it's a work day, else leave as-is
-    if (schedule[todayStr]?.working) shiftDateEl.value = todayStr;
-}
-
-function isScheduledWorkDay(ds) {
-    if (!schedEnabled) return true; // no restriction when off
-    return !!schedule[ds]?.working;
-}
-
-/* ── REMINDERS ── */
-function schedCheckReminders() {
-    if (!schedEnabled) return;
-    const todayStr = todayStrInTZ();
-    const sched = schedule[todayStr];
-    if (!sched?.working) return;
-    const earned = entries.find(e => e.date === todayStr);
-    if (earned) return;
-    // Show a toast reminder after a 3-second delay on load
-    setTimeout(() => {
-        const pip = document.getElementById('pipSchedule');
-        if (pip) pip.classList.add('show');
-        showToast("📅 Today is a work day — don't forget to log your shift!", 4000);
-    }, 3000);
-}
-
-/* ── SHARE SCREENSHOT ── */
-async function shareScheduleScreenshot() {
-    haptic('medium');
-    const monthDate = getSchedMonthDate();
-    const capture = document.getElementById('schedShareCapture');
-    const year = monthDate.getFullYear();
-    const month = monthDate.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const monthLabel = monthDate.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
-
-    // Build hidden share div — show working days only for the month
-    let html = `<h3>📅 Work Schedule: ${monthLabel}</h3>`;
-    for (let day = 1; day <= daysInMonth; day++) {
-        const ds = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-        const d = new Date(year, month, day);
-        const sched = schedule[ds] || {};
-        const earn  = entries.find(e => e.date === ds);
-        if (!sched.working && !earn) continue; // only show relevant days
-        const dayLbl = d.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short'});
-        const isWorking = sched.working;
-        const earned = earn ? `$${earn.amount.toFixed(2)}` : '';
-        html += `<div class="share-day-row">
-            <div class="share-day-pill ${isWorking?'working':'off'}">
-                <div style="font-size:10px;font-weight:800;">${d.toLocaleDateString('en-GB',{weekday:'short'})}</div>
-                <div style="font-size:14px;font-weight:900;">${d.getDate()}</div>
-            </div>
-            <div style="flex:1;">
-                <div style="font-size:13px;font-weight:700;color:#0f172a;">${isWorking?'🟢 Working':'⭕ Day Off'}</div>
-                ${earned ? `<div style="font-size:11px;color:#059669;margin-top:2px;">Earned: ${earned}</div>` : ''}
-            </div>
-        </div>`;
-    }
-    capture.innerHTML = html;
-    capture.style.left = '0'; capture.style.top = '0'; capture.style.position = 'fixed';
-    capture.style.zIndex = '-1';
-
-    try {
-        const canvas = await html2canvas(capture, { scale: 2, backgroundColor: '#ffffff', logging: false });
-        capture.style.left = '-9999px'; capture.style.top = '-9999px';
-        canvas.toBlob(async blob => {
-            const file = new File([blob], `Schedule_${wlbl.replace(/[^a-zA-Z0-9]/g,'_')}.png`, { type: 'image/png' });
-            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                try { await navigator.share({ files: [file], title: 'Work Schedule' }); }
-                catch(e) { fallbackDownload(blob, file.name); }
-            } else { fallbackDownload(blob, file.name); }
-        }, 'image/png');
-    } catch(e) {
-        capture.style.left = '-9999px'; capture.style.top = '-9999px';
-        showToast('❌ Error generating screenshot');
-    }
-}
-
-function fallbackDownload(blob, name) {
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    showToast('📥 Schedule saved as image');
-}
-
-
-/* ── SHIFT DATE QUICK SELECT ── */
-function setShiftDate(preset) {
-    haptic('light');
-    const el = document.getElementById('shiftDate');
-    const today = todayStrInTZ();
-    let target;
-    if (preset === 'today') {
-        target = today;
-    } else if (preset === 'yesterday') {
-        const d = nowInTZ(); d.setDate(d.getDate() - 1);
-        target = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-    } else {
-        target = preset; // YYYY-MM-DD string passed directly
-    }
-    el.value = target;
-    updateDateQuickBtns(target);
-    loadTripsForDate(target);
-    // Warn if schedule is on and not a work day
-    if (schedEnabled && !schedule[target]?.working) {
-        showToast('⚠️ Not a scheduled work day — double check!', 3500);
-    }
-    updateCalc();
-}
-
-function openDatePicker() {
-    const el = document.getElementById('shiftDate');
-    try { if (el.showPicker) { el.showPicker(); } else { el.click(); } } catch(e) { el.click(); }
-}
-
-function updateDateQuickBtns(ds) {
-    const today = todayStrInTZ();
-    const d = nowInTZ(); d.setDate(d.getDate() - 1);
-    const yest = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-
-    const btnToday = document.getElementById('dateQToday');
-    const btnYest  = document.getElementById('dateQYest');
-    const btnPick  = document.getElementById('dateQPick');
-    if (!btnToday) return;
-
-    btnToday.classList.toggle('active', ds === today);
-    btnYest.classList.toggle('active', ds === yest);
-    btnPick.classList.toggle('active', ds !== today && ds !== yest);
 }
 
 
@@ -4009,10 +3744,6 @@ function _refreshForKey(key) {
             renderLevyReport();
             updateLevyPreview();
             break;
-        case 'd2e_schedule_v1':
-            if (document.getElementById('tab-schedule').classList.contains('active')) renderSchedule();
-            updateScheduleStatus();
-            break;
         case 'd2e_receipt_archive_v1':
             if (document.getElementById('tab-receipts').classList.contains('active')) renderReceiptArchive();
             break;
@@ -4092,10 +3823,7 @@ function switchToProfile() {
 window.addEventListener('load', () => {
     const hasCfg = !!localStorage.getItem('d2e_firebase_config');
     const fab = document.getElementById('profileFab');
-    if (!hasCfg && fab) {
-        // Pulse the FAB to hint setup needed
-        fab.style.animation = 'fabPulse 2s ease-in-out 3';
-    }
+    if (!hasCfg && fab) fab.style.animation = 'fabPulse 2s ease-in-out 3';
     showProfileSection();
 });
 
@@ -4103,9 +3831,23 @@ window.addEventListener('load', () => {
 /* =====================================================================
    APP VERSION
 ===================================================================== */
-const APP_VERSION = '1.9';
-const APP_BUILD   = '2025-05-17';
+const APP_VERSION = '1.10';
+const APP_BUILD   = '2025-05-27';
 const CHANGELOG = [
+    {
+        version: '1.10',
+        date: '27 May 2025',
+        changes: [
+            'Version comment added at top of code',
+            'Vehicle Rego dropdown — mandatory, saveable, shows in message and weekly tracker',
+            'Planner/Schedule tab removed',
+            'Receipt photo saving fixed — handles file picker and base64 correctly',
+            'Weekly report screenshot — clean white background, consistent on iOS & Android',
+            'iOS share: message auto-copied to clipboard when sharing with image',
+            'shareWeeklyWhatsApp fixed for iOS — clipboard + image share',
+            'Duplicate const rego JS error fixed',
+        ]
+    },
     {
         version: '1.9',
         date: '17 May 2025',
@@ -4253,6 +3995,7 @@ function renderVersionInfo() {
     });
 }
 
+buildRegoSelect();
 renderTrackerTable();
 autoCreditPreviousWeeks();
 renderReceiptArchive();
@@ -4266,7 +4009,6 @@ buildTZSelect();
 updateTZDisplay();
 setInterval(updateTZDisplay, 1000);
 checkPayDayPopup();
-initSchedule();
 renderVersionInfo();
 requestAnimationFrame(initTabSlider);
 // Island init
