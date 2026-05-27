@@ -205,7 +205,7 @@
             background: var(--bg);
             background-image: var(--bg-mesh);
             color: var(--primary);
-            padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 16px + env(safe-area-inset-bottom)), 90px) 14px;
+            padding: max(12px, env(safe-area-inset-top)) 14px max(calc(var(--tab-h) + 24px + env(safe-area-inset-bottom)), 100px) 14px;
             display: flex; justify-content: center;
             overscroll-behavior: none; -webkit-overflow-scrolling: touch;
             transition: background 0.4s ease, color 0.32s ease;
@@ -455,7 +455,7 @@
             background: var(--glass-card);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
-            border-radius: var(--radius); padding: 18px;
+            border-radius: var(--radius); padding: 16px;
             box-shadow: var(--glass-card-shadow);
             border: 1px solid var(--glass-card-border);
             transition: background 0.32s ease, border-color 0.32s ease, box-shadow 0.32s ease;
@@ -467,8 +467,8 @@
             font-weight: 700; color: var(--primary); transition: color 0.28s ease;
         }
         label {
-            display: block; font-size: 12px; font-weight: 700; color: var(--muted);
-            margin-bottom: 6px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.6px;
+            display: block; font-size: 11px; font-weight: 700; color: var(--muted);
+            margin-bottom: 5px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px;
             transition: color 0.28s ease;
         }
         label:first-child { margin-top: 0; }
@@ -546,7 +546,7 @@
         .btn-clear { background: transparent; color: var(--red); }
         .btn-danger-soft { background: #fef2f2; color: var(--red); }
         [data-theme="dark"] .btn-danger-soft { background: #2d1515; }
-        .btn-pair { display: flex; gap: 10px; }
+        .btn-pair { display: flex; gap: 8px; }
         .btn-pair .btn { flex: 1; margin-bottom: 0; }
 
         /* ── DYNAMIC ROWS ── */
@@ -614,7 +614,7 @@
         }
         .total-banner h3 { font-size: 12px; color: var(--total-banner-text); text-transform: uppercase; margin-bottom: 6px; font-weight: 700; letter-spacing: 1.2px; transition: color 0.28s ease; }
         .total-earn-val {
-            font-size: 52px; font-weight: 800; color: var(--green); letter-spacing: -2px;
+            font-size: clamp(38px, 12vw, 52px); font-weight: 800; color: var(--green); letter-spacing: -2px;
             text-shadow: 0 2px 12px rgba(16,185,129,0.3);
             transition: transform 0.2s ease, color 0.28s ease;
         }
@@ -633,7 +633,7 @@
         .week-nav-btn:active { transform: scale(0.96); }
         .week-display-label { font-size: 14px; font-weight: 700; color: var(--primary); text-align: center; flex: 1; line-height: 1.3; transition: color 0.28s ease; }
 
-        table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
         th, td { padding: 13px 6px; border-bottom: 1px solid var(--table-border); text-align: left; }
         th { color: var(--muted); font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.6px; }
         td { font-weight: 600; color: var(--primary); transition: color 0.28s ease; }
@@ -732,8 +732,8 @@
             background: linear-gradient(145deg, rgba(12,25,41,0.82), rgba(8,16,32,0.90));
         }
         .glance-card::before {
-            content: '🚕'; position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-            font-size: 60px; opacity: 0.07; line-height: 1;
+            content: '🚕'; position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+            font-size: clamp(40px, 12vw, 60px); opacity: 0.07; line-height: 1;
         }
         .glance-sub { font-size: 11px; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 4px; }
         .glance-date { font-size: 14px; font-weight: 700; color: #94a3b8; margin-bottom: 2px; }
@@ -1172,7 +1172,7 @@
             font-size: 15px !important; font-weight: 700 !important;
             box-shadow: var(--glass-card-shadow) !important;
             gap: 10px !important;
-            height: 52px;
+            min-height: 52px; border-radius: 16px !important;
         }
         .profile-google-btn:active { transform: scale(0.97); }
 
@@ -1286,6 +1286,159 @@
             white-space: nowrap; flex-shrink: 0; min-width: 38px;
             text-transform: uppercase; letter-spacing: 0.5px;
         }
+
+        /* ════════════════════════════════════════
+           MOBILE-FIRST FIXES & POLISH
+        ════════════════════════════════════════ */
+
+        /* Better body scroll on iOS */
+        html { height: 100%; overflow-x: hidden; }
+        body { min-height: 100%; -webkit-overflow-scrolling: touch; }
+
+        /* Tighter header on small phones */
+        @media (max-width: 390px) {
+            .app-header h1 { font-size: 20px; }
+            .island-collapsed { gap: 5px; }
+            .island-temp { font-size: 12px; }
+            .island-date-txt { font-size: 11px; }
+        }
+
+        /* ── CARD spacing tighter on phones ── */
+        @media (max-width: 430px) {
+            .card { padding: 15px 14px; border-radius: 18px; }
+            .page { gap: 11px; }
+            body { padding-left: 12px; padding-right: 12px; }
+        }
+
+        /* ── INPUTS — larger touch targets ── */
+        input[type="text"], input[type="number"], input[type="date"],
+        input[type="email"], input[type="password"], select {
+            min-height: 50px;
+            font-size: 16px !important; /* prevents iOS zoom */
+        }
+
+        /* ── BUTTONS — minimum 44px touch target ── */
+        .btn { min-height: 50px; border-radius: 14px; font-size: 15px; }
+        .btn-add { min-height: 36px; font-size: 13px; }
+        .btn-rm { min-height: 44px; width: 44px; }
+
+        /* ── TAB BAR — better sizing for 4 tabs ── */
+        .tab-btn { width: 62px; font-size: 8.5px; letter-spacing: 0.3px; }
+        .tab-btn-center { width: 68px; }
+        .tab-icon { font-size: 20px; }
+        .tab-bar-inner { padding: 5px 5px; gap: 0px; }
+        .tab-center-pill { width: 50px; height: 50px; font-size: 22px; }
+
+        /* ── STAT PILLS — equal sizing ── */
+        .stat-pill { border-radius: 16px; }
+        .stat-pill-val { font-size: 18px; }
+
+        /* ── TOTAL BANNER ── */
+        .total-earn-val { font-size: 46px; }
+
+        /* ── FORM ROWS — better mobile layout ── */
+        .drow { gap: 6px; margin-bottom: 6px; }
+        .drow input.item-name { min-width: 0; }
+        .drow input.item-amt { width: 90px; }
+
+        /* ── GLANCE CARD ── */
+        .glance-sub { font-size: 10px; }
+        .glance-date { font-size: 13px; }
+        .glance-day { font-size: 22px; }
+
+        /* ── RECEIPT BOX ── */
+        .receipt-box { padding: 20px 12px; }
+        .receipt-tap-label { font-size: 15px; }
+
+        /* ── WEEK NAV ── */
+        .week-nav-btn { padding: 10px 16px; font-size: 13px; }
+        .week-display-label { font-size: 13px; }
+
+        /* ── TABLE TEXT ── */
+        td, th { font-size: 13px; padding: 11px 5px; }
+
+        /* ── PREVIEW BOX ── */
+        .preview-box { font-size: 13px; padding: 12px; line-height: 1.65; }
+
+        /* ── MODAL ── */
+        .modal-box { border-radius: 28px 28px 20px 20px; }
+        .modal-box h3 { font-size: 20px; }
+        .modal-box p { font-size: 14px; }
+
+        /* ── TOAST ── */
+        .toast { font-size: 13px; padding: 11px 20px; border-radius: 100px; max-width: 90vw; }
+
+        /* ── QUICK DATE STRIP ── */
+        .date-quick-btn { font-size: 13px; padding: 11px 10px; min-height: 44px; }
+
+        /* ── SECTION DIVIDER ── */
+        .section-divider { font-size: 12px; }
+
+        /* ── PROFILE ── */
+        .profile-hero-title { font-size: 24px; }
+        .profile-hero-sub { font-size: 13px; }
+        .profile-signed-hero { padding: 16px; }
+        .profile-big-avatar { width: 52px; height: 52px; font-size: 20px; }
+        .profile-signed-name { font-size: 16px; }
+
+        /* ── RECEIPTS GRID ── */
+        .receipt-archive-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+        @media (max-width: 360px) {
+            .receipt-archive-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ── FIX: island panel overflow on small screens ── */
+        .island-panel {
+            right: -8px;
+            min-width: 230px;
+            max-width: calc(100vw - 20px);
+        }
+
+        /* ── FIX: h2 doesn't wrap awkwardly ── */
+        h2 { flex-wrap: wrap; gap: 6px; }
+
+        /* ── FIX: run row on small screen ── */
+        .run-row { flex-wrap: nowrap; }
+        .run-multiplier { font-size: 14px; white-space: nowrap; }
+
+        /* ── REGO ROW ── */
+        .rego-row { gap: 6px; }
+        .rego-add-row { gap: 6px; }
+
+        /* ── TRIPS BADGE ── */
+        .trips-badge { padding: 9px 10px; font-size: 12px; }
+
+        /* ── FUEL ROW ── */
+        #fuelType { font-size: 15px; }
+
+        /* ── LANDSCAPE SAFE ZONE ── */
+        @media (max-height: 500px) and (orientation: landscape) {
+            :root { --tab-h: 58px; }
+            .tab-btn { height: 38px; }
+            .tab-btn-center { height: 46px; }
+            .tab-center-pill { width: 38px; height: 38px; font-size: 18px; margin-top: -2px; }
+            body { padding-top: max(6px, env(safe-area-inset-top)); }
+            .app-header { margin-bottom: 10px; margin-top: 0; }
+            .page { gap: 8px; }
+        }
+
+        /* ── TABLET ── */
+        @media (min-width: 600px) {
+            body { padding-left: 24px; padding-right: 24px; }
+            .app { max-width: 560px; }
+            .tab-btn { width: 72px; }
+            .tab-btn-center { width: 78px; }
+            .tab-bar-inner { padding: 6px 14px; gap: 4px; }
+        }
+
+        /* ── SVG TAB ICONS ── */
+        .tab-icon-svg { display: flex; align-items: center; justify-content: center; }
+        .tab-icon-svg svg { transition: transform 0.28s cubic-bezier(0.34,1.56,0.64,1); }
+        .tab-btn.active .tab-icon-svg svg { transform: scale(1.18) translateY(-1px); }
+        .tab-btn:active .tab-icon-svg svg { transform: scale(0.88); }
+        .tab-center-pill svg { display: block; }
+        /* Dim inactive SVG icons slightly */
+        .tab-btn:not(.active) .tab-icon-svg svg { opacity: 0.45; }
     </style>
 </head>
 <body>
@@ -1330,21 +1483,44 @@
     <div class="tab-bar-inner" id="tabBarInner">
         <div class="tab-bar-slider" id="tabSlider"></div>
         <button class="tab-btn" onclick="switchTab('tab-tracker', this)" id="tabWeekly">
-            <span class="tab-icon">📊</span>
+            <span class="tab-icon tab-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="12" width="4" height="10" rx="1.5" fill="#f59e0b"/>
+                <rect x="9" y="7" width="4" height="15" rx="1.5" fill="#f59e0b" opacity="0.8"/>
+                <rect x="16" y="3" width="4" height="19" rx="1.5" fill="#f59e0b" opacity="0.6"/>
+            </svg></span>
             Weekly
             <span class="tab-pip" id="pipWeekly"></span>
         </button>
         <button class="tab-btn" onclick="switchTab('tab-receipts', this)" id="tabReceipts">
-            <span class="tab-icon">📁</span>
+            <span class="tab-icon tab-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 7C3 5.34 4.34 4 6 4H14L21 11V19C21 20.66 19.66 22 18 22H6C4.34 22 3 20.66 3 19V7Z" fill="#38bdf8" opacity="0.9"/>
+                <path d="M14 4L21 11H16C14.9 11 14 10.1 14 9V4Z" fill="#0ea5e9"/>
+                <rect x="7" y="14" width="8" height="1.5" rx="0.75" fill="white" opacity="0.8"/>
+                <rect x="7" y="17" width="5" height="1.5" rx="0.75" fill="white" opacity="0.6"/>
+            </svg></span>
             Docs
         </button>
         <button class="tab-btn-center active" onclick="switchTab('tab-calc', this)" id="tabShift">
-            <div class="tab-center-pill">🧮</div>
+            <div class="tab-center-pill"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9" stroke="white" stroke-width="2" opacity="0.9"/>
+                <circle cx="12" cy="12" r="2" fill="white"/>
+                <line x1="12" y1="3" x2="12" y2="7" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                <line x1="12" y1="17" x2="12" y2="21" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+                <line x1="3" y1="12" x2="7" y2="12" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+                <line x1="17" y1="12" x2="21" y2="12" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+                <line x1="12" y1="10" x2="12" y2="12" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                <line x1="12" y1="12" x2="15" y2="10" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+            </svg></div>
             <span class="tab-center-label">Shift</span>
         </button>
-
         <button class="tab-btn" onclick="switchTab('tab-tax', this)" id="tabReports">
-            <span class="tab-icon">🏛️</span>
+            <span class="tab-icon tab-icon-svg"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="3" width="18" height="18" rx="3" fill="#a78bfa" opacity="0.15" stroke="#a78bfa" stroke-width="1.5"/>
+                <path d="M8 17V13" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 17V9" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16 17V11" stroke="#a78bfa" stroke-width="2" stroke-linecap="round"/>
+                <path d="M7 10L10 8L13 10L17 7" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg></span>
             Reports
         </button>
     </div>
