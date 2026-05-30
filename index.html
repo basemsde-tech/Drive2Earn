@@ -78,8 +78,6 @@
     .table-row.head{color:var(--muted);font-size:11px;text-transform:uppercase}.tag{display:inline-flex;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--gold3);border-radius:999px;padding:4px 7px;font-size:11px}
     .total-row{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);margin-top:10px;padding-top:13px}.total-row b{font-family:"Bricolage Grotesque";font-size:28px;color:var(--gold3)}
     .report-chip{margin-bottom:9px}.report-body{display:none;padding:0 12px 12px}.report-chip.open .report-body{display:block}.filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
-    .expense-form{display:grid;gap:8px;margin:8px 0}.expense-form .row{margin:0}.expense-list{display:grid;gap:7px;margin-top:10px}.expense-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px}.expense-item small{display:block;color:var(--muted);font-size:11px}.expense-item b{color:var(--gold3)}
-    .checkline{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}.checkline input{width:auto}
     .settings-list{display:grid;gap:9px}.setting{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px}.setting p{margin:2px 0 0;color:var(--muted);font-size:12px}
     .setting.full{display:block}.quick-share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.quick-share-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
     .switch{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px}.switch button{padding:7px 10px;border-radius:999px;background:transparent}.switch button.active{background:var(--gold);color:#160d00}
@@ -203,7 +201,7 @@
 <script type="module">
 const APP_VERSION='2.0', APP_BUILD='2025-05-28';
 const CHANGELOG=[{version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']},{version:'1.10',date:'27 May 2025',changes:['Weekly status and screenshot sharing']}];
-const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState'};
+const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=n=>'$'+(Number(n)||0).toFixed(2);
 const n=v=>Number(v)||0;
@@ -213,10 +211,9 @@ const localDateStr=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')
 const parseLocal=s=>{const [y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
 const fmtDate=s=>parseLocal(s).toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'});
 const ddmmyyyy=s=>parseLocal(s).toLocaleDateString('en-AU',{day:'2-digit',month:'2-digit',year:'numeric'});
-let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),expenses:load(KEYS.expenses,[]),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),weekOffset:0,receiptFilter:'all',firebase:null};
+let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),weekOffset:0,receiptFilter:'all',firebase:null};
 let calc=load(KEYS.shift,{date:localDateStr(new Date()),rego:localStorage.getItem(KEYS.lastRego)||state.regos[0]||'',eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''});
 let syncTimer, db, auth, userId;
-const EXPENSE_CATEGORIES=['Fuel','Car wash/detailing','Taxi lease/bailee fee','Taxi network/base fees','Booking/platform fees','Tolls','Parking','Airport fees','Vehicle registration','CTP/insurance','Repairs and maintenance','Tyres','Servicing','Oil/coolant/AdBlue','Phone plan','Mobile phone accessories','GPS/navigation','Dash cam','Cleaning supplies','Uniform/work clothing','Accounting/bookkeeping','Bank fees','E-tag fees','Safety equipment','First aid kit','Depreciating asset','Other'];
 function toast(t){const el=$('#toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200)}
 function confirmBox(title,text,ok){$('#modalTitle').textContent=title;$('#modalText').className='muted';$('#modalText').textContent=text;$('#modalCancel').textContent='Cancel';$('#modalOk').textContent='OK';$('#modal').classList.add('show');$('#modalOk').onclick=()=>{$('#modal').classList.remove('show');ok&&ok()};}
 $('#modalCancel').onclick=()=>$('#modal').classList.remove('show');
@@ -252,11 +249,6 @@ function quickContact(){const number=normalisePhone(state.quickShare.number); re
 function whatsappUrl(text){const c=quickContact(); return `https://wa.me/${c?c.number:''}?text=${encodeURIComponent(text)}`}
 async function shareText(text){const c=quickContact(); if(c){try{await navigator.clipboard.writeText(text)}catch{} location.href=whatsappUrl(text); toast(`Opening WhatsApp for ${c.name}`); return} try{if(navigator.share) await navigator.share({text}); else location.href=whatsappUrl(text)}catch{try{location.href=whatsappUrl(text)}catch{}}}
 function weekShareText(){const total=$('#weekTotal').textContent, range=$('#weekRange').textContent; const rows=state.entries.filter(e=>{const start=weekStart(); start.setDate(start.getDate()+state.weekOffset*7); const end=new Date(start); end.setDate(start.getDate()+6); return e.date>=localDateStr(start)&&e.date<=localDateStr(end)}).sort((a,b)=>a.date.localeCompare(b.date)); return `*Drive2Earn Weekly Report*\n${range}\n${rows.map(r=>`${fmtDate(r.date)} - ${r.rego||'REG'} - ${money(r.amount)}`).join('\n')||'No shifts'}\n*Total Amount: ${total}*`}
-function basQuarter(dateStr){const d=parseLocal(dateStr), y=d.getFullYear(), m=d.getMonth()+1; const fyStart=m>=7?y:y-1, fy=`FY${fyStart}-${String(fyStart+1).slice(2)}`; if(m>=7&&m<=9)return `${fy} Q1 (Jul-Sep)`; if(m>=10&&m<=12)return `${fy} Q2 (Oct-Dec)`; if(m>=1&&m<=3)return `${fy} Q3 (Jan-Mar)`; return `${fy} Q4 (Apr-Jun)`}
-function expenseGst(e){return e.gstIncluded?n(e.amount)/11*(n(e.businessUse||100)/100):0}
-function expenseDeductible(e){return n(e.amount)*(n(e.businessUse||100)/100)}
-function expenseAttachmentLabel(e){return e.attachment?.fileName||'No attachment'}
-async function fileToData(file){return await new Promise(res=>{const r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(file)})}
 function renderCalc(){
   const t=totals(), max=Math.max(t.eos+t.cash+t.runs+t.fuel,1);
   $('#takeHome').textContent=money(t.take); $('#formula').textContent=`(${t.gross.toFixed(2)} x 0.55) - ${t.cash.toFixed(2)} + ${t.fuel.toFixed(2)} = ${t.take.toFixed(2)}`;
@@ -298,48 +290,10 @@ async function shareWeek(photo=false){const txt=weekShareText(); if(photo&&windo
 $('#shareWeek').onclick=()=>shareWeek(false); $('#photoWeek').onclick=()=>shareWeek(true);
 function renderReports(){
   const rate=n(localStorage.getItem(KEYS.levy)||'1.20'), cashTotal=Object.values(state.cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(state.trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(state.fuel).reduce((a,b)=>a+n(b.amount),0), bas=state.entries.reduce((a,b)=>a+n(b.amount),0);
-  const expTotal=state.expenses.reduce((a,e)=>a+expenseDeductible(e),0), expGst=state.expenses.reduce((a,e)=>a+expenseGst(e),0);
   const sections=[['Cash Income',money(cashTotal),Object.entries(state.cash).map(([d,v])=>`${fmtDate(d)} | ${(v.payers||[]).map(p=>p.name).join(', ')||'Cash'} | ${money(v.total)}`)],['Passenger Levy',money(trips*rate),Object.entries(state.trip).map(([d,v])=>`${fmtDate(d)} | ${v} trips | ${money(v*rate)}`)],['Fuel Tracker',money(fuelTotal),Object.entries(state.fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`)],['BAS Gross',money(bas),state.entries.map(e=>`${fmtDate(e.date)} | ${e.rego} | ${money(e.amount)}`)]];
-  $('#reports').innerHTML=sections.map((s,i)=>`<article class="card report-chip ${i===0?'open':''}"><button class="chip"><span class="chip-title"><span class="dot"></span>${s[0]}</span><b>${s[1]}</b></button><div class="report-body"><div class="filter"><button class="pill active">Week</button><button class="pill">Month</button><button class="pill">Q1-Q4</button><button class="pill">All</button><button class="pill" data-copy-report="${i}">CSV</button></div><pre class="preview">${s[2].join('\n')||'No data yet.'}</pre></div></article>`).join('')+
-  `<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expTotal)}</b></button><div class="report-body">
-    <div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expTotal)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${state.expenses.filter(e=>e.attachment).length}/${state.expenses.length}</b></div></div>
-    <div class="expense-form">
-      <div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" step="0.01" inputmode="decimal" placeholder="Amount"></div>
-      <div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div>
-      <div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div>
-      <div class="row one"><input id="expenseNote" placeholder="Note"></div>
-      <label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label>
-      <label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label>
-      <input id="expenseAttachment" type="file" accept="image/*,application/pdf">
-      <div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div>
-      <p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p>
-    </div>
-    <div class="expense-list" id="expenseList"></div>
-  </div></article>`;
+  $('#reports').innerHTML=sections.map((s,i)=>`<article class="card report-chip ${i===0?'open':''}"><button class="chip"><span class="chip-title"><span class="dot"></span>${s[0]}</span><b>${s[1]}</b></button><div class="report-body"><div class="filter"><button class="pill active">Week</button><button class="pill">Month</button><button class="pill">Q1-Q4</button><button class="pill">All</button><button class="pill" data-copy-report="${i}">CSV</button></div><pre class="preview">${s[2].join('\n')||'No data yet.'}</pre></div></article>`).join('');
   $$('#reports .report-chip>button').forEach(b=>b.onclick=()=>{$$('.report-chip').forEach(x=>x!==b.parentElement&&x.classList.remove('open'));b.parentElement.classList.toggle('open')});
   $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard.writeText(sections[b.dataset.copyReport][2].join('\n')).then(()=>toast('CSV copied')));
-  bindExpenseReport();
-}
-function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Frequent,Attachment,Note',...state.expenses.map(e=>[e.date,basQuarter(e.date),`"${e.category}"`,`"${e.supplier||''}"`,n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),e.frequent?'Yes':'No',e.attachment?.fileName||'',`"${e.note||''}"`].join(','))].join('\n')}
-function renderExpenseList(){
-  const box=$('#expenseList'); if(!box)return;
-  box.innerHTML=state.expenses.slice().sort((a,b)=>b.date.localeCompare(a.date)).map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${e.category}${e.supplier?' | '+e.supplier:''} | GST ${money(expenseGst(e))}</small><small>${e.frequent?'Frequent | ':''}${expenseAttachmentLabel(e)}</small></span><span><button class="view-btn" data-view-expense="${e.id}">View</button><button class="mini" data-del-expense="${e.id}">x</button></span></div>`).join('')||'<p class="muted">No expenses saved yet.</p>';
-}
-function bindExpenseReport(){
-  renderExpenseList();
-  const date=$('#expenseDate'), category=$('#expenseCategory'), manual=$('#expenseManual'), q=$('#expenseQuarterPreview');
-  const updateQuarter=()=>{q.textContent=`BAS quarter: ${basQuarter(date.value||localDateStr(new Date()))}`};
-  updateQuarter(); date.onchange=updateQuarter;
-  category.onchange=()=>{manual.style.display=category.value==='__manual'?'block':'none'};
-  $('#copyExpensesCsv').onclick=()=>navigator.clipboard.writeText(expensesCsv()).then(()=>toast('Expenses CSV copied'));
-  $('#addExpense').onclick=async()=>{
-    const file=$('#expenseAttachment').files[0], categoryValue=category.value==='__manual'?manual.value.trim():category.value;
-    if(!date.value||!n($('#expenseAmount').value)||!categoryValue){toast('Add date, amount and category');return}
-    const attachment=file?{fileName:file.name,fileType:file.type,fileData:await fileToData(file),savedAt:new Date().toISOString()}:null;
-    state.expenses.push({id:crypto.randomUUID(),date:date.value,amount:n($('#expenseAmount').value),category:categoryValue,supplier:$('#expenseSupplier').value.trim(),businessUse:n($('#expenseBusinessUse').value)||100,gstIncluded:$('#expenseGst').checked,frequent:$('#expenseFrequent').checked,note:$('#expenseNote').value.trim(),attachment,quarter:basQuarter(date.value),savedAt:new Date().toISOString()});
-    save(KEYS.expenses,state.expenses); toast('Expense saved'); renderReports();
-  };
-  $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports(); return} const text=`${exp.category}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST credit estimate: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
 }
 function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; $('#regoListText').textContent=state.regos.join(', ')||'No saved regos'; $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase connected':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set'; }
 $('#levyRate').oninput=e=>{localStorage.setItem(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>localStorage.setItem(KEYS.fuelDefault,e.target.value);
