@@ -400,10 +400,13 @@ $('#shareWeek').onclick=shareWeek;
 
 function periodLabel(){return {all:'All time',week:'This week',month:'This month',quarter:'This quarter'}[state.reportPeriod]}
 function periodMatch(dateStr){const p=state.reportPeriod; if(p==='all')return true; const d=parseLocal(dateStr), now=new Date(); if(p==='month')return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth(); if(p==='quarter')return basQuarter(dateStr)===basQuarter(localDateStr(now)); if(p==='week'){const start=weekStart();const end=new Date(start);end.setDate(start.getDate()+6);return dateStr>=localDateStr(start)&&dateStr<=localDateStr(end)} return true}
-function filterMap(obj){return Object.fromEntries(Object.entries(obj).filter(([d])=>periodMatch(d)))}
-function renderReports(){
+function filterMap(obj){const out={};Object.keys(obj||{}).forEach(d=>{if(periodMatch(d))out[d]=(obj||{})[d]});return out}/* CHG: avoid Object.fromEntries (unsupported in older mobile/in-app webviews) */
+function normCash(v){return v&&typeof v==='object'?{total:n(v.total),payers:Array.isArray(v.payers)?v.payers:[]}:{total:n(v),payers:[]}}
+function normFuel(v){return v&&typeof v==='object'?{amount:n(v.amount),type:v.type||'Fuel'}:{amount:n(v),type:'Fuel'}}/* CHG: tolerate null/legacy cache shapes */
+function renderReports(){ try{
   const rate=n(localStorage.getItem(KEYS.levy)||'1.20');
-  const cash=filterMap(state.cash), trip=filterMap(state.trip), fuel=filterMap(state.fuel), entries=state.entries.filter(e=>periodMatch(e.date)).sort((a,b)=>a.date.localeCompare(b.date));
+  const cash=filterMap(state.cash), trip=filterMap(state.trip), fuel=filterMap(state.fuel), entries=state.entries.filter(e=>e&&periodMatch(e.date)).sort((a,b)=>a.date.localeCompare(b.date));
+  Object.keys(cash).forEach(k=>cash[k]=normCash(cash[k])); Object.keys(fuel).forEach(k=>fuel[k]=normFuel(fuel[k])); Object.keys(trip).forEach(k=>trip[k]=n(trip[k]));/* CHG: null-proof cached report data */
   const cashTotal=Object.values(cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(fuel).reduce((a,b)=>a+n(b.amount),0), bas=entries.reduce((a,b)=>a+n(b.amount),0);
   const periods=[['all','All'],['week','Week'],['month','Month'],['quarter','Quarter']];
   const sections=[
@@ -435,7 +438,7 @@ function renderReports(){
   $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(sections[b.dataset.copyReport].csv||'').then(()=>toast('CSV copied')).catch(()=>toast('Copy unavailable')));
   $$('[data-dl-report]').forEach(b=>b.onclick=()=>{const s=sections[b.dataset.dlReport];downloadText(`${s.title.toLowerCase().replace(/\s+/g,'-')}-${state.reportPeriod}.csv`,s.csv||'No data');toast('Downloaded')});
   bindExpenseReport();
-}
+ }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel report data? Your saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }/* CHG: error boundary — show a message + recovery instead of a blank tab */
 function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Frequent,Attachment,Note',...state.expenses.filter(e=>periodMatch(e.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),e.frequent?'Yes':'No',csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
 function renderExpenseList(){
   const box=$('#expenseList'); if(!box)return;
