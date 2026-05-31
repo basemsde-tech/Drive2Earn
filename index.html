@@ -124,7 +124,7 @@
       <button class="pill active" id="todayBtn">Today</button><button class="pill" id="yesterdayBtn">Yesterday</button><button class="pill" id="pickBtn">Pick</button>
     </div>
     <input type="date" id="shiftDate" style="position:absolute;opacity:0;pointer-events:none">
-    <section class="card hero">
+    <section class="card hero" id="shiftCapture">
       <div class="hero-head"><span class="mono muted">TOTAL AMOUNT</span><span class="tag" id="heroRego">No rego</span></div>
       <div class="total" id="takeHome">$0.00</div>
       <div class="formula mono" id="formula">(0 x 0.55) - 0 + 0 = 0</div>
@@ -150,7 +150,7 @@
     <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px"><div class="stat"><small>Shifts</small><b id="statShifts">0</b></div><div class="stat"><small>Avg</small><b id="statAvg">$0</b></div><div class="stat"><small>Best</small><b class="gold" id="statBest">$0</b></div></div>
     <div class="actions"><button class="pill" id="prevWeek">Prev</button><button class="pill" id="thisWeek">This week</button><button class="pill" id="nextWeek">Next</button></div>
     <section class="card week-table" id="weekCapture"><div class="table-row head"><span>Date</span><span>Rego</span><span>Amount</span><span>View</span><span>Del</span></div><div id="weekRows"></div><div class="total-row"><span class="muted">Grand total</span><b id="weekTotal">$0.00</b></div></section>
-    <div class="actions" style="grid-template-columns:1fr 1fr"><button class="primary" id="shareWeek" style="margin:10px 0">Share</button><button class="secondary" id="photoWeek" style="margin:10px 0">Photo</button></div>
+    <button class="primary" id="shareWeek" style="margin:10px 0 0">Share report + photo</button>
     <article class="chip"><button id="overrideToggle"><span class="chip-title"><span class="dot"></span>Override Entry</span><b>+</b></button><div class="chip-content" id="overrideContent"><div class="row two"><input type="date" id="overrideDate"><input type="number" id="overrideAmount" placeholder="Amount"></div><div class="row two"><input id="overrideRego" placeholder="Rego"><button class="add" id="saveOverride">Save</button></div></div></article>
   </section>
 
@@ -277,6 +277,32 @@ function quickContact(){const number=normalisePhone(state.quickShare.number); re
 function whatsappUrl(text){const c=quickContact(); return `https://wa.me/${c?c.number:''}?text=${encodeURIComponent(text)}`}
 async function shareText(text){const c=quickContact(); if(c){try{await navigator.clipboard.writeText(text)}catch{} location.href=whatsappUrl(text); toast(`Opening WhatsApp for ${c.name}`); return} try{if(navigator.share) await navigator.share({text}); else location.href=whatsappUrl(text)}catch{try{location.href=whatsappUrl(text)}catch{}}}
 function downloadText(filename,text,type='text/csv'){try{const blob=new Blob([text],{type}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500)}catch{toast('Download unavailable')}}
+function downloadBlob(file){try{const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name||'image.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}catch{}}
+async function captureImage(el,filename){
+  if(!window.html2canvas||!el)return null;
+  const id=el.id, style=document.createElement('style');
+  style.textContent=`#${id}{background:#0b0b0b!important;border-color:#232323!important;color:#f5f0e8!important} #${id} .total{-webkit-text-fill-color:#f0c040!important;color:#f0c040!important;background:none!important} #${id} .muted,#${id} .formula,#${id} .legend small{color:#bdb39f!important} #${id} .legend div{background:#191919!important;border-color:#292929!important;color:#f5f0e8!important} #${id} .bar{background:#222!important} #${id} .gold,#${id} b{color:#f0c040!important} #${id} .tag{background:rgba(212,160,23,.14)!important;border-color:rgba(212,160,23,.4)!important;color:#f0c040!important}`;
+  document.head.append(style);
+  try{const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#0b0b0b',removeContainer:true}); style.remove(); return await new Promise(res=>canvas.toBlob(b=>res(b?new File([b],filename,{type:'image/png'}):null),'image/png'));}
+  catch(e){style.remove(); return null}
+}
+async function shareWithPhoto(el,text,filename){
+  toast('Preparing photo...');
+  const file=await captureImage(el,filename);
+  if(file&&navigator.share&&navigator.canShare?.({files:[file]})){
+    try{await navigator.share({text,files:[file]});return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  if(navigator.share&&!quickContact()){
+    try{await navigator.share({text}); if(file){downloadBlob(file);toast('Image saved to attach')} return}
+    catch(e){if(e&&e.name==='AbortError')return}
+  }
+  const c=quickContact();
+  try{await navigator.clipboard.writeText(text)}catch{}
+  if(file)downloadBlob(file);
+  try{location.href=whatsappUrl(text)}catch{}
+  toast(file?(c?`Image saved + WhatsApp opening for ${c.name}`:'Image saved - attach it in WhatsApp'):(c?`Opening WhatsApp for ${c.name}`:'Opening WhatsApp'));
+}
 function weekShareText(){const total=$('#weekTotal').textContent, range=$('#weekRange').textContent; const rows=weekEntries(); return `*Drive2Earn Weekly Report*\n${range}\n${rows.map(r=>`${fmtDate(r.date)} - ${r.rego||'REG'} - ${money(r.amount)}`).join('\n')||'No shifts'}\n*Total Amount: ${total}*`}
 function basQuarter(dateStr){const d=parseLocal(dateStr), y=d.getFullYear(), m=d.getMonth()+1; const fyStart=m>=7?y:y-1, fy=`FY${fyStart}-${String(fyStart+1).slice(2)}`; if(m>=7&&m<=9)return `${fy} Q1 (Jul-Sep)`; if(m>=10&&m<=12)return `${fy} Q2 (Oct-Dec)`; if(m>=1&&m<=3)return `${fy} Q3 (Jan-Mar)`; return `${fy} Q4 (Apr-Jun)`}
 function expenseGst(e){return e.gstIncluded?n(e.amount)/11*(n(e.businessUse||100)/100):0}
@@ -345,7 +371,7 @@ async function saveShift(){
   state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; state.trip[calc.date]=nn(calc.hailTrips); state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.fuel,state.fuel); save(KEYS.trip,state.trip); save(KEYS.cash,state.cash);
   const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date); toast('Shift saved'); renderSettings(); return true;
 }
-async function shareShift(){if(!await saveShift())return; await shareText(message())}
+async function shareShift(){if(!await saveShift())return; await shareWithPhoto($('#shiftCapture'),message(),'drive2earn-shift.png')}
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None'};
 
@@ -364,8 +390,8 @@ function renderWeekly(){
 $('#prevWeek').onclick=()=>{state.weekOffset--;renderWeekly()};$('#nextWeek').onclick=()=>{state.weekOffset++;renderWeekly()};$('#thisWeek').onclick=()=>{state.weekOffset=0;renderWeekly()};
 $('#overrideToggle').onclick=()=>$('#overrideToggle').closest('.chip').classList.toggle('open');
 $('#saveOverride').onclick=()=>{const date=$('#overrideDate').value||localDateStr(new Date()), amount=n($('#overrideAmount').value), rego=$('#overrideRego').value.trim()||calc.rego||''; if(!amount){toast('Enter an amount');return} state.entries=state.entries.filter(x=>!(x.date===date&&x.rego===rego)); state.entries.push({date,amount:+amount.toFixed(2),rego}); save(KEYS.entries,state.entries); $('#overrideAmount').value='';$('#overrideRego').value=''; toast('Entry saved'); renderWeekly()};
-async function shareWeek(photo=false){const txt=weekShareText(); if(photo&&window.html2canvas){const style=document.createElement('style');style.textContent='#weekCapture{background:#fff!important;color:#0c1929!important} #weekCapture .gold,#weekCapture b{color:#00b377!important}';document.head.append(style);try{const canvas=await html2canvas($('#weekCapture'),{scale:2,useCORS:true,allowTaint:false,removeContainer:true});style.remove();canvas.toBlob(async blob=>{const file=new File([blob],'drive2earn-week.png',{type:'image/png'}); const c=quickContact(); if(navigator.share&&navigator.canShare?.({files:[file]})){await navigator.share({text:txt,files:[file]});return} if(c){try{await navigator.clipboard.writeText(txt)}catch{} location.href=whatsappUrl(txt)} else {const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='drive2earn-week.png';a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);toast('Image downloaded')}})}catch{style.remove();toast('Could not render image');await shareText(txt)}} else await shareText(txt)}
-$('#shareWeek').onclick=()=>shareWeek(false); $('#photoWeek').onclick=()=>shareWeek(true);
+function shareWeek(){return shareWithPhoto($('#weekCapture'),weekShareText(),'drive2earn-week.png')}
+$('#shareWeek').onclick=shareWeek;
 
 function periodLabel(){return {all:'All time',week:'This week',month:'This month',quarter:'This quarter'}[state.reportPeriod]}
 function periodMatch(dateStr){const p=state.reportPeriod; if(p==='all')return true; const d=parseLocal(dateStr), now=new Date(); if(p==='month')return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth(); if(p==='quarter')return basQuarter(dateStr)===basQuarter(localDateStr(now)); if(p==='week'){const start=weekStart();const end=new Date(start);end.setDate(start.getDate()+6);return dateStr>=localDateStr(start)&&dateStr<=localDateStr(end)} return true}
