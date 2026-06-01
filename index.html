@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v2.8 | build 2026-06-01 | single-file PWA -->
+<!-- Drive2Earn v3.0 | build 2026-06-02 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v2.8</title>
+  <title>Drive2Earn v3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -139,6 +139,61 @@
     .sync-dot.idle{background:var(--muted)}
     @keyframes syncPulse{0%,100%{box-shadow:0 0 0 3px rgba(50,213,131,.2)}50%{box-shadow:0 0 0 6px rgba(50,213,131,.05)}}
     .sync-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+    /* ── Weekly status bar ── */
+    .wk-status-toggle{width:34px;height:34px;border-radius:999px;background:var(--bg3);border:1px solid var(--border);color:var(--gold3);display:grid;place-items:center;flex:0 0 auto;transition:transform .25s}
+    .wk-status-toggle svg{width:17px;height:17px;transition:transform .25s}
+    .wk-status-toggle.hidden svg{transform:rotate(-90deg)}
+    .wk-status{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;transition:max-height .3s ease,opacity .25s ease,padding .25s ease,margin .25s ease;max-height:60px;opacity:1}
+    .wk-status.collapsed{max-height:0;opacity:0;padding-top:0;padding-bottom:0;margin-bottom:0;border-width:0}
+    .wk-status-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
+    .wk-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:800;font-family:"Bricolage Grotesque",sans-serif}
+    .wk-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+    .wk-badge.current{background:rgba(212,160,23,.15);color:var(--gold3);border:1px solid rgba(212,160,23,.4)}
+    .wk-badge.credited{background:rgba(50,213,131,.13);color:var(--green);border:1px solid rgba(50,213,131,.4)}
+    /* ── Redesigned settings groups ── */
+    .set-group{margin-bottom:14px}
+    .set-group-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:800;margin:0 0 8px 4px}
+    .set-card{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+    [data-theme="light"] .set-card{background:rgba(255,255,255,.9)}
+    .set-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-bottom:1px solid var(--border);width:100%;background:transparent;text-align:left}
+    .set-item:last-child{border-bottom:0}
+    .set-item .si-label{min-width:0}
+    .set-item .si-label b{display:block;font-size:14.5px;font-weight:700}
+    .set-item .si-label p{margin:1px 0 0;font-size:11.5px;color:var(--muted)}
+    .set-item .si-control{flex:0 0 auto;display:flex;align-items:center;gap:8px}
+    .set-item input,.set-item select{width:auto;min-width:88px;max-width:130px;padding:8px 10px;border-radius:9px}
+    .set-item.stack{flex-direction:column;align-items:stretch;gap:9px}
+    .set-chev{color:var(--muted);font-size:18px;line-height:1}
+    /* ── Validation error styling ── */
+    .field-error{outline:2px solid var(--red)!important;outline-offset:-1px}
+    .validate-msg{display:none;background:rgba(224,82,82,.12);border:1px solid rgba(224,82,82,.4);color:var(--red);border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin:0 0 10px;line-height:1.4}
+    .validate-msg.show{display:block;animation:vshake .35s}
+    @keyframes vshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+    .chip[data-chip="hail"].required>button .chip-title::after,.chip[data-chip="receipt"].required>button .chip-title::after{content:"Required";font-size:10px;font-weight:800;color:var(--red);background:rgba(224,82,82,.13);border:1px solid rgba(224,82,82,.35);border-radius:999px;padding:2px 7px;margin-left:7px}
+    .chip.field-error{outline:2px solid var(--red);outline-offset:-1px}
+    /* ── Week-cycle clock selector ── */
+    .weekclock-wrap{display:flex;flex-direction:column;align-items:center;gap:9px;width:100%;padding:4px 0 2px}
+    .weekclock{display:flex;justify-content:center;width:100%}
+    .weekclock svg{width:218px;height:218px;max-width:74vw;touch-action:none;-webkit-user-select:none;user-select:none}
+    .wc-track{fill:none;stroke:var(--border);stroke-width:6}
+    .wc-arc{fill:none;stroke:var(--gold3);stroke-width:6;stroke-linecap:round;opacity:.92;transition:d .12s}
+    .wc-dot-mark{fill:var(--muted);transition:fill .15s}
+    .wc-dot-mark.startday,.wc-dot-mark.endday{fill:#150d00}
+    .wc-label{fill:var(--muted);font:700 12px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .15s}
+    .wc-label.startday{fill:var(--gold3)}
+    .wc-label.endday{fill:var(--text)}
+    .wc-pin{cursor:grab}
+    .wc-pin-start{fill:url(#wcg);stroke:#150d00;stroke-width:1}
+    .wc-pin-end{fill:var(--bg2);stroke:var(--gold3);stroke-width:2.5}
+    .wc-pin-txt{font:800 11px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+    .wc-center{fill:var(--text);font:800 16px "Bricolage Grotesque",sans-serif;text-anchor:middle;dominant-baseline:central}
+    .wc-center-sub{fill:var(--muted);font:600 9px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:.6px}
+    .wc-legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted)}
+    .wc-legend span{display:inline-flex;align-items:center;gap:5px}
+    .wc-legend b{color:var(--text);font-weight:700}
+    .wc-key{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+    .wc-key.s{background:linear-gradient(135deg,var(--gold3),var(--gold2))}
+    .wc-key.e{background:var(--bg2);border:2px solid var(--gold3)}
     @media (min-width:600px){.tabbar{width:430px}.app{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
   </style>
 </head>
@@ -191,12 +246,14 @@
       <article class="chip" data-chip="hail"><button><span class="chip-title"><span class="dot"></span>Hail Trips</span><b id="hailChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="hailTrips" type="number" min="0" inputmode="numeric" placeholder="Trip count"><input id="levyDisplay" disabled></div></div></article>
       <article class="chip" data-chip="receipt"><button><span class="chip-title"><span class="dot"></span>Receipt Upload</span><b id="receiptChip">None</b></button><div class="chip-content"><input id="receiptFile" type="file" accept="image/*,application/pdf"><p class="muted" id="receiptName" style="font-size:12px"></p></div></article>
     </section>
-    <button class="primary" id="shareShift">Share to WhatsApp</button>
+    <div class="validate-msg" id="shareValidate"></div>
+    <button class="primary" id="shareShift">Share End of Shift</button>
     <section class="card preview"><div id="messagePreview"></div><div class="preview-actions"><button class="secondary" id="copyMsg">Copy</button><button class="secondary" id="clearShift">Clear</button></div></section>
   </section>
 
   <section class="screen" data-screen="weekly">
-    <div class="subhead"><div><h2>Weekly</h2></div></div>
+    <div class="subhead"><div><h2>Weekly</h2></div><button class="wk-status-toggle" id="wkStatusToggle" aria-label="Toggle status badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div>
+    <div class="wk-status" id="wkStatusBar"><span class="wk-status-label">Status</span><span class="wk-badge" id="wkBadge">—</span></div>
     <div class="weeknav"><button id="wkPrev" aria-label="Previous week">&lsaquo;</button><span class="wklabel" id="wkLabel">Week</span><button id="wkNext" aria-label="Next week">&rsaquo;</button></div>
     <div class="daterow"><div class="datefield"><small>From</small><input type="date" id="wkStart"></div><div class="datefield"><small>To</small><input type="date" id="wkEnd"></div></div>
     <section class="card week-table" id="weekCapture"><div id="weekRows"></div><div class="total-row"><span class="muted">Total</span><b id="weekTotal">$0.00</b></div></section>
@@ -210,21 +267,49 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.8</span></div>
-    <div class="settings-list">
-      <button class="card setting" data-go="profile"><span><b>Profile &amp; Sync</b><p id="syncSummary">Local only</p></span><span class="tag">Open</span></button>
-      <div class="card setting full"><span><b>WhatsApp Quick Share</b><p id="quickShareSummary">No quick contact set</p></span><div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div><div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick Contact</button><button class="secondary" id="saveQuickShare">Save Contact</button><button class="secondary" id="clearQuickShare">Clear</button></div></div>
-      <div class="card setting"><span><b>Hail Trip Levy Rate</b><p>Default $1.20 per trip</p></span><input id="levyRate" type="number" min="0" step="0.01" style="width:95px"></div>
-      <div class="card setting"><span><b>Default Fuel Type</b><p>Used on new shift forms</p></span><select id="defaultFuel" style="width:116px"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
-      <div class="card setting" style="flex-direction:column;align-items:stretch;gap:10px">
-        <span><b>Vehicle Regos</b><p>These appear in the shift rego dropdown</p></span>
-        <div style="display:grid;grid-template-columns:1fr auto;gap:8px"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters" autocomplete="off"><button class="secondary" id="addRego" style="white-space:nowrap">Add Rego</button></div>
-        <div id="regoChips" class="rego-chips"></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.0</span></div>
+
+    <div class="set-group">
+      <p class="set-group-title">Account</p>
+      <div class="set-card">
+        <button class="set-item" data-go="profile"><span class="si-label"><b>Profile &amp; Sync</b><p id="syncSummary">Local only</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
+        <div class="set-item stack"><span class="si-label"><b>WhatsApp Quick Share</b><p id="quickShareSummary">No contact set</p></span>
+          <div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div>
+          <div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick</button><button class="secondary" id="saveQuickShare">Save</button><button class="secondary" id="clearQuickShare">Clear</button></div>
+        </div>
       </div>
-      <div class="card setting"><span><b>Appearance</b><p>Dark mode is the default</p></span><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></div>
-      <button class="card setting" id="openReceipts"><span><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="tag">Open</span></button>
-      <button class="card setting" id="refreshApp"><span><b>Clear Cache &amp; Refresh</b><p>Confirmation before local cache reset</p></span><span class="tag">Refresh</span></button>
-      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.8 | build 2026-06-01</p></span><span class="tag">Gold</span></div>
+    </div>
+
+    <div class="set-group">
+      <p class="set-group-title">Shift Defaults</p>
+      <div class="set-card">
+        <div class="set-item"><span class="si-label"><b>Hail Trip Levy</b><p>Per trip ($)</p></span><span class="si-control"><input id="levyRate" type="number" min="0" step="0.01"></span></div>
+        <div class="set-item"><span class="si-label"><b>Default Fuel</b><p>New shift forms</p></span><span class="si-control"><select id="defaultFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></span></div>
+        <div class="set-item stack"><span class="si-label"><b>Vehicle Regos</b><p>Shown in the shift rego dropdown</p></span>
+          <div style="display:grid;grid-template-columns:1fr auto;gap:8px;width:100%"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters" autocomplete="off"><button class="secondary" id="addRego" style="white-space:nowrap">Add</button></div>
+          <div id="regoChips" class="rego-chips"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="set-group-title">Work Week</p>
+      <div class="set-card">
+        <div class="set-item stack"><span class="si-label"><b>Week Cycle</b><p id="weekCycleHint">Thursday → Wednesday</p></span>
+          <div class="weekclock-wrap"><div class="weekclock" id="weekClock"></div><div class="wc-legend"><span><span class="wc-key s"></span><b>Start</b></span><span><span class="wc-key e"></span><b>End</b></span></div></div>
+        </div>
+        <div class="set-item"><span class="si-label"><b>Credited On</b><p>Pay milestone after week ends</p></span><span class="si-control"><select id="creditDaySelect" style="min-width:108px;max-width:140px"></select></span></div>
+      </div>
+    </div>
+
+    <div class="set-group">
+      <p class="set-group-title">App</p>
+      <div class="set-card">
+        <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
+        <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
+        <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.0 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+      </div>
     </div>
   </section>
 
@@ -260,16 +345,18 @@
   <button data-nav="weekly"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-8M22 19V3"/></svg><span>Weekly</span></button>
   <button data-nav="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg><span>Reports</span></button>
   <button class="shift active" data-nav="shift"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 17h14l-1.5-5h-11z"/><path d="M7 17v2M17 17v2M8 12l1-4h6l1 4"/></svg><span>Shift</span></button>
-  <button data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg><span>Settings</span></button>
   <button id="refreshTab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/></svg><span>Refresh</span></button>
+  <button data-nav="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1-2 3.4-.2-.1a1.7 1.7 0 0 0-1.9-.1 1.7 1.7 0 0 0-.9 1.5V22H9.2v-.3a1.7 1.7 0 0 0-.9-1.5 1.7 1.7 0 0 0-1.9.1l-.2.1-2-3.4.1-.1A1.7 1.7 0 0 0 4.6 15 1.7 1.7 0 0 0 3 14H2v-4h1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.8l-.1-.1 2-3.4.2.1a1.7 1.7 0 0 0 1.9.1A1.7 1.7 0 0 0 9.2 2V2h5.6v.3a1.7 1.7 0 0 0 .9 1.5 1.7 1.7 0 0 0 1.9-.1l.2-.1 2 3.4-.1.1A1.7 1.7 0 0 0 19.4 9 1.7 1.7 0 0 0 21 10h1v4h-1a1.7 1.7 0 0 0-1.6 1Z"/></svg><span>Settings</span></button>
 </nav>
 
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='2.8', APP_BUILD='2026-06-01';
+const APP_VERSION='3.0', APP_BUILD='2026-06-02';
 const CHANGELOG=[
+  {version:'3.0',date:'02 Jun 2026',changes:['Visual clock-style week-cycle selector in Settings: two draggable pins (Start + End) on a 7-day dial','Tap a day or drag either pin - the End pin auto-locks to a complete 7-day window so an invalid/broken cycle is impossible','Works with touch on iOS/Android and pointer/mouse on desktop','The clock selection is the global calendar rule: Weekly filtering, totals and the Current/Credited status badge all follow the pinned cycle instantly']},
+  {version:'2.9',date:'02 Jun 2026',changes:['Customizable work-week cycle: pick any 7-day start (Thursday-Wednesday, Monday-Sunday, etc) in Settings','Chosen cycle is the global calendar rule - Weekly tab filtering, grouping, totals and the Reports Last-Week filter all adapt automatically','Configurable Credited pay-day: the green Credited badge now fires on your chosen milestone day after each custom week ends','Week cycle and pay-day settings sync across iPhone and Android in real time']},
   {version:'2.8',date:'01 Jun 2026',changes:['Hardened real-time multi-device sync engine with zero-debounce immediate writes for shift saves','Network-aware sync: detects online/offline transitions and flushes queued writes on reconnect','Live sync-dot indicator in Profile (green pulsing = connected, grey = offline, red = error)','Initial join reconciliation: union-merge so neither phone loses data when a second device signs in','Echo prevention upgraded: deviceId tag + serverTimestamp guard prevents double-renders','Smart per-key refresh: only re-renders the affected screen, not the whole app','All 15 data keys covered: shifts, weekly, fuel, trips, cash, expenses, messages, snapshots, regos, quickShare, profile, levy, fuelDefault, lastRego, timezone','Firebase offline persistence enabled (multi-tab safe) — full offline operation guaranteed']},
   {version:'2.7',date:'01 Jun 2026',changes:['Real-time multi-device sync: sign in with the same account on iPhone and Android','Every module syncs live - shifts, weekly, fuel, BAS, tax expenses, hail trips, regos and settings','Offline-safe: changes cache locally and merge on reconnect (last-write-wins, union merge on first connect)']},
   {version:'2.6',date:'31 May 2026',changes:['New shift message format with emojis and weekday date','Per-line icons (EOS, Cash, Run (n), Accounts, Fuel); payer amounts show cents','Total relabelled TOTAL EARNINGS; empty lines hidden']},
@@ -277,7 +364,7 @@ const CHANGELOG=[
   {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
   {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']}
 ];
-const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1'};
+const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1',weekStartDay:'d2e_week_start_day',creditDay:'d2e_credit_day'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=v=>'$'+(Number(v)||0).toFixed(2);
 const n=v=>{const x=Number(v); return isFinite(x)?x:0};
@@ -314,7 +401,7 @@ let userId;
 // =====================================================================
 
 const SYNC_DATA_KEYS=[KEYS.entries,KEYS.weekly,KEYS.fuel,KEYS.trip,KEYS.cash,KEYS.expenses,KEYS.messages,KEYS.snapshots,KEYS.regos,KEYS.quickShare,KEYS.profile];
-const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.fuelDefault,KEYS.lastRego,KEYS.tz];
+const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.fuelDefault,KEYS.lastRego,KEYS.tz,KEYS.weekStartDay,KEYS.creditDay];
 const SYNC_KEYS=[...SYNC_DATA_KEYS,...SYNC_SETTING_KEYS];
 const KEY_TO_STATE={[KEYS.entries]:'entries',[KEYS.weekly]:'weekly',[KEYS.fuel]:'fuel',[KEYS.trip]:'trip',[KEYS.cash]:'cash',[KEYS.expenses]:'expenses',[KEYS.messages]:'messages',[KEYS.snapshots]:'snapshots',[KEYS.regos]:'regos',[KEYS.quickShare]:'quickShare',[KEYS.profile]:'profile'};
 
@@ -769,7 +856,7 @@ function bindCalc(){
     if(e.target.id==='runCount')calc.runs=nn(e.target.value);
     if(e.target.id==='fuelAmount')calc.fuelAmount=nn(e.target.value);
     if(e.target.id==='fuelType')calc.fuelType=e.target.value;
-    if(e.target.id==='hailTrips')calc.hailTrips=e.target.value;
+    if(e.target.id==='hailTrips'){calc.hailTrips=e.target.value;if(e.target.value!==''){$('.chip[data-chip="hail"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}}
     pulse(); renderCalc()});
   $('#todayBtn').onclick=()=>{calc.date=localDateStr(new Date());setActiveDate('todayBtn');renderRows();renderCalc()};
   $('#yesterdayBtn').onclick=()=>{const d=new Date();d.setDate(d.getDate()-1);calc.date=localDateStr(d);setActiveDate('yesterdayBtn');renderRows();renderCalc()};
@@ -792,29 +879,72 @@ function loadShiftIntoCalc(entry){
   toast('Loaded into calculator - EOS/runs need re-entry');
 }
 async function saveShift(){
-  const t=totals();
-  if(t.eos===0&&t.cash===0&&t.runs===0&&t.accounts===0){toast('Add some takings first');return false}
-  if(calc.hailTrips===''||calc.hailTrips===null||calc.hailTrips===undefined)calc.hailTrips=0;
-  const entry={date:calc.date,amount:+t.take.toFixed(2),rego:calc.rego||''};
-  state.entries=state.entries.filter(x=>!(x.date===entry.date&&x.rego===entry.rego));
-  state.entries.push(entry);
-  save(KEYS.entries,state.entries);
-  immediateSync(KEYS.entries); // zero-debounce: shift saves go up instantly
-  state.messages[shiftKey(entry.date,entry.rego)]=message(); save(KEYS.messages,state.messages);
-  state.snapshots[shiftKey(entry.date,entry.rego)]=JSON.parse(JSON.stringify(calc)); save(KEYS.snapshots,state.snapshots);
-  state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; save(KEYS.fuel,state.fuel);
-  state.trip[calc.date]=nn(calc.hailTrips); save(KEYS.trip,state.trip);
-  state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.cash,state.cash);
-  const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date);
-  toast('Shift saved'); renderSettings(); return true;
+  try{
+    const t=totals();
+    if(t.eos===0&&t.cash===0&&t.runs===0&&t.accounts===0){toast('Add some takings first');return false}
+    if(calc.hailTrips===''||calc.hailTrips===null||calc.hailTrips===undefined)calc.hailTrips=0;
+    const entry={date:calc.date,amount:+t.take.toFixed(2),rego:calc.rego||''};
+    state.entries=state.entries.filter(x=>!(x.date===entry.date&&x.rego===entry.rego));
+    state.entries.push(entry);
+    save(KEYS.entries,state.entries);
+    immediateSync(KEYS.entries); // zero-debounce: shift saves go up instantly
+    state.messages[shiftKey(entry.date,entry.rego)]=message(); save(KEYS.messages,state.messages);
+    state.snapshots[shiftKey(entry.date,entry.rego)]=JSON.parse(JSON.stringify(calc)); save(KEYS.snapshots,state.snapshots);
+    state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; save(KEYS.fuel,state.fuel);
+    state.trip[calc.date]=nn(calc.hailTrips); save(KEYS.trip,state.trip);
+    state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.cash,state.cash);
+    const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date);
+    toast('Shift saved'); renderSettings(); return true;
+  }catch(e){ toast('Could not save shift - try again'); return false; }
 }
 async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }
-async function doShareShift(addToWeekly){ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }
-function shareShift(){ confirmBox('Add to weekly report?','Do you want to add this shift to your weekly report?',()=>doShareShift(true),'Yes, add & share','No, just share'); $('#modalCancel').onclick=()=>{$('#modal').classList.remove('show'); doShareShift(false)}; }
+async function doShareShift(addToWeekly){ try{ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }catch(e){ toast('Share failed - try again'); } }
+/* Req 5: receipt photo + hail trips are strictly mandatory before sharing */
+function shareValidation(){
+  const errors=[];
+  const hasReceipt=!!($('#receiptFile')&&$('#receiptFile').files[0]) || (((state.receipts&&state.receipts[calc.date])||[]).some(r=>r&&r.fileData));
+  const hailFilled=!(calc.hailTrips===''||calc.hailTrips===null||calc.hailTrips===undefined);
+  if(!hasReceipt)errors.push('receipt');
+  if(!hailFilled)errors.push('hail');
+  return {ok:errors.length===0,errors,hasReceipt,hailFilled};
+}
+function clearShareValidationUI(){
+  const m=$('#shareValidate'); if(m){m.classList.remove('show');m.textContent='';}
+  $('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');
+  $('.chip[data-chip="hail"]')?.classList.remove('field-error','required');
+}
+function showShareValidation(v){
+  const m=$('#shareValidate');
+  const msgs=[];
+  if(!v.hasReceipt)msgs.push('attach a receipt photo');
+  if(!v.hailFilled)msgs.push('enter the hail trips count');
+  if(m){m.textContent='Before sharing, please '+msgs.join(' and ')+'.';m.classList.add('show');}
+  const rc=$('.chip[data-chip="receipt"]'), hc=$('.chip[data-chip="hail"]');
+  if(!v.hasReceipt&&rc){rc.classList.add('field-error','required','open');}
+  if(!v.hailFilled&&hc){hc.classList.add('field-error','required','open');}
+  // open the first failing chip so the user sees the field
+  const firstFail=!v.hasReceipt?rc:hc;
+  if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
+}
+/* Req 7: Yes = already logged, share immediately. No = pause so they can log it first. */
+function shareShift(){
+  clearShareValidationUI();
+  const v=shareValidation();
+  if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
+  confirmBox('Weekly report','Have you added this shift to your weekly report?',()=>doShareShift(false),'Yes, share now','No, log it first');
+  // "No, log it first" pauses: jump to the weekly tab to log, no share happens
+  $('#modalCancel').onclick=()=>{ $('#modal').classList.remove('show'); toast('Log it in Weekly, then share'); };
+}
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
-$('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None'};
+$('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None';if(e.target.files[0]){$('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}};
 
-function weekStart(d=new Date()){const x=new Date(d); const day=x.getDay(); const diff=(day>=4?day-4:day+3); x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
+const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+/* Configured week cycle. Defaults: start Thursday (4), credited Friday (5) — preserves prior behaviour. */
+function weekStartDay(){const v=parseInt(localStorage.getItem(KEYS.weekStartDay),10);return (v>=0&&v<=6)?v:4;}
+function creditDay(){const v=parseInt(localStorage.getItem(KEYS.creditDay),10);return (v>=0&&v<=6)?v:5;}
+function weekEndDay(){return (weekStartDay()+6)%7;}
+function weekCycleLabel(){return `${DAY_NAMES[weekStartDay()]} \u2192 ${DAY_NAMES[weekEndDay()]}`;}
+function weekStart(d=new Date()){const x=new Date(d); const S=weekStartDay(); const diff=((x.getDay()-S)+7)%7; x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
 function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
 function wkRange(){ if(!state.wkStart||!state.wkEnd){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);state.wkStart=localDateStr(s);state.wkEnd=localDateStr(e);} return [state.wkStart,state.wkEnd]; }
 function wkLabel(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return `${fmtDate(lo)} - ${fmtDate(hi)}`}
@@ -830,6 +960,30 @@ function saveRep(){try{localStorage.setItem('d2e_rep_range',JSON.stringify({s:st
 function shiftRowsHTML(entries){return entries.map((r,i)=>`<div class="table-row" data-row="${i}" style="grid-template-columns:1fr auto auto 26px;cursor:pointer"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold" style="text-align:right">${money(r.amount)}</b><button class="mini" data-del-entry="${i}" aria-label="Delete" style="width:26px;height:30px;line-height:1">x</button></div>`).join('')||'<p class="muted" style="padding:10px 2px">No shifts in this range.</p>'}
 function openShiftModal(entry){ $('#modalTitle').textContent=`Shift - ${fmtDate(entry.date)}`;$('#modalText').className='preview-message';$('#modalText').textContent=shiftPreviewForEntry(entry);$('#modalCancel').textContent='Load to edit';$('#modalOk').textContent='Copy';$('#modal').classList.add('show');$('#modalCancel').onclick=()=>{$('#modal').classList.remove('show');loadShiftIntoCalc(entry)};$('#modalOk').onclick=()=>navigator.clipboard?.writeText($('#modalText').textContent).then(()=>{$('#modal').classList.remove('show');toast('Copied')}).catch(()=>$('#modal').classList.remove('show')); }
 function bindShiftRows(container,entries,rerender){ if(!container)return; container.onclick=e=>{ const del=e.target.closest('[data-del-entry]'); if(del){const r=entries[del.dataset.delEntry]; if(!r)return; confirmBox('Delete shift',`Delete ${fmtDate(r.date)} (${r.rego||'REG'}) ${money(r.amount)}? This cannot be undone.`,()=>{state.entries=state.entries.filter(x=>x!==r); delete state.messages[shiftKey(r.date,r.rego)]; delete state.snapshots[shiftKey(r.date,r.rego)]; save(KEYS.entries,state.entries); save(KEYS.messages,state.messages); save(KEYS.snapshots,state.snapshots); rerender()}); return} const row=e.target.closest('[data-row]'); if(row){const entry=entries[row.dataset.row]; if(entry)openShiftModal(entry);} }; }
+/* Req 8: Thu-Wed status badge — Current (this week) vs Credited (past Friday after week end) */
+function weekStatus(){
+  const [a,b]=wkRange();
+  const lo=a<=b?a:b, hi=a<=b?b:a;
+  const today=new Date(); today.setHours(0,0,0,0);
+  // Credited once the calendar reaches the configured pay/milestone day that falls
+  // immediately after this week's end. We advance from the week-end date to the first
+  // occurrence of the credit weekday strictly after it (e.g. Wed end + next Friday).
+  const cd=creditDay();
+  const creditDate=parseLocal(hi); creditDate.setHours(0,0,0,0);
+  do{creditDate.setDate(creditDate.getDate()+1);}while(creditDate.getDay()!==cd);
+  return today>=creditDate ? 'credited' : 'current';
+}
+function renderWeekStatus(){
+  const badge=$('#wkBadge'); if(!badge)return;
+  const st=weekStatus();
+  badge.className='wk-badge '+st;
+  badge.textContent=st==='credited'?'Credited':'Current';
+}
+function applyWkStatusVisibility(){
+  const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';
+  $('#wkStatusBar')?.classList.toggle('collapsed',hidden);
+  $('#wkStatusToggle')?.classList.toggle('hidden',hidden);
+}
 function renderWeekly(){
   wkRange();
   if($('#wkStart'))$('#wkStart').value=state.wkStart; if($('#wkEnd'))$('#wkEnd').value=state.wkEnd; if($('#wkLabel'))$('#wkLabel').textContent=wkLabel();
@@ -837,8 +991,10 @@ function renderWeekly(){
   $('#weekRows').innerHTML=shiftRowsHTML(rows);
   $('#weekTotal').textContent=money(rows.reduce((a,b)=>a+n(b.amount),0));
   bindShiftRows($('#weekRows'),rows,renderWeekly);
+  renderWeekStatus(); applyWkStatusVisibility();
 }
 $('#wkPrev').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,-7);state.wkEnd=shiftDays(state.wkEnd,-7);saveWk();renderWeekly()};
+$('#wkStatusToggle').onclick=()=>{const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';localStorage.setItem('d2e_wk_status_hidden',hidden?'0':'1');applyWkStatusVisibility()};
 $('#wkNext').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,7);state.wkEnd=shiftDays(state.wkEnd,7);saveWk();renderWeekly()};
 $('#wkStart').onchange=e=>{state.wkStart=e.target.value;saveWk();renderWeekly()};
 $('#wkEnd').onchange=e=>{state.wkEnd=e.target.value;saveWk();renderWeekly()};
@@ -923,8 +1079,77 @@ function bindExpenseReport(){
   };
   $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?`,()=>{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports()}); return} const text=`${exp.category}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST credit estimate: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
 }
-function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set'; }
+function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
+  try{renderWeekClock();}catch(_){}
+  const cs=$('#creditDaySelect'); if(cs){cs.innerHTML=DAY_NAMES.map((d,i)=>`<option value="${i}">${d}</option>`).join('');cs.value=String(creditDay());}
+}
 $('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
+/* Flexible week cycle: changing it re-snaps the Weekly view to the new cycle's current week
+   and refreshes all weekly summaries + the status badge globally. */
+function applyWeekCycleChange(){
+  const s=weekStart(); const e=new Date(s); e.setDate(s.getDate()+6);
+  state.wkStart=localDateStr(s); state.wkEnd=localDateStr(e); saveWk();
+  try{renderWeekly();}catch(_){}
+}
+if($('#creditDaySelect'))$('#creditDaySelect').onchange=e=>{setLS(KEYS.creditDay,String(parseInt(e.target.value,10)));try{renderWeekStatus();}catch(_){}toast('Credited on '+DAY_NAMES[creditDay()]);};
+
+/* ── Clock-style week-cycle selector ──────────────────────────────────
+   7 days arranged in a circle (Sun at top, clockwise). Two pins:
+   • Start (filled gold knob) — the day the work week begins
+   • End   (outlined knob)    — auto-locked to start+6 (full 7-day window)
+   Dragging Start moves End to start+6; dragging End sets Start to end+1.
+   This makes an invalid/overlapping/broken window impossible by construction. */
+const WC={cx:120,cy:120,ring:84,lab:54,dot:4.5};
+const DAY2=['Su','Mo','Tu','We','Th','Fr','Sa'];
+function wcAngle(i){return -90 + i*(360/7);}
+function wcPolar(r,deg){const a=deg*Math.PI/180;return [WC.cx+r*Math.cos(a),WC.cy+r*Math.sin(a)];}
+function wcArcPath(sDeg,eDeg){const [x1,y1]=wcPolar(WC.ring,sDeg);const [x2,y2]=wcPolar(WC.ring,eDeg);return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${WC.ring} ${WC.ring} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;}
+function renderWeekClock(){
+  const host=document.getElementById('weekClock'); if(!host)return;
+  if(document.getElementById('weekClockSvg')){updateWeekClock();return;}
+  let nodes='';
+  for(let i=0;i<7;i++){
+    const [lx,ly]=wcPolar(WC.lab,wcAngle(i)), [dx,dy]=wcPolar(WC.ring,wcAngle(i));
+    nodes+=`<circle class="wc-dot-mark" cx="${dx.toFixed(2)}" cy="${dy.toFixed(2)}" r="${WC.dot}" data-day="${i}"></circle>`;
+    nodes+=`<text class="wc-label" x="${lx.toFixed(2)}" y="${ly.toFixed(2)}" data-day="${i}">${DAY2[i]}</text>`;
+  }
+  host.innerHTML=`<svg id="weekClockSvg" viewBox="0 0 240 240" role="group" aria-label="Week cycle selector clock">
+    <defs><linearGradient id="wcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold3)"/><stop offset="1" stop-color="var(--gold2)"/></linearGradient></defs>
+    <circle class="wc-track" cx="120" cy="120" r="84"></circle>
+    <path id="wcArc" class="wc-arc" d=""></path>
+    ${nodes}
+    <text id="wcCenter" class="wc-center" x="120" y="114"></text>
+    <text id="wcCenterSub" class="wc-center-sub" x="120" y="132">tap or drag</text>
+    <circle id="wcEndC" class="wc-pin wc-pin-end" r="15" data-pin="end"></circle>
+    <text id="wcEndT" class="wc-pin-txt" style="fill:var(--gold3)">E</text>
+    <circle id="wcStartC" class="wc-pin wc-pin-start" r="15" data-pin="start"></circle>
+    <text id="wcStartT" class="wc-pin-txt" style="fill:#150d00">S</text>
+  </svg>`;
+  bindWeekClock();
+  updateWeekClock();
+}
+function updateWeekClock(){
+  const svg=document.getElementById('weekClockSvg'); if(!svg)return;
+  const s=weekStartDay(), e=weekEndDay();
+  document.getElementById('wcArc').setAttribute('d',wcArcPath(wcAngle(s),wcAngle(e)));
+  const [sx,sy]=wcPolar(WC.ring,wcAngle(s)), [ex,ey]=wcPolar(WC.ring,wcAngle(e));
+  const setPin=(cid,tid,x,y)=>{const c=document.getElementById(cid);c.setAttribute('cx',x.toFixed(2));c.setAttribute('cy',y.toFixed(2));const t=document.getElementById(tid);t.setAttribute('x',x.toFixed(2));t.setAttribute('y',y.toFixed(2));};
+  setPin('wcStartC','wcStartT',sx,sy); setPin('wcEndC','wcEndT',ex,ey);
+  svg.querySelectorAll('.wc-dot-mark,.wc-label').forEach(d=>{const i=+d.getAttribute('data-day');d.classList.toggle('startday',i===s);d.classList.toggle('endday',i===e);});
+  document.getElementById('wcCenter').textContent=`${DAY2[s]} → ${DAY2[e]}`;
+  const hint=document.getElementById('weekCycleHint'); if(hint)hint.textContent=weekCycleLabel();
+}
+function setWeekStartDayValue(day){ day=((day%7)+7)%7; if(day===weekStartDay())return false; setLS(KEYS.weekStartDay,String(day)); applyWeekCycleChange(); updateWeekClock(); return true; }
+function bindWeekClock(){
+  const svg=document.getElementById('weekClockSvg'); if(!svg||svg._bound)return; svg._bound=true;
+  let drag=null;
+  const nearestDay=e=>{ const r=svg.getBoundingClientRect(); if(!r.width)return weekStartDay(); const px=(e.clientX-r.left)*(240/r.width), py=(e.clientY-r.top)*(240/r.height); const a=Math.atan2(py-WC.cy,px-WC.cx)*180/Math.PI; let best=0,bd=1e9; for(let i=0;i<7;i++){const d=Math.abs(((a-wcAngle(i)+540)%360)-180); if(d<bd){bd=d;best=i;}} return best; };
+  const apply=day=>{ if(drag==='end')setWeekStartDayValue((day+1)%7); else setWeekStartDayValue(day); };
+  svg.addEventListener('pointerdown',e=>{ const pin=e.target.getAttribute&&e.target.getAttribute('data-pin'); drag=pin==='end'?'end':'start'; try{svg.setPointerCapture(e.pointerId);}catch(_){} apply(nearestDay(e)); e.preventDefault(); });
+  svg.addEventListener('pointermove',e=>{ if(!drag)return; apply(nearestDay(e)); e.preventDefault(); });
+  const stop=e=>{ if(drag){ drag=null; try{svg.releasePointerCapture(e.pointerId);}catch(_){} toast('Week cycle: '+weekCycleLabel()); } };
+  svg.addEventListener('pointerup',stop); svg.addEventListener('pointercancel',stop);
+}
 $('#darkSwitch').onclick=()=>setTheme('dark'); $('#lightSwitch').onclick=()=>setTheme('light'); $('#themeBtn').onclick=e=>{e.stopPropagation();setTheme((localStorage.getItem(KEYS.theme)||'dark')==='dark'?'light':'dark')};
 if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;setLS(KEYS.lastRego,calc.rego);renderCalc()};
 if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
