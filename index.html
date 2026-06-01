@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v2.4</title>
+  <title>Drive2Earn v2.5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,16 +32,26 @@
     [data-theme="light"] .app{background:linear-gradient(180deg,#fff7e6 0,var(--bg) 38%)}
     h1,h2,h3,.big,.brand{font-family:"Bricolage Grotesque",Outfit,sans-serif;margin:0;letter-spacing:0}
     .mono{font-family:"Geist Mono",monospace}.muted{color:var(--muted)}.gold{color:var(--gold3)}
-    .top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:4px 0 14px}
-    .hello{display:flex;gap:10px;align-items:center;min-width:0}
-    .avatar{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#120b00;font-weight:800;box-shadow:0 0 0 3px rgba(212,160,23,.15)}
-    .hello h1{font-size:22px;line-height:1.05}.hello p{margin:3px 0 0;font-size:13px;color:var(--muted)}
-    .island{position:relative;border:1px solid rgba(212,160,23,.26);background:#141008;color:var(--text);border-radius:999px;padding:8px 9px;min-width:126px;box-shadow:var(--shadow)}
-    [data-theme="light"] .island{background:#fff6dc;color:#180e00}
-    .island-row{display:flex;align-items:center;justify-content:space-between;gap:7px;font-size:12px}.island b{color:var(--gold3)}
-    .iconbtn{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--bg3);border:1px solid var(--border)}
-    .island-panel{display:none;position:absolute;right:0;top:44px;width:240px;z-index:5;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:12px;box-shadow:var(--shadow)}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 14px}
+    .hello{display:flex;gap:11px;align-items:center;min-width:0;background:transparent;padding:0}
+    .avatar{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#1a1200;font-weight:800;font-size:15px;box-shadow:0 4px 14px rgba(212,160,23,.30);flex:0 0 auto}
+    .hello-text{min-width:0;text-align:left}
+    .hello-text h1{font-size:19px;line-height:1.1;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hello-text p{margin:1px 0 0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .island{position:relative;display:flex;align-items:center;gap:3px;border:1px solid var(--border);background:var(--bg2);color:var(--text);border-radius:999px;padding:4px 5px 4px 12px;box-shadow:var(--shadow);flex:0 0 auto}
+    .island-row{display:flex;align-items:center;gap:7px;font-size:13px;background:transparent;color:inherit;border:0;padding:0;cursor:pointer}
+    .island-row b{color:var(--text);font-weight:700;font-variant-numeric:tabular-nums}
+    .wx-ico{width:16px;height:16px;color:var(--gold3);flex:0 0 auto}
+    .isl-div{width:1px;height:15px;background:var(--border);flex:0 0 auto}
+    .isl-date{color:var(--muted);font-size:12px;white-space:nowrap}
+    .iconbtn{width:34px;height:34px;border-radius:999px;display:grid;place-items:center;background:var(--bg3);border:1px solid var(--border);color:var(--text);flex:0 0 auto}
+    .iconbtn svg{width:16px;height:16px}
+    .iconbtn .ico-moon{display:none}.iconbtn .ico-sun{display:block}
+    [data-theme="light"] .iconbtn .ico-sun{display:none}[data-theme="light"] .iconbtn .ico-moon{display:block}
+    .island-panel{display:none;position:absolute;right:0;top:48px;width:248px;z-index:5;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:13px;box-shadow:var(--shadow);color:var(--text)}
+    .island-panel>b{color:var(--text);font-size:14px}
     .island.open .island-panel{display:block}.island-panel .grid{grid-template-columns:1fr 1fr;margin-top:8px}
+    .island-panel .stat b{color:var(--text)}
     .card,.panel,.chip{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow)}
     [data-theme="light"] .card,[data-theme="light"] .panel,[data-theme="light"] .chip{background:rgba(255,255,255,.88)}
     .nudge{padding:11px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:rgba(212,160,23,.35)}
@@ -126,10 +136,19 @@
     <header class="top">
       <button class="hello" data-go="profile" aria-label="Open profile">
         <span class="avatar" id="avatar">D2</span>
-        <span><h1 id="greeting">Hey, Driver</h1><p id="todayLabel">Today</p></span>
+        <span class="hello-text"><h1 id="greeting">Hey, Driver</h1><p id="todayLabel">Today</p></span>
       </button>
       <div class="island" id="island">
-        <div class="island-row" id="islandToggle"><span id="weatherIcon">SUN</span><b id="temp">--</b><span class="muted">|</span><span id="miniDate">--</span><button class="iconbtn" id="themeBtn" aria-label="Toggle theme">T</button></div>
+        <button class="island-row" id="islandToggle" aria-label="Weather details">
+          <svg class="wx-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+          <b id="temp">--</b>
+          <span class="isl-div"></span>
+          <span class="isl-date" id="miniDate">--</span>
+        </button>
+        <button class="iconbtn" id="themeBtn" aria-label="Toggle light or dark theme">
+          <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+          <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        </button>
         <div class="island-panel">
           <b id="weatherDesc">Weather loading</b>
           <div class="grid"><div class="stat"><small>Suburb</small><b id="suburb">Melbourne</b></div><div class="stat"><small>Clock</small><b id="clock">--</b></div><div class="stat"><small>Humidity</small><b id="humidity">--</b></div><div class="stat"><small>Wind</small><b id="wind">--</b></div></div>
@@ -179,7 +198,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.4</span></div>
+    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.5</span></div>
     <div class="settings-list">
       <button class="card setting" data-go="profile"><span><b>Profile & Sync</b><p id="syncSummary">Local only</p></span><span class="tag">Open</span></button>
       <div class="card setting full"><span><b>WhatsApp Quick Share</b><p id="quickShareSummary">No quick contact set</p></span><div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div><div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick Contact</button><button class="secondary" id="saveQuickShare">Save Contact</button><button class="secondary" id="clearQuickShare">Clear</button></div></div>
@@ -189,7 +208,7 @@
       <div class="card setting"><span><b>Appearance</b><p>Dark mode is the default</p></span><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></div>
       <button class="card setting" id="openReceipts"><span><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="tag">Open</span></button>
       <button class="card setting" id="refreshApp"><span><b>Clear Cache & Refresh</b><p>Confirmation before local cache reset</p></span><span class="tag">Refresh</span></button>
-      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.4 | build 2026-05-31</p></span><span class="tag">Gold</span></div>
+      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.5 | build 2026-05-31</p></span><span class="tag">Gold</span></div>
     </div>
   </section>
 
@@ -226,8 +245,9 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='2.4', APP_BUILD='2026-05-31';
+const APP_VERSION='2.5', APP_BUILD='2026-05-31';
 const CHANGELOG=[
+  {version:'2.5',date:'31 May 2026',changes:['Redesigned top profile bar: fully theme-variable driven (no hardcoded colours)','Compact, premium layout with rounded avatar and pill weather/time widget','Sun/moon theme toggle and weather icon adapt automatically to light/dark']},
   {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
   {version:'2.3',date:'31 May 2026',changes:['Compact, tactile Reports redesign','Weekly tab: auto Thu-Wed week with Prev/Next navigation','Reports tab: date range + Last Week / Last 30 Days / Last Month quick filters','Single shift card (Date - Rego - Amount) with integrated Total','Removed in-tab tax/expense breakdown for strict minimalism (data still backed up)']},
   {version:'2.2',date:'31 May 2026',changes:['Weekly & Reports filtered by explicit Start/End date pickers','Minimal weekly card: Date - Rego - Amount rows with a single Total','Designed share photo (rows + total) with all branding removed','Removed week stat clutter and per-section text filters']},
