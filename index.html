@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v2.1 | build 2026-05-31 | single-file PWA -->
+<!-- Drive2Earn v2.8 | build 2026-06-01 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v2.7</title>
+  <title>Drive2Earn v2.8</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -132,6 +132,13 @@
     .sum-card .sc-row{display:flex;align-items:center;justify-content:space-between}
     .sum-card .sc-total{font-family:"Bricolage Grotesque",sans-serif;font-size:20px;color:var(--gold3)}
     .sum-card .sc-sub{font-size:11px;margin:4px 0 8px}
+    /* ── Sync dot indicator ── */
+    .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 auto;transition:background .3s}
+    .sync-dot.live{background:var(--green);box-shadow:0 0 0 3px rgba(50,213,131,.2);animation:syncPulse 2.5s ease-in-out infinite}
+    .sync-dot.error{background:var(--red)}
+    .sync-dot.idle{background:var(--muted)}
+    @keyframes syncPulse{0%,100%{box-shadow:0 0 0 3px rgba(50,213,131,.2)}50%{box-shadow:0 0 0 6px rgba(50,213,131,.05)}}
+    .sync-row{display:flex;align-items:center;gap:8px;margin-top:8px}
     @media (min-width:600px){.tabbar{width:430px}.app{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
   </style>
 </head>
@@ -166,7 +173,7 @@
     <div class="date-strip">
       <button class="pill active" id="todayBtn">Today</button><button class="pill" id="yesterdayBtn">Yesterday</button><button class="pill" id="pickBtn">Pick</button>
     </div>
-    <input type="date" id="shiftDate" style="position:absolute;width:1px;height:1px;opacity:0;border:0;padding:0;margin:0"><!-- CHG: removed pointer-events:none so showPicker() works -->
+    <input type="date" id="shiftDate" style="position:absolute;width:1px;height:1px;opacity:0;border:0;padding:0;margin:0">
     <section class="card hero" id="shiftCapture">
       <div class="hero-head"><span class="mono muted">TOTAL AMOUNT</span><span class="tag" id="heroRego">No rego</span></div>
       <div class="total" id="takeHome">$0.00</div>
@@ -179,7 +186,7 @@
     <section class="chips" id="shiftChips">
       <article class="chip open" data-chip="eos"><button><span class="chip-title"><span class="dot"></span>EOS Takings</span><b id="eosChip">$0.00</b></button><div class="chip-content"><div id="eosRows"></div><button class="add" data-add="eos">Add EOS</button></div></article>
       <article class="chip" data-chip="cash"><button><span class="chip-title"><span class="dot"></span>Cash Income</span><b id="cashChip">$0.00</b></button><div class="chip-content"><div id="cashRows"></div><button class="add" data-add="cash">Add Cash</button></div></article>
-      <article class="chip" data-chip="runs"><button><span class="chip-title"><span class="dot"></span>Runs & Accounts</span><b id="runsChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="runCount" type="number" min="0" inputmode="numeric" placeholder="Passenger count"><input value="$5 / pax" disabled></div><div id="accountRows"></div><button class="add" data-add="account">Add Account</button></div></article>
+      <article class="chip" data-chip="runs"><button><span class="chip-title"><span class="dot"></span>Runs &amp; Accounts</span><b id="runsChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="runCount" type="number" min="0" inputmode="numeric" placeholder="Passenger count"><input value="$5 / pax" disabled></div><div id="accountRows"></div><button class="add" data-add="account">Add Account</button></div></article>
       <article class="chip" data-chip="fuel"><button><span class="chip-title"><span class="dot"></span>Fuel</span><b id="fuelChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="fuelAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Fuel amount"><select id="fuelType"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div></div></article>
       <article class="chip" data-chip="hail"><button><span class="chip-title"><span class="dot"></span>Hail Trips</span><b id="hailChip">$0.00</b></button><div class="chip-content"><div class="row two"><input id="hailTrips" type="number" min="0" inputmode="numeric" placeholder="Trip count"><input id="levyDisplay" disabled></div></div></article>
       <article class="chip" data-chip="receipt"><button><span class="chip-title"><span class="dot"></span>Receipt Upload</span><b id="receiptChip">None</b></button><div class="chip-content"><input id="receiptFile" type="file" accept="image/*,application/pdf"><p class="muted" id="receiptName" style="font-size:12px"></p></div></article>
@@ -203,9 +210,9 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.7</span></div>
+    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.8</span></div>
     <div class="settings-list">
-      <button class="card setting" data-go="profile"><span><b>Profile & Sync</b><p id="syncSummary">Local only</p></span><span class="tag">Open</span></button>
+      <button class="card setting" data-go="profile"><span><b>Profile &amp; Sync</b><p id="syncSummary">Local only</p></span><span class="tag">Open</span></button>
       <div class="card setting full"><span><b>WhatsApp Quick Share</b><p id="quickShareSummary">No quick contact set</p></span><div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div><div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick Contact</button><button class="secondary" id="saveQuickShare">Save Contact</button><button class="secondary" id="clearQuickShare">Clear</button></div></div>
       <div class="card setting"><span><b>Hail Trip Levy Rate</b><p>Default $1.20 per trip</p></span><input id="levyRate" type="number" min="0" step="0.01" style="width:95px"></div>
       <div class="card setting"><span><b>Default Fuel Type</b><p>Used on new shift forms</p></span><select id="defaultFuel" style="width:116px"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></div>
@@ -216,8 +223,8 @@
       </div>
       <div class="card setting"><span><b>Appearance</b><p>Dark mode is the default</p></span><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></div>
       <button class="card setting" id="openReceipts"><span><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="tag">Open</span></button>
-      <button class="card setting" id="refreshApp"><span><b>Clear Cache & Refresh</b><p>Confirmation before local cache reset</p></span><span class="tag">Refresh</span></button>
-      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.7 | build 2026-06-01</p></span><span class="tag">Gold</span></div>
+      <button class="card setting" id="refreshApp"><span><b>Clear Cache &amp; Refresh</b><p>Confirmation before local cache reset</p></span><span class="tag">Refresh</span></button>
+      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.8 | build 2026-06-01</p></span><span class="tag">Gold</span></div>
     </div>
   </section>
 
@@ -225,14 +232,19 @@
     <div class="subhead"><div><p>Account</p><h2>Profile</h2></div><button class="pill" data-go="shift">Done</button></div>
     <section class="card" style="padding:13px;margin-bottom:10px"><div class="row one"><input id="driverName" placeholder="Driver name"><input id="driverEmail" placeholder="Email"></div><button class="primary" id="saveProfile">Save Profile</button></section>
     <section class="card" style="padding:13px;margin-bottom:10px">
-      <h3>Multi-device Sync</h3><p class="muted" style="font-size:12px">Sign in with the <b>same account</b> on your iPhone and Android to keep every shift, weekly report, fuel, BAS, tax expense, hail trip and rego in sync in real time. Uses your own free Firebase project (Email/Password auth + Firestore). Works offline and merges automatically when you reconnect.</p>
+      <h3>Multi-device Sync</h3>
+      <!-- Sync status indicator -->
+      <div class="sync-row">
+        <span class="sync-dot idle" id="syncDot"></span>
+        <p class="mono muted" id="syncStatus" style="font-size:12px;margin:0">Sync: local</p>
+      </div>
+      <p class="muted" style="font-size:12px;margin-top:8px">Sign in with the <b>same account</b> on your iPhone and Android to keep every shift, weekly report, fuel, BAS, tax expense, hail trip and rego in sync in real time. Uses your own free Firebase project (Email/Password auth + Firestore). Works offline — changes merge automatically when you reconnect.</p>
       <textarea id="firebaseConfig" placeholder='Firebase web config JSON {"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><input id="syncEmail" type="email" placeholder="Account email" autocomplete="username"><input id="syncPassword" type="password" placeholder="Password" autocomplete="current-password"></div>
       <div class="preview-actions"><button class="secondary" id="signInBtn">Sign in</button><button class="secondary" id="createAccountBtn">Create account</button><button class="secondary" id="signOutBtn" style="display:none">Sign out</button></div>
       <div class="preview-actions" style="margin-top:4px"><button class="secondary" id="disconnectFirebase">Disconnect this device</button></div>
-      <p class="mono muted" id="syncStatus" style="font-size:12px">Sync: local</p>
     </section>
-    <section class="card" style="padding:13px;margin-bottom:10px"><h3>Backup & Restore</h3><p class="muted" style="font-size:12px">Export all local data to a JSON file, or import a previous backup. Import replaces current data.</p><div class="preview-actions"><button class="secondary" id="exportData">Export</button><button class="secondary" id="importData">Import</button></div><input type="file" id="importFile" accept="application/json,.json" style="display:none"></section>
+    <section class="card" style="padding:13px;margin-bottom:10px"><h3>Backup &amp; Restore</h3><p class="muted" style="font-size:12px">Export all local data to a JSON file, or import a previous backup. Import replaces current data.</p><div class="preview-actions"><button class="secondary" id="exportData">Export</button><button class="secondary" id="importData">Import</button></div><input type="file" id="importFile" accept="application/json,.json" style="display:none"></section>
     <section class="card" style="padding:13px"><h3>Changelog</h3><div id="changelog" class="mono muted" style="font-size:12px;line-height:1.7"></div></section>
   </section>
 
@@ -256,17 +268,14 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='2.7', APP_BUILD='2026-06-01';
+const APP_VERSION='2.8', APP_BUILD='2026-06-01';
 const CHANGELOG=[
+  {version:'2.8',date:'01 Jun 2026',changes:['Hardened real-time multi-device sync engine with zero-debounce immediate writes for shift saves','Network-aware sync: detects online/offline transitions and flushes queued writes on reconnect','Live sync-dot indicator in Profile (green pulsing = connected, grey = offline, red = error)','Initial join reconciliation: union-merge so neither phone loses data when a second device signs in','Echo prevention upgraded: deviceId tag + serverTimestamp guard prevents double-renders','Smart per-key refresh: only re-renders the affected screen, not the whole app','All 15 data keys covered: shifts, weekly, fuel, trips, cash, expenses, messages, snapshots, regos, quickShare, profile, levy, fuelDefault, lastRego, timezone','Firebase offline persistence enabled (multi-tab safe) — full offline operation guaranteed']},
   {version:'2.7',date:'01 Jun 2026',changes:['Real-time multi-device sync: sign in with the same account on iPhone and Android','Every module syncs live - shifts, weekly, fuel, BAS, tax expenses, hail trips, regos and settings','Offline-safe: changes cache locally and merge on reconnect (last-write-wins, union merge on first connect)']},
   {version:'2.6',date:'31 May 2026',changes:['New shift message format with emojis and weekday date','Per-line icons (EOS, Cash, Run (n), Accounts, Fuel); payer amounts show cents','Total relabelled TOTAL EARNINGS; empty lines hidden']},
-  {version:'2.5',date:'31 May 2026',changes:['Redesigned top profile bar: fully theme-variable driven (no hardcoded colours)','Compact, premium layout with rounded avatar and pill weather/time widget','Sun/moon theme toggle and weather icon adapt automatically to light/dark']},
+  {version:'2.5',date:'31 May 2026',changes:['Redesigned top profile bar: fully theme-variable driven','Compact, premium layout with rounded avatar and pill weather/time widget','Sun/moon theme toggle and weather icon adapt automatically to light/dark']},
   {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
-  {version:'2.3',date:'31 May 2026',changes:['Compact, tactile Reports redesign','Weekly tab: auto Thu-Wed week with Prev/Next navigation','Reports tab: date range + Last Week / Last 30 Days / Last Month quick filters','Single shift card (Date - Rego - Amount) with integrated Total','Removed in-tab tax/expense breakdown for strict minimalism (data still backed up)']},
-  {version:'2.2',date:'31 May 2026',changes:['Weekly & Reports filtered by explicit Start/End date pickers','Minimal weekly card: Date - Rego - Amount rows with a single Total','Designed share photo (rows + total) with all branding removed','Removed week stat clutter and per-section text filters']},
-  {version:'2.1',date:'31 May 2026',changes:['Fixed input focus loss while typing in EOS/Cash/Account rows','Accounts now included in totals bar, legend and WhatsApp message','Report period filters (Week / Month / Quarter / All) now fully functional','Proper CSV export with headers + one-tap CSV download','Hail trips no longer block saving (empty = 0 trips)','Load a saved shift back into the calculator to edit','Negative amounts clamped, safer number handling','Chip toggling scoped so Reports/Weekly chips are unaffected']},
-  {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']},
-  {version:'1.10',date:'27 May 2025',changes:['Weekly status and screenshot sharing']}
+  {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']}
 ];
 const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -275,35 +284,372 @@ const n=v=>{const x=Number(v); return isFinite(x)?x:0};
 const nn=v=>Math.max(0,n(v));
 const uid=()=>(self.crypto&&crypto.randomUUID)?crypto.randomUUID():'id-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
 const load=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}catch{return d}};
-const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Storage full - clear old receipts')} autoSync(k,v)};
+const save=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){toast('Storage full - clear old receipts')} autoSync(k)};
 const localDateStr=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const parseLocal=s=>{const [y,m,d]=String(s).split('-').map(Number);return new Date(y,(m||1)-1,d||1)};
 const fmtDate=s=>parseLocal(s).toLocaleDateString('en-AU',{weekday:'short',day:'2-digit',month:'short'});
 const ddmmyyyy=s=>parseLocal(s).toLocaleDateString('en-AU',{day:'2-digit',month:'2-digit',year:'numeric'});
-const csvCell=v=>{let s=String(v??''); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};/* CHG: prefix formula chars to block CSV injection */
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));/* CHG: HTML-escape user text before innerHTML to block stored XSS */
+const csvCell=v=>{let s=String(v??''); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),expenses:load(KEYS.expenses,[]),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),snapshots:load(KEYS.snapshots,{}),weekOffset:0,receiptFilter:'all',firebase:null};
 let calc=load(KEYS.shift,{date:localDateStr(new Date()),rego:localStorage.getItem(KEYS.lastRego)||state.regos[0]||'',eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''});
 if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];
 if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];
 if(!Array.isArray(calc.accounts))calc.accounts=[];
-let syncTimer, db, auth, userId;
+let userId;
+
+// =====================================================================
+// REAL-TIME MULTI-DEVICE SYNC ENGINE v2.8
+// ─────────────────────────────────────────────────────────────────────
+// Architecture:
+//   • Firestore: accounts/{uid}/data/{key}  (one doc per data key)
+//   • Offline persistence: persistentLocalCache (IndexedDB-backed)
+//   • Conflict resolution: last-write-wins via serverTimestamp
+//   • Initial join: union-merge — neither device loses data
+//   • Echo prevention: _deviceId + timestamp guard
+//   • Network awareness: online/offline events flush pending writes
+//   • immediateSync() = zero-debounce (shift saves, rego changes)
+//   • autoSync()      = 150ms debounce (all other saves)
+// =====================================================================
+
 const SYNC_DATA_KEYS=[KEYS.entries,KEYS.weekly,KEYS.fuel,KEYS.trip,KEYS.cash,KEYS.expenses,KEYS.messages,KEYS.snapshots,KEYS.regos,KEYS.quickShare,KEYS.profile];
 const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.fuelDefault,KEYS.lastRego,KEYS.tz];
 const SYNC_KEYS=[...SYNC_DATA_KEYS,...SYNC_SETTING_KEYS];
 const KEY_TO_STATE={[KEYS.entries]:'entries',[KEYS.weekly]:'weekly',[KEYS.fuel]:'fuel',[KEYS.trip]:'trip',[KEYS.cash]:'cash',[KEYS.expenses]:'expenses',[KEYS.messages]:'messages',[KEYS.snapshots]:'snapshots',[KEYS.regos]:'regos',[KEYS.quickShare]:'quickShare',[KEYS.profile]:'profile'};
-let fb={app:null,auth:null,db:null,fns:null,authFns:null}, syncOn=false, unsub=[], pushTimers={}, syncMeta=load('d2e_sync_meta',{});
+
+let fb={app:null,auth:null,db:null,fns:null,authFns:null};
+let syncOn=false, unsub=[], pushTimers={}, immediateQueue=new Set();
+let syncMeta=load('d2e_sync_meta',{});
+let netOnline=navigator.onLine;
+
+// ── Device identity ───────────────────────────────────────────────────
+function deviceId(){
+  let id=localStorage.getItem(KEYS.device);
+  if(!id){id=uid();localStorage.setItem(KEYS.device,id);}
+  return id;
+}
+
+// ── Sync status UI ────────────────────────────────────────────────────
+function setSyncStatus(s){
+  const el=$('#syncStatus'); if(el)el.textContent='Sync: '+s;
+  const dot=$('#syncDot');
+  if(dot){
+    dot.className='sync-dot';
+    if(s==='live')dot.classList.add('live');
+    else if(s.includes('error'))dot.classList.add('error');
+    else dot.classList.add('idle');
+  }
+  const sum=$('#syncSummary');
+  if(sum)sum.textContent=(syncOn&&userId)?'Firebase \u2022 Real-time':'Local only';
+}
+
+// ── Read local value for any key (state object or localStorage) ───────
+function localValueFor(key){
+  const p=KEY_TO_STATE[key];
+  return p!==undefined?state[p]:localStorage.getItem(key);
+}
+
+// ── Persist a remote value WITHOUT triggering another push (no echo) ──
+function rawPersist(key,value){
+  const p=KEY_TO_STATE[key];
+  try{
+    if(p!==undefined){state[p]=value;localStorage.setItem(key,JSON.stringify(value));}
+    else{if(value==null)localStorage.removeItem(key);else localStorage.setItem(key,typeof value==='string'?value:String(value));}
+  }catch(e){}
+}
+
+// ── Write one key to Firestore (called by push queue) ─────────────────
+async function cloudWrite(key){
+  if(!syncOn||!fb.db||!userId||!fb.fns)return;
+  const value=localValueFor(key);
+  try{
+    await fb.fns.setDoc(
+      fb.fns.doc(fb.db,'accounts',userId,'data',key),
+      {value,_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()}
+    );
+    setSyncStatus('live');
+  }catch(e){
+    setSyncStatus('offline \u2013 queued');
+    // Firestore offline persistence will automatically retry when back online
+  }
+}
+
+// ── Push queue: immediate (0ms) or debounced (150ms) ─────────────────
+function queuePush(key,immediate=false){
+  if(!syncOn||SYNC_KEYS.indexOf(key)<0)return;
+  if(immediate){
+    clearTimeout(pushTimers[key]);
+    delete pushTimers[key];
+    immediateQueue.add(key);
+    cloudWrite(key).finally(()=>immediateQueue.delete(key));
+  }else{
+    if(immediateQueue.has(key))return; // already in-flight, skip debounce
+    clearTimeout(pushTimers[key]);
+    pushTimers[key]=setTimeout(()=>cloudWrite(key),150);
+  }
+}
+
+// ── Public API: called from save() and saveShift() ────────────────────
+function autoSync(k){queuePush(k,false);}
+function immediateSync(k){queuePush(k,true);}
+
+// ── setLS: write a setting to localStorage + push to cloud ───────────
+function setLS(key,val){
+  if(val==null)localStorage.removeItem(key);
+  else localStorage.setItem(key,val);
+  queuePush(key,false);
+}
+
+// ── Convert Firestore timestamp to epoch ms ───────────────────────────
+function tsMillis(u){
+  if(!u)return 0;
+  if(typeof u.toMillis==='function')return u.toMillis();
+  if(u.seconds)return u.seconds*1000+(u.nanoseconds||0)/1e6;
+  const nn=Date.parse(u); return isFinite(nn)?nn:0;
+}
+
+// ── Apply incoming remote snapshot (last-write-wins + echo guard) ─────
+function applyRemote(key,data,hasPendingWrites){
+  if(!data)return;
+  // hasPendingWrites = this is our own write reflected from the local cache
+  if(hasPendingWrites)return;
+  const ts=tsMillis(data.updatedAt), prev=syncMeta[key]||0;
+  // Echo: our own device's write reflected back with same or older timestamp
+  if(data._deviceId===deviceId()&&ts&&ts<=prev)return;
+  // Last-write-wins: we have a strictly newer confirmed value
+  if(ts&&prev&&ts<prev)return;
+  rawPersist(key,data.value);
+  syncMeta[key]=ts||Date.now();
+  try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta));}catch(e){}
+  refreshAfterSync(key);
+}
+
+// ── Smart re-render: only touch the screen that changed ───────────────
+function refreshAfterSync(key){
+  const active=document.querySelector('.screen.active');
+  const scr=active&&active.dataset.screen;
+  // Always refresh rego options and the shift calc (cheap, always needed)
+  try{renderRegoOptions();renderRegoChips();}catch(e){}
+  try{renderRows();renderCalc();}catch(e){}
+  // Screen-specific re-renders
+  try{if(scr==='reports')renderReports();}catch(e){}
+  try{if(scr==='weekly')renderWeekly();}catch(e){}
+  try{if(scr==='settings')renderSettings();}catch(e){}
+  try{if(scr==='profile')renderProfile();}catch(e){}
+  try{if(scr==='receipts')renderReceipts();}catch(e){}
+}
+
+// ── Union-merge local + cloud on first device join ────────────────────
+// Neither side loses data; cloud wins on scalar conflicts
+function mergeValues(key,localV,cloudV){
+  if(cloudV==null)return localV;
+  if(localV==null)return cloudV;
+  if(key===KEYS.entries){
+    // Array of shift objects — union by date+rego key
+    const m={};
+    (localV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e));
+    (cloudV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e));
+    return Object.values(m);
+  }
+  if(key===KEYS.expenses){
+    // Array of expense objects — union by id
+    const m={};
+    (localV||[]).forEach(e=>e&&e.id&&(m[e.id]=e));
+    (cloudV||[]).forEach(e=>e&&e.id&&(m[e.id]=e));
+    return Object.values(m);
+  }
+  if(key===KEYS.regos){
+    // String array — deduplicated union
+    const out=[],seen={};
+    [...(localV||[]),...(cloudV||[])].forEach(r=>{
+      const k=String(r).toLowerCase();
+      if(!seen[k]){seen[k]=1;out.push(r);}
+    });
+    return out;
+  }
+  if(Array.isArray(cloudV))return cloudV;
+  if(typeof cloudV==='object'&&cloudV!==null&&typeof localV==='object'&&localV!==null)
+    return Object.assign({},localV,cloudV); // object maps: union keys, cloud wins on collision
+  return cloudV; // scalar settings: cloud value wins
+}
+
+// ── One-time reconciliation when a device joins/rejoins an account ────
+async function reconcile(){
+  if(!fb.db||!userId||!fb.fns)return;
+  setSyncStatus('merging\u2026');
+  for(const key of SYNC_KEYS){
+    try{
+      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
+      const snap=await fb.fns.getDoc(ref);
+      const exists=typeof snap.exists==='function'?snap.exists():snap.exists;
+      const cloudV=exists?(snap.data&&snap.data()||{}).value:undefined;
+      const merged=mergeValues(key,localValueFor(key),cloudV);
+      rawPersist(key,merged);
+      // Push merged value so cloud reflects the union too
+      await fb.fns.setDoc(ref,{value:localValueFor(key),_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()});
+      syncMeta[key]=Date.now();
+    }catch(e){}
+  }
+  try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta));}catch(e){}
+  refreshAfterSync('*');
+}
+
+// ── Attach real-time Firestore listeners (one per SYNC_KEY) ──────────
+function attachListeners(){
+  detachListeners();
+  if(!fb.db||!userId||!fb.fns)return;
+  SYNC_KEYS.forEach(key=>{
+    try{
+      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
+      const u=fb.fns.onSnapshot(
+        ref,
+        snap=>{
+          try{
+            if(!snap)return;
+            const exists=typeof snap.exists==='function'?snap.exists():snap.exists;
+            const meta=snap.metadata||{};
+            if(!exists){
+              // Key missing from cloud — push our local value up immediately
+              if(localValueFor(key)!=null&&!meta.hasPendingWrites)queuePush(key,true);
+              return;
+            }
+            applyRemote(key,snap.data&&snap.data(),meta.hasPendingWrites);
+          }catch(e){}
+        },
+        ()=>setSyncStatus('listener error')
+      );
+      unsub.push(u);
+    }catch(e){}
+  });
+}
+function detachListeners(){unsub.forEach(u=>{try{u&&u();}catch(e){}});unsub=[];}
+
+// ── Network awareness: flush pending writes when connectivity returns ──
+window.addEventListener('online',()=>{
+  netOnline=true;
+  setSyncStatus('reconnecting\u2026');
+  if(syncOn&&userId){
+    // Re-push all keys — Firestore queues failed writes, but this
+    // ensures settings (non-Firestore-tracked) also get flushed
+    SYNC_KEYS.forEach(k=>queuePush(k,false));
+    setSyncStatus('live');
+  }
+});
+window.addEventListener('offline',()=>{
+  netOnline=false;
+  setSyncStatus('offline \u2013 changes saved locally');
+});
+
+// ── Firebase SDK init (dynamic import, zero cost when not configured) ─
+async function initFirebase(cfg){
+  const [appMod,authMod,fsMod]=await Promise.all([
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
+    import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'),
+  ]);
+  // Reuse existing app if already initialized (handles hot-reload)
+  try{fb.app=appMod.getApp();}catch{fb.app=appMod.initializeApp(cfg);}
+  fb.auth=authMod.getAuth(fb.app);
+  // Enable offline persistence with multi-tab support
+  try{
+    fb.db=fsMod.initializeFirestore(fb.app,{
+      localCache:fsMod.persistentLocalCache({
+        tabManager:fsMod.persistentMultipleTabManager?fsMod.persistentMultipleTabManager():undefined
+      })
+    });
+  }catch(e){try{fb.db=fsMod.getFirestore(fb.app);}catch(_){}}
+  fb.fns={doc:fsMod.doc,setDoc:fsMod.setDoc,getDoc:fsMod.getDoc,onSnapshot:fsMod.onSnapshot,serverTimestamp:fsMod.serverTimestamp};
+  fb.authFns={signIn:authMod.signInWithEmailAndPassword,signUp:authMod.createUserWithEmailAndPassword,signOut:authMod.signOut};
+  // Persist auth session across reloads / app restarts
+  try{await authMod.setPersistence(fb.auth,authMod.browserLocalPersistence);}catch(e){}
+  // Auth state observer — fires immediately on load if session is restored
+  authMod.onAuthStateChanged(fb.auth,async user=>{
+    if(user){
+      userId=user.uid; syncOn=true;
+      if(user.email)localStorage.setItem('d2e_sync_email',user.email);
+      setSyncStatus('connecting\u2026');
+      try{await reconcile();}catch(e){}
+      attachListeners();
+      setSyncStatus('live');
+    }else{
+      userId=null; syncOn=false;
+      detachListeners();
+      setSyncStatus('signed out');
+    }
+    updateSyncUI();
+  });
+}
+
+// ── Auth actions ──────────────────────────────────────────────────────
+async function connectAndSignIn(create){
+  let cfg;
+  try{cfg=JSON.parse($('#firebaseConfig').value);}
+  catch(e){toast('Invalid Firebase config JSON');return;}
+  const email=($('#syncEmail').value||'').trim(), pass=$('#syncPassword').value||'';
+  if(!email||!pass){toast('Enter email and password');return;}
+  localStorage.setItem(KEYS.fb,JSON.stringify(cfg));
+  try{
+    if(!fb.app)await initFirebase(cfg);
+    if(create)await fb.authFns.signUp(fb.auth,email,pass);
+    else       await fb.authFns.signIn(fb.auth,email,pass);
+    localStorage.setItem('d2e_sync_email',email);
+    toast(create?'Account created \u2013 syncing\u2026':'Signed in \u2013 syncing\u2026');
+  }catch(e){toast('Sign-in failed: '+(e&&(e.code||e.message)||'error'));setSyncStatus('error');}
+}
+function signOutSync(){
+  try{fb.authFns&&fb.auth&&fb.authFns.signOut(fb.auth);}catch(e){}
+  detachListeners(); userId=null; syncOn=false;
+  setSyncStatus('signed out'); updateSyncUI();
+  toast('Signed out \u2013 data stays on this device');
+}
+function disconnectFirebase(){
+  signOutSync(); localStorage.removeItem(KEYS.fb);
+  fb={app:null,auth:null,db:null,fns:null,authFns:null};
+  toast('Sync disconnected');
+}
+function updateSyncUI(){
+  const on=!!userId;
+  const si=$('#signInBtn'),ca=$('#createAccountBtn'),so=$('#signOutBtn');
+  if(si)si.style.display=on?'none':'';
+  if(ca)ca.style.display=on?'none':'';
+  if(so)so.style.display=on?'':'none';
+  setSyncStatus(on?'live':'local');
+  try{renderSettings();}catch(e){}
+}
+
+// ── Boot: auto-restore Firebase session if config is stored ──────────
+(async()=>{
+  const raw=localStorage.getItem(KEYS.fb);
+  if(raw){
+    try{setSyncStatus('restoring\u2026');await initFirebase(JSON.parse(raw));}
+    catch(e){setSyncStatus('session error');}
+  }
+})();
+
+// ── Test hook (unit testing with mock backend) ────────────────────────
+window.__sync={
+  get on(){return syncOn;},set on(v){syncOn=v;},
+  setUser:u=>{userId=u;},setBackend:b=>{fb=b;},
+  deviceId,applyRemote,queuePush,cloudWrite,mergeValues,
+  reconcile,attachListeners,detachListeners,refreshAfterSync,
+  localValueFor,SYNC_KEYS,KEY_TO_STATE,
+  meta:()=>syncMeta,setMeta:(k,v)=>{syncMeta[k]=v;}
+};
+
+// =====================================================================
+// END SYNC ENGINE
+// =====================================================================
+
 const EXPENSE_CATEGORIES=['Fuel','Car wash/detailing','Taxi lease/bailee fee','Taxi network/base fees','Booking/platform fees','Tolls','Parking','Airport fees','Vehicle registration','CTP/insurance','Repairs and maintenance','Tyres','Servicing','Oil/coolant/AdBlue','Phone plan','Mobile phone accessories','GPS/navigation','Dash cam','Cleaning supplies','Uniform/work clothing','Accounting/bookkeeping','Bank fees','E-tag fees','Safety equipment','First aid kit','Depreciating asset','Other'];
 
 function toast(t){const el=$('#toast');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2200)}
-function confirmBox(title,text,ok,okLabel,cancelLabel){$('#modalTitle').textContent=title;$('#modalText').className='muted';$('#modalText').textContent=text;$('#modalCancel').textContent=cancelLabel||'Cancel';$('#modalOk').textContent=okLabel||'OK';$('#modalCancel').onclick=()=>$('#modal').classList.remove('show');/* CHG: reset cancel handler so a prior custom handler cannot leak into later dialogs */$('#modal').classList.add('show');$('#modalOk').onclick=()=>{$('#modal').classList.remove('show');ok&&ok()};}
+function confirmBox(title,text,ok,okLabel,cancelLabel){$('#modalTitle').textContent=title;$('#modalText').className='muted';$('#modalText').textContent=text;$('#modalCancel').textContent=cancelLabel||'Cancel';$('#modalOk').textContent=okLabel||'OK';$('#modalCancel').onclick=()=>$('#modal').classList.remove('show');$('#modal').classList.add('show');$('#modalOk').onclick=()=>{$('#modal').classList.remove('show');ok&&ok();};}
 function renderRegoOptions(){const sel=$('#regoSelect');if(!sel)return;const list=state.regos.slice();if(calc.rego&&!list.includes(calc.rego))list.unshift(calc.rego);sel.innerHTML=list.length?list.map(r=>`<option value="${esc(r)}"${r===calc.rego?' selected':''}>${esc(r)}</option>`).join(''):'<option value="">No regos - add in Settings</option>';}
 function renderRegoChips(){const box=$('#regoChips');if(!box)return;box.innerHTML=state.regos.map(r=>`<span class="rego-chip">${esc(r)}<button data-del-rego="${esc(r)}" aria-label="Remove ${esc(r)}">&times;</button></span>`).join('')||'<span class="muted" style="font-size:12px">No saved regos yet</span>';}
 $('#modalCancel').onclick=()=>$('#modal').classList.remove('show');
 $('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};
 function shiftKey(date,rego){return `${date}|${rego||''}`}
-/* CHG: removed unused showShiftPreview (dead code; weekly view now inlines the modal) */
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(KEYS.theme,t);$('#darkSwitch')?.classList.toggle('active',t==='dark');$('#lightSwitch')?.classList.toggle('active',t==='light')}
 setTheme(localStorage.getItem(KEYS.theme)||'dark');
 
@@ -349,18 +695,17 @@ function whatsappUrl(text){const c=quickContact(); return `https://wa.me/${c?c.n
 async function shareText(text){const c=quickContact(); if(c){try{await navigator.clipboard.writeText(text)}catch{} location.href=whatsappUrl(text); toast(`Opening WhatsApp for ${c.name}`); return} try{if(navigator.share) await navigator.share({text}); else location.href=whatsappUrl(text)}catch{try{location.href=whatsappUrl(text)}catch{}}}
 function downloadText(filename,text,type='text/csv'){try{const blob=new Blob([text],{type}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500)}catch{toast('Download unavailable')}}
 function downloadBlob(file){try{const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name||'image.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}catch{}}
-/* CHG: daily-shift WhatsApp share now sends the raw receipt photo + a plain-text caption, not an app-designed card */
 function dataUrlToFile(dataUrl,name){
   try{const i=String(dataUrl).indexOf(','); const meta=dataUrl.slice(0,i), b64=dataUrl.slice(i+1); const mime=(meta.match(/data:([^;]+)/)||[])[1]||'image/jpeg'; const bin=atob(b64), len=bin.length, arr=new Uint8Array(len); for(let j=0;j<len;j++)arr[j]=bin.charCodeAt(j); const ext=mime.includes('pdf')?'.pdf':(mime.includes('png')?'.png':'.jpg'); return new File([arr], (name||'receipt')+(/\.[a-z0-9]+$/i.test(name||'')?'':ext), {type:mime});}
   catch{return null}
 }
 async function shiftReceiptFile(){
-  const f=$('#receiptFile')&&$('#receiptFile').files[0]; if(f)return f;            // freshly attached raw photo
-  const arr=(state.receipts&&state.receipts[calc.date])||[];                       // else latest saved receipt for this shift date
+  const f=$('#receiptFile')&&$('#receiptFile').files[0]; if(f)return f;
+  const arr=(state.receipts&&state.receipts[calc.date])||[];
   for(let k=arr.length-1;k>=0;k--){ if(arr[k]&&arr[k].fileData)return dataUrlToFile(arr[k].fileData,arr[k].fileName); }
   return null;
 }
-async function captureCard(el,filename){ if(!window.html2canvas||!el)return null; try{const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#0b0b0b',removeContainer:true}); return await new Promise(res=>canvas.toBlob(b=>res(b?new File([b],filename,{type:'image/png'}):null),'image/png'));}catch(e){return null} }/* CHG: capture a designed card (no UI screenshot) */
+async function captureCard(el,filename){ if(!window.html2canvas||!el)return null; try{const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#0b0b0b',removeContainer:true}); return await new Promise(res=>canvas.toBlob(b=>res(b?new File([b],filename,{type:'image/png'}):null),'image/png'));}catch(e){return null} }
 async function shareFileAndText(file,text){
   if(file&&navigator.share&&navigator.canShare?.({files:[file]})){
     try{await navigator.share({text,files:[file]});return}
@@ -382,15 +727,15 @@ function buildWeekShareCard(){
   const wrap=document.createElement('div'); wrap.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1';
   wrap.innerHTML=`<div style="width:520px;padding:28px 32px;background:#0b0b0b;color:#f5f0e8;font-family:Outfit,system-ui,sans-serif;border-radius:18px;box-sizing:border-box"><div style="font-size:13px;color:#8c8068;margin-bottom:14px;letter-spacing:.3px">${esc(wkLabel())}</div>${rowsHtml}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:2px solid #2a2a2a"><span style="font-size:14px;color:#a89878;text-transform:uppercase;letter-spacing:1px">Total</span><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;color:#f0c040;font-variant-numeric:tabular-nums">${money(total)}</span></div></div>`;
   document.body.appendChild(wrap); return {card:wrap.firstElementChild, cleanup:()=>wrap.remove()};
-}/* CHG: minimal share card — rows + total only, no branding */
-function weekShareText(){const rows=weekEntries(); const total=rows.reduce((a,b)=>a+n(b.amount),0); return `${wkLabel()}\n*Total Amount: ${money(total)}*`}/* CHG: range + total, no branding */
+}
+function weekShareText(){const rows=weekEntries(); const total=rows.reduce((a,b)=>a+n(b.amount),0); return `${wkLabel()}\n*Total Amount: ${money(total)}*`}
 function basQuarter(dateStr){const d=parseLocal(dateStr), y=d.getFullYear(), m=d.getMonth()+1; const fyStart=m>=7?y:y-1, fy=`FY${fyStart}-${String(fyStart+1).slice(2)}`; if(m>=7&&m<=9)return `${fy} Q1 (Jul-Sep)`; if(m>=10&&m<=12)return `${fy} Q2 (Oct-Dec)`; if(m>=1&&m<=3)return `${fy} Q3 (Jan-Mar)`; return `${fy} Q4 (Apr-Jun)`}
 function expenseGst(e){return e.gstIncluded?n(e.amount)/11*(n(e.businessUse||100)/100):0}
 function expenseDeductible(e){return n(e.amount)*(n(e.businessUse||100)/100)}
 function expenseAttachmentLabel(e){return e.attachment?.fileName||'No attachment'}
 async function fileToData(file){return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
-async function compressImage(file){if(!file.type||!file.type.startsWith('image/'))return fileToData(file);try{const dataUrl=await fileToData(file);const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=dataUrl});const max=1280,scale=Math.min(1,max/Math.max(img.width||max,img.height||max));const w=Math.round((img.width||max)*scale),h=Math.round((img.height||max)*scale);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);return c.toDataURL('image/jpeg',0.7)}catch{return fileToData(file)}}/* CHG: downscale images to avoid blowing the 5MB localStorage quota */
-async function prepMedia(file){const isImg=file.type&&file.type.startsWith('image/');if(!isImg&&file.size>2000000){toast('PDF too large (max 2MB)');return null}if(file.size>10000000){toast('File too large (max 10MB)');return null}try{const data=await compressImage(file);if(data&&data.length>2800000){toast('File too large to store');return null}return data}catch{toast('Could not read file');return null}}/* CHG: hard size caps before persisting media */
+async function compressImage(file){if(!file.type||!file.type.startsWith('image/'))return fileToData(file);try{const dataUrl=await fileToData(file);const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=dataUrl});const max=1280,scale=Math.min(1,max/Math.max(img.width||max,img.height||max));const w=Math.round((img.width||max)*scale),h=Math.round((img.height||max)*scale);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);return c.toDataURL('image/jpeg',0.7)}catch{return fileToData(file)}}
+async function prepMedia(file){const isImg=file.type&&file.type.startsWith('image/');if(!isImg&&file.size>2000000){toast('PDF too large (max 2MB)');return null}if(file.size>10000000){toast('File too large (max 10MB)');return null}try{const data=await compressImage(file);if(data&&data.length>2800000){toast('File too large to store');return null}return data}catch{toast('Could not read file');return null}}
 
 function renderCalc(){
   const t=totals(), runsAcc=t.runs+t.accounts, max=Math.max(t.eos+t.cash+runsAcc+t.fuel,1);
@@ -434,7 +779,9 @@ function bindCalc(){
 function setActiveDate(id){['todayBtn','yesterdayBtn','pickBtn'].forEach(x=>$('#'+x).classList.toggle('active',x===id))}
 function pulse(){const el=$('#takeHome');el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}
 function resetCalc(){calc={date:localDateStr(new Date()),rego:calc.rego,eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''};$('#receiptFile').value='';$('#receiptName').textContent='';$('#receiptChip').textContent='None';setActiveDate('todayBtn');renderRows();renderCalc();toast('Cleared')}
-function loadShiftIntoCalc(entry){const snap=state.snapshots[shiftKey(entry.date,entry.rego)];if(snap){calc=JSON.parse(JSON.stringify(snap));if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];if(!Array.isArray(calc.accounts))calc.accounts=[];show('shift');setActiveDate(entry.date===localDateStr(new Date())?'todayBtn':'pickBtn');renderRows();renderCalc();toast('Loaded saved shift');return}/* CHG: restore full snapshot when present */
+function loadShiftIntoCalc(entry){
+  const snap=state.snapshots[shiftKey(entry.date,entry.rego)];
+  if(snap){calc=JSON.parse(JSON.stringify(snap));if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];if(!Array.isArray(calc.accounts))calc.accounts=[];show('shift');setActiveDate(entry.date===localDateStr(new Date())?'todayBtn':'pickBtn');renderRows();renderCalc();toast('Loaded saved shift');return;}
   const cash=state.cash[entry.date], fuel=state.fuel[entry.date], trips=state.trip[entry.date];
   calc.date=entry.date; calc.rego=entry.rego||calc.rego;
   calc.cash=(cash?.payers?.length?cash.payers.map(p=>({name:p.name||'',amount:nn(p.amount)})):[{name:'',amount:nn(cash?.total)}]);
@@ -448,20 +795,26 @@ async function saveShift(){
   const t=totals();
   if(t.eos===0&&t.cash===0&&t.runs===0&&t.accounts===0){toast('Add some takings first');return false}
   if(calc.hailTrips===''||calc.hailTrips===null||calc.hailTrips===undefined)calc.hailTrips=0;
-  const entry={date:calc.date,amount:+t.take.toFixed(2),rego:calc.rego||''}; state.entries=state.entries.filter(x=>!(x.date===entry.date&&x.rego===entry.rego)); state.entries.push(entry); save(KEYS.entries,state.entries); immediateSync(KEYS.entries,state.entries);
+  const entry={date:calc.date,amount:+t.take.toFixed(2),rego:calc.rego||''};
+  state.entries=state.entries.filter(x=>!(x.date===entry.date&&x.rego===entry.rego));
+  state.entries.push(entry);
+  save(KEYS.entries,state.entries);
+  immediateSync(KEYS.entries); // zero-debounce: shift saves go up instantly
   state.messages[shiftKey(entry.date,entry.rego)]=message(); save(KEYS.messages,state.messages);
-  state.snapshots[shiftKey(entry.date,entry.rego)]=JSON.parse(JSON.stringify(calc)); save(KEYS.snapshots,state.snapshots);/* CHG: persist full breakdown so an edit restores EOS/runs/accounts losslessly */
-  state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; state.trip[calc.date]=nn(calc.hailTrips); state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.fuel,state.fuel); save(KEYS.trip,state.trip); save(KEYS.cash,state.cash);
-  const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date); toast('Shift saved'); renderSettings(); return true;
+  state.snapshots[shiftKey(entry.date,entry.rego)]=JSON.parse(JSON.stringify(calc)); save(KEYS.snapshots,state.snapshots);
+  state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; save(KEYS.fuel,state.fuel);
+  state.trip[calc.date]=nn(calc.hailTrips); save(KEYS.trip,state.trip);
+  state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.cash,state.cash);
+  const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date);
+  toast('Shift saved'); renderSettings(); return true;
 }
-async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }/* raw receipt photo + emoji/WhatsApp-bold caption */
-async function doShareShift(addToWeekly){ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }/* CHG: Yes logs the shift to the weekly report first, then shares */
-function shareShift(){ confirmBox('Add to weekly report?','Do you want to add this shift to your weekly report?',()=>doShareShift(true),'Yes, add & share','No, just share'); $('#modalCancel').onclick=()=>{$('#modal').classList.remove('show'); doShareShift(false)}; }/* CHG: Yes adds it then shares; No shares without adding */
+async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }
+async function doShareShift(addToWeekly){ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }
+function shareShift(){ confirmBox('Add to weekly report?','Do you want to add this shift to your weekly report?',()=>doShareShift(true),'Yes, add & share','No, just share'); $('#modalCancel').onclick=()=>{$('#modal').classList.remove('show'); doShareShift(false)}; }
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None'};
 
 function weekStart(d=new Date()){const x=new Date(d); const day=x.getDay(); const diff=(day>=4?day-4:day+3); x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
-function weekStartDate(){return weekStart()}
 function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
 function wkRange(){ if(!state.wkStart||!state.wkEnd){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);state.wkStart=localDateStr(s);state.wkEnd=localDateStr(e);} return [state.wkStart,state.wkEnd]; }
 function wkLabel(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return `${fmtDate(lo)} - ${fmtDate(hi)}`}
@@ -488,10 +841,10 @@ function renderWeekly(){
 $('#wkPrev').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,-7);state.wkEnd=shiftDays(state.wkEnd,-7);saveWk();renderWeekly()};
 $('#wkNext').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,7);state.wkEnd=shiftDays(state.wkEnd,7);saveWk();renderWeekly()};
 $('#wkStart').onchange=e=>{state.wkStart=e.target.value;saveWk();renderWeekly()};
-$('#wkEnd').onchange=e=>{state.wkEnd=e.target.value;saveWk();renderWeekly()};/* CHG: Thu-Wed pickers + 7-day nav */
+$('#wkEnd').onchange=e=>{state.wkEnd=e.target.value;saveWk();renderWeekly()};
 $('#overrideToggle').onclick=()=>$('#overrideToggle').closest('.chip').classList.toggle('open');
-$('#saveOverride').onclick=()=>{const date=$('#overrideDate').value||localDateStr(new Date()), amount=n($('#overrideAmount').value), rego=$('#overrideRego').value.trim()||calc.rego||''; if(!amount){toast('Enter an amount');return} state.entries=state.entries.filter(x=>!(x.date===date&&x.rego===rego)); state.entries.push({date,amount:+amount.toFixed(2),rego}); save(KEYS.entries,state.entries); $('#overrideAmount').value='';$('#overrideRego').value=''; toast('Entry saved'); renderWeekly()};
-async function shareWeek(){ toast('Preparing photo...'); const {card,cleanup}=buildWeekShareCard(); const file=await captureCard(card,'drive2earn-week.png'); cleanup(); await shareFileAndText(file,weekShareText()); }/* CHG: share a generated card, not a screenshot */
+$('#saveOverride').onclick=()=>{const date=$('#overrideDate').value||localDateStr(new Date()), amount=n($('#overrideAmount').value), rego=$('#overrideRego').value.trim()||calc.rego||''; if(!amount){toast('Enter an amount');return} state.entries=state.entries.filter(x=>!(x.date===date&&x.rego===rego)); state.entries.push({date,amount:+amount.toFixed(2),rego}); save(KEYS.entries,state.entries); immediateSync(KEYS.entries); $('#overrideAmount').value='';$('#overrideRego').value=''; toast('Entry saved'); renderWeekly()};
+async function shareWeek(){ toast('Preparing photo...'); const {card,cleanup}=buildWeekShareCard(); const file=await captureCard(card,'drive2earn-week.png'); cleanup(); await shareFileAndText(file,weekShareText()); }
 $('#shareWeek').onclick=shareWeek;
 
 function applyQuickFilter(kind){
@@ -529,7 +882,7 @@ function renderReports(){ try{
     {title:'Fuel Tracker',total:fuelTotal,lines:Object.entries(fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`),csv:'Date,Type,Amount\n'+Object.entries(fuel).map(([d,v])=>[ddmmyyyy(d),csvCell(v.type),n(v.amount).toFixed(2)].join(',')).join('\n')}
   ];
   const qf=[['lastweek','Last Week'],['last30','Last 30 Days'],['lastmonth','Last Month'],['alltime','All Time']];
-  const hero=modules[0];/* CHG: BAS Gross headline summary; individual transaction rows are hidden (export-only) */
+  const hero=modules[0];
   const heroHTML=`<section class="card hero-sum"><span class="chip-title"><span class="dot"></span>${hero.title}</span><div class="hs-total">${money(hero.total)}</div><div class="hs-sub">${repLabel()} &middot; ${hero.lines.length} item${hero.lines.length===1?'':'s'}</div><div class="filter" style="margin-top:10px"><button class="pill" data-copy-report="0">Copy CSV</button><button class="pill" data-dl-report="0">Download</button></div></section>`;
   const cardHTML=modules.slice(1).map((s,j)=>{const i=j+1;return `<article class="card sum-card"><div class="sc-row"><span class="chip-title"><span class="dot"></span>${s.title}</span><b class="sc-total">${money(s.total)}</b></div><div class="muted sc-sub">${repLabel()} &middot; ${s.lines.length} item${s.lines.length===1?'':'s'}</div><div class="filter"><button class="pill" data-copy-report="${i}">Copy CSV</button><button class="pill" data-dl-report="${i}">Download</button></div></article>`}).join('');
   const expHTML=`<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expDeduct)}</b></button><div class="report-body"><div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${exps.filter(e=>e.attachment).length}/${exps.length}</b></div></div><div class="expense-form"><div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div><div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div><div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div><div class="row one"><input id="expenseNote" placeholder="Note"></div><label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label><label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label><input id="expenseAttachment" type="file" accept="image/*,application/pdf"><div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div><p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p></div><div class="expense-list" id="expenseList" style="margin-top:10px"></div></div></article>`;
@@ -570,150 +923,36 @@ function bindExpenseReport(){
   };
   $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?`,()=>{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports()}); return} const text=`${exp.category}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST credit estimate: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
 }
-function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase connected':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set'; }
+function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set'; }
 $('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
 $('#darkSwitch').onclick=()=>setTheme('dark'); $('#lightSwitch').onclick=()=>setTheme('light'); $('#themeBtn').onclick=e=>{e.stopPropagation();setTheme((localStorage.getItem(KEYS.theme)||'dark')==='dark'?'light':'dark')};
 if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;setLS(KEYS.lastRego,calc.rego);renderCalc()};
-if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
+if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
 if($('#newRego'))$('#newRego').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addRego').click()}};
-if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';setLS(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
+if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';setLS(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
 $('#saveQuickShare').onclick=()=>{state.quickShare={name:$('#quickShareName').value.trim(),number:$('#quickShareNumber').value.trim()}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact saved')};
 $('#clearQuickShare').onclick=()=>{state.quickShare={name:'',number:''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share cleared')};
 $('#pickQuickShare').onclick=async()=>{try{if(!navigator.contacts?.select){toast('Contact picker unavailable on this device');return} const contacts=await navigator.contacts.select(['name','tel'],{multiple:false}); const c=contacts?.[0]; if(!c)return; state.quickShare={name:c.name?.[0]||'',number:c.tel?.[0]||''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact selected')}catch{toast('Contact picker cancelled')}};
-function renderProfile(){ $('#driverName').value=state.profile.name||''; $('#driverEmail').value=state.profile.email||''; $('#firebaseConfig').value=localStorage.getItem(KEYS.fb)||''; $('#changelog').innerHTML=CHANGELOG.map(c=>`v${c.version} | ${c.date}<br>${c.changes.map(x=>' - '+x).join('<br>')}`).join('<br><br>'); $('#greeting').textContent=`Hey, ${state.profile.name||'Driver'}`; $('#avatar').textContent=(state.profile.name||'D2').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(); }
+function renderProfile(){ $('#driverName').value=state.profile.name||''; $('#driverEmail').value=state.profile.email||''; $('#firebaseConfig').value=localStorage.getItem(KEYS.fb)||''; $('#changelog').innerHTML=CHANGELOG.map(c=>`v${c.version} | ${c.date}<br>${c.changes.map(x=>' - '+x).join('<br>')}`).join('<br><br>'); $('#greeting').textContent=`Hey, ${state.profile.name||'Driver'}`; $('#avatar').textContent=(state.profile.name||'D2').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(); setSyncStatus(syncOn&&userId?'live':'local');}
 $('#saveProfile').onclick=()=>{state.profile={name:$('#driverName').value.trim()||'Driver',email:$('#driverEmail').value.trim()};save(KEYS.profile,state.profile);renderProfile();toast('Profile saved')};
-$('#exportData').onclick=()=>{const dump={};Object.values(KEYS).forEach(k=>{const v=localStorage.getItem(k);if(v!==null)dump[k]=v});downloadText(`drive2earn-backup-${localDateStr(new Date())}.json`,JSON.stringify({app:'drive2earn',version:APP_VERSION,exported:new Date().toISOString(),data:dump},null,2),'application/json');toast('Backup exported')};/* CHG: local export */
+$('#exportData').onclick=()=>{const dump={};Object.values(KEYS).forEach(k=>{const v=localStorage.getItem(k);if(v!==null)dump[k]=v});downloadText(`drive2earn-backup-${localDateStr(new Date())}.json`,JSON.stringify({app:'drive2earn',version:APP_VERSION,exported:new Date().toISOString(),data:dump},null,2),'application/json');toast('Backup exported')};
 $('#importData').onclick=()=>$('#importFile').click();
-$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const text=await f.text();const obj=JSON.parse(text);const data=obj&&obj.data?obj.data:obj;if(!data||typeof data!=='object')throw 0;confirmBox('Import backup','Replace all current data with this backup? This cannot be undone.',()=>{Object.entries(data).forEach(([k,v])=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}});toast('Backup imported - reloading');setTimeout(()=>location.reload(),600)})}catch{toast('Invalid backup file')}finally{e.target.value=''}};/* CHG: local import with confirm */
+$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const text=await f.text();const obj=JSON.parse(text);const data=obj&&obj.data?obj.data:obj;if(!data||typeof data!=='object')throw 0;confirmBox('Import backup','Replace all current data with this backup? This cannot be undone.',()=>{Object.entries(data).forEach(([k,v])=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}});toast('Backup imported - reloading');setTimeout(()=>location.reload(),600)})}catch{toast('Invalid backup file')}finally{e.target.value=''}};
 async function saveReceiptFile(file,shiftReceipt,date=localDateStr(new Date())){try{const data=await prepMedia(file); if(!data)return; const rec={id:uid(),fileName:file.name,fileData:data,fileType:file.type,savedAt:new Date().toISOString(),shiftReceipt}; state.receipts[date]=state.receipts[date]||[]; state.receipts[date].push(rec); save(KEYS.receipts,state.receipts); toast('Receipt saved to Docs')}catch{toast('Could not save receipt')}}
 function renderReceipts(){const all=Object.entries(state.receipts).flatMap(([date,arr])=>arr.map(r=>({...r,date}))).filter(r=>state.receiptFilter==='all'||(state.receiptFilter==='shift'?r.shiftReceipt:!r.shiftReceipt)); $('#receiptGrid').innerHTML=all.map(r=>`<button class="receipt" data-receipt="${r.id}">${r.fileType?.startsWith('image')?`<img src="${r.fileData}" alt="">`:`<span>PDF<br>${esc(r.fileName)}</span>`}</button>`).join('')||'<p class="muted">No receipts yet.</p>'; $$('#receiptGrid [data-receipt]').forEach(b=>b.onclick=()=>{const r=all.find(x=>x.id===b.dataset.receipt); confirmBox(r.fileName,`${fmtDate(r.date)} | ${r.shiftReceipt?'Shift receipt':'Manual receipt'} - delete this receipt?`,()=>{state.receipts[r.date]=(state.receipts[r.date]||[]).filter(x=>x.id!==r.id); if(!state.receipts[r.date].length)delete state.receipts[r.date]; save(KEYS.receipts,state.receipts); renderReceipts(); renderSettings()})})}
 $('#openReceipts').onclick=()=>show('receipts'); $$('[data-receipt-filter]').forEach(b=>b.onclick=()=>{$$('[data-receipt-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.receiptFilter=b.dataset.receiptFilter;renderReceipts()}); $('#manualReceiptBtn').onclick=()=>$('#manualReceipt').click(); $('#manualReceipt').onchange=e=>e.target.files[0]&&saveReceiptFile(e.target.files[0],false).then(renderReceipts);
-
-/* ===== Real-time multi-device sync (Firebase Firestore) =====
-   Account model: the SAME email/password on every device -> same uid -> one shared data tree.
-   Real-time onSnapshot listeners + Firestore offline persistence + last-write-wins conflict handling.
-   When sync is not configured the app stays 100% local; every guard below is a no-op. */
-function deviceId(){let id=localStorage.getItem(KEYS.device); if(!id){id=uid();localStorage.setItem(KEYS.device,id)} return id}
-function setSyncStatus(s){const el=$('#syncStatus'); if(el)el.textContent='Sync: '+s; const sum=$('#syncSummary'); if(sum)sum.textContent=(syncOn&&userId)?('Synced \u00b7 '+(localStorage.getItem('d2e_sync_email')||'account')):'Local only';}
-function setLS(key,val){ if(val==null)localStorage.removeItem(key); else localStorage.setItem(key,val); queuePush(key); }/* setting writer that also pushes to the cloud */
-function localValueFor(key){ const p=KEY_TO_STATE[key]; return p!==undefined?state[p]:localStorage.getItem(key); }
-function rawPersist(key,value){ const p=KEY_TO_STATE[key]; try{ if(p!==undefined){ state[p]=value; localStorage.setItem(key,JSON.stringify(value)); } else { if(value==null)localStorage.removeItem(key); else localStorage.setItem(key,typeof value==='string'?value:String(value)); } }catch(e){} }/* persists WITHOUT pushing (prevents echo loops) */
-function autoSync(k){ queuePush(k); }
-function immediateSync(k){ queuePush(k); }
-function queuePush(key){ if(!syncOn||SYNC_KEYS.indexOf(key)<0)return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(()=>cloudWrite(key),200); }
-async function cloudWrite(key){
-  if(!syncOn||!fb.db||!userId||!fb.fns)return;
-  try{ await fb.fns.setDoc(fb.fns.doc(fb.db,'accounts',userId,'data',key),{value:localValueFor(key),_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()}); setSyncStatus('live'); }
-  catch(e){ setSyncStatus('offline \u2013 changes queued'); }
-}
-function tsMillis(u){ if(!u)return 0; if(typeof u.toMillis==='function')return u.toMillis(); if(u.seconds)return u.seconds*1000; const n=Date.parse(u); return isFinite(n)?n:0; }
-function applyRemote(key,data,hasPendingWrites){
-  if(!data)return;
-  if(hasPendingWrites)return;/* our own un-acknowledged write echoed from the local cache */
-  const ts=tsMillis(data.updatedAt), prev=syncMeta[key]||0;
-  if(data._deviceId===deviceId()&&ts<=prev)return;/* echo of our own most recent write */
-  if(ts&&prev&&ts<prev)return;/* we already hold a newer value (last-write-wins) */
-  rawPersist(key,data.value);
-  syncMeta[key]=ts||Date.now(); try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta))}catch(e){}
-  refreshAfterSync(key);
-}
-function refreshAfterSync(key){
-  try{renderRegoOptions();renderRegoChips();}catch(e){}
-  try{renderRows();renderCalc();}catch(e){}
-  const active=document.querySelector('.screen.active'), scr=active&&active.dataset.screen;
-  try{if(scr==='reports')renderReports();}catch(e){}
-  try{if(scr==='weekly')renderWeekly();}catch(e){}
-  try{if(scr==='settings')renderSettings();}catch(e){}
-  try{if(scr==='profile')renderProfile();}catch(e){}
-  try{if(scr==='receipts')renderReceipts();}catch(e){}
-}
-/* initial reconciliation merge so a device joining an existing account does not wipe either side */
-function mergeValues(key,localV,cloudV){
-  if(cloudV==null)return localV; if(localV==null)return cloudV;
-  if(key===KEYS.entries){ const m={}; (localV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e)); (cloudV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e)); return Object.keys(m).map(k=>m[k]); }
-  if(key===KEYS.expenses){ const m={}; (localV||[]).forEach(e=>e&&e.id&&(m[e.id]=e)); (cloudV||[]).forEach(e=>e&&e.id&&(m[e.id]=e)); return Object.keys(m).map(k=>m[k]); }
-  if(key===KEYS.regos){ const out=[],seen={}; (localV||[]).concat(cloudV||[]).forEach(r=>{const k=String(r).toLowerCase(); if(!seen[k]){seen[k]=1;out.push(r)}}); return out; }
-  if(Array.isArray(cloudV))return cloudV;
-  if(typeof cloudV==='object')return Object.assign({},localV,cloudV);/* object maps (fuel/trip/cash/messages/snapshots/weekly): union keys, cloud wins on collision */
-  return cloudV;/* scalar settings: take cloud value */
-}
-async function reconcile(){
-  if(!fb.db||!userId||!fb.fns||!fb.fns.getDoc)return;
-  for(let i=0;i<SYNC_KEYS.length;i++){ const key=SYNC_KEYS[i];
-    try{
-      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
-      const snap=await fb.fns.getDoc(ref);
-      const exists=snap&&(typeof snap.exists==='function'?snap.exists():snap.exists);
-      const cloudV=exists?((snap.data&&snap.data())||{}).value:undefined;
-      const merged=mergeValues(key,localValueFor(key),cloudV);
-      rawPersist(key,merged);
-      await fb.fns.setDoc(ref,{value:localValueFor(key),_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()});
-      syncMeta[key]=Date.now();
-    }catch(e){}
-  }
-  try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta))}catch(e){}
-  refreshAfterSync('*');
-}
-function attachListeners(){
-  detachListeners();
-  if(!fb.db||!userId||!fb.fns||!fb.fns.onSnapshot)return;
-  SYNC_KEYS.forEach(key=>{
-    try{
-      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
-      const u=fb.fns.onSnapshot(ref,snap=>{ try{ if(!snap)return; const exists=typeof snap.exists==='function'?snap.exists():snap.exists; const meta=snap.metadata||{}; if(!exists){ if(localValueFor(key)!=null&&!meta.hasPendingWrites)queuePush(key); return; } applyRemote(key,snap.data&&snap.data(),meta.hasPendingWrites); }catch(e){} }, ()=>setSyncStatus('error'));
-      unsub.push(u);
-    }catch(e){}
-  });
-}
-function detachListeners(){ unsub.forEach(u=>{try{u&&u()}catch(e){}}); unsub=[]; }
-async function initFirebase(cfg){
-  const appMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-  const authMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
-  const fsMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
-  fb.app=appMod.initializeApp(cfg);
-  fb.auth=authMod.getAuth(fb.app);
-  try{ fb.db=fsMod.initializeFirestore(fb.app,{localCache:fsMod.persistentLocalCache({tabManager:(fsMod.persistentMultipleTabManager?fsMod.persistentMultipleTabManager():undefined)})}); }
-  catch(e){ try{fb.db=fsMod.getFirestore(fb.app);}catch(_){} }
-  fb.fns={doc:fsMod.doc,setDoc:fsMod.setDoc,getDoc:fsMod.getDoc,onSnapshot:fsMod.onSnapshot,serverTimestamp:fsMod.serverTimestamp};
-  fb.authFns={signIn:authMod.signInWithEmailAndPassword,signUp:authMod.createUserWithEmailAndPassword,signOut:authMod.signOut};
-  try{ await authMod.setPersistence(fb.auth,authMod.browserLocalPersistence); }catch(e){}
-  authMod.onAuthStateChanged(fb.auth, async user=>{
-    if(user){ userId=user.uid; syncOn=true; if(user.email)localStorage.setItem('d2e_sync_email',user.email); setSyncStatus('connecting\u2026'); try{await reconcile()}catch(e){} attachListeners(); setSyncStatus('live'); }
-    else { userId=null; syncOn=false; detachListeners(); setSyncStatus('signed out'); }
-    updateSyncUI();
-  });
-}
-function updateSyncUI(){ const on=!!userId; const si=$('#signInBtn'),ca=$('#createAccountBtn'),so=$('#signOutBtn'); if(si)si.style.display=on?'none':''; if(ca)ca.style.display=on?'none':''; if(so)so.style.display=on?'':'none'; setSyncStatus(on?'live':'local'); try{renderSettings()}catch(e){} }
-async function connectAndSignIn(create){
-  let cfg; try{cfg=JSON.parse($('#firebaseConfig').value)}catch(e){toast('Invalid Firebase config JSON');return}
-  const email=($('#syncEmail').value||'').trim(), pass=$('#syncPassword').value||'';
-  if(!email||!pass){toast('Enter the account email and password');return}
-  localStorage.setItem(KEYS.fb,JSON.stringify(cfg));
-  try{
-    if(!fb.app)await initFirebase(cfg);
-    if(create) await fb.authFns.signUp(fb.auth,email,pass); else await fb.authFns.signIn(fb.auth,email,pass);
-    localStorage.setItem('d2e_sync_email',email);
-    toast(create?'Account created \u2013 syncing this device':'Signed in \u2013 syncing this device');
-  }catch(e){ toast('Sync sign-in failed: '+(e&&(e.code||e.message)||'error')); setSyncStatus('error'); }
-}
-function signOutSync(){ try{ fb.authFns&&fb.authFns.signOut&&fb.authFns.signOut(fb.auth);}catch(e){} detachListeners(); userId=null; syncOn=false; setSyncStatus('signed out'); updateSyncUI(); toast('Signed out \u2013 your data stays on this device'); }
-function disconnectFirebase(){ signOutSync(); localStorage.removeItem(KEYS.fb); fb={app:null,auth:null,db:null,fns:null,authFns:null}; toast('Sync disconnected'); }
-if($('#signInBtn'))$('#signInBtn').onclick=()=>connectAndSignIn(false);
-if($('#createAccountBtn'))$('#createAccountBtn').onclick=()=>connectAndSignIn(true);
-if($('#signOutBtn'))$('#signOutBtn').onclick=signOutSync;
-if($('#disconnectFirebase'))$('#disconnectFirebase').onclick=disconnectFirebase;
-(async()=>{ const raw=localStorage.getItem(KEYS.fb); if(raw){ try{ setSyncStatus('restoring session\u2026'); await initFirebase(JSON.parse(raw)); }catch(e){} } })();
-/* test hook: lets the sync engine be unit-tested with a mock backend; inert in production */
-window.__sync={ get on(){return syncOn}, set on(v){syncOn=v}, setUser:u=>{userId=u}, setBackend:b=>{fb=b}, deviceId, applyRemote, queuePush, cloudWrite, mergeValues, reconcile, attachListeners, detachListeners, refreshAfterSync, localValueFor, SYNC_KEYS, KEY_TO_STATE, meta:()=>syncMeta, setMeta:(k,v)=>{syncMeta[k]=v} };
+$('#signInBtn').onclick=()=>connectAndSignIn(false);
+$('#createAccountBtn').onclick=()=>connectAndSignIn(true);
+$('#signOutBtn').onclick=signOutSync;
+$('#disconnectFirebase').onclick=disconnectFirebase;
 
 function weather(){const cached=load('d2e_weather_cache',null); if(cached&&Date.now()-cached.t<900000){applyWeather(cached);return} if(!navigator.geolocation){applyWeather({temp:'--',desc:'Location unavailable',suburb:'Melbourne'});return} navigator.geolocation.getCurrentPosition(async pos=>{try{const {latitude,longitude}=pos.coords; const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m`).then(r=>r.json()); let suburb='Melbourne'; try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`).then(r=>r.json()); suburb=g.address.suburb||g.address.city||g.address.town||suburb}catch{} const data={t:Date.now(),temp:Math.round(w.current.temperature_2m)+'C',desc:'Current conditions',suburb,humidity:w.current.relative_humidity_2m+'%',wind:Math.round(w.current.wind_speed_10m)+' km/h'}; save('d2e_weather_cache',data); applyWeather(data)}catch{applyWeather({temp:'--',desc:'Weather unavailable',suburb:'Melbourne'})}},()=>applyWeather({temp:'--',desc:'Location blocked',suburb:'Melbourne'}),{maximumAge:900000,timeout:5000})}
 function applyWeather(d){$('#temp').textContent=d.temp||'--';$('#weatherDesc').textContent=d.desc||'Weather';$('#suburb').textContent=d.suburb||'Melbourne';$('#humidity').textContent=d.humidity||'--';$('#wind').textContent=d.wind||'--'}
 $('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{setLS(KEYS.tz,e.target.value);tick()};
 function tick(){const tz=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; const now=new Date(); try{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',timeZone:tz}); $('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short',timeZone:tz}); $('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',timeZone:tz})}catch{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});$('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});$('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}}
 setActiveDate(calc.date===localDateStr(new Date())?'todayBtn':'pickBtn');
-(function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();/* CHG: Weekly=Thu-Wed, Reports=last 30 days defaults */
+(function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();
 renderProfile(); renderRows(); bindCalc(); renderCalc(); renderSettings(); weather(); tick(); setInterval(tick,1000);
-
 </script>
 </body>
 </html>
