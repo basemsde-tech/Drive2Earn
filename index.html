@@ -446,8 +446,9 @@ async function saveShift(){
   state.fuel[calc.date]={amount:t.fuel,type:calc.fuelType}; state.trip[calc.date]=nn(calc.hailTrips); state.cash[calc.date]={total:t.cash,payers:calc.cash.filter(x=>nn(x.amount)>0)}; save(KEYS.fuel,state.fuel); save(KEYS.trip,state.trip); save(KEYS.cash,state.cash);
   const f=$('#receiptFile').files[0]; if(f) await saveReceiptFile(f,true,calc.date); toast('Shift saved'); renderSettings(); return true;
 }
-async function doShareShift(){ if(!await saveShift())return; const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }/* CHG: raw receipt photo as media + formatted caption (emoji + WhatsApp bold) */
-function shareShift(){ confirmBox('Add to weekly report?','Have you added this shift to your weekly report?',()=>doShareShift(),'Yes, share','No, not yet'); $('#modalCancel').onclick=()=>{$('#modal').classList.remove('show'); toast('No problem - log the shift, then share')}; }/* CHG: pre-share confirmation gate */
+async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }/* raw receipt photo + emoji/WhatsApp-bold caption */
+async function doShareShift(addToWeekly){ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }/* CHG: Yes logs the shift to the weekly report first, then shares */
+function shareShift(){ confirmBox('Add to weekly report?','Do you want to add this shift to your weekly report?',()=>doShareShift(true),'Yes, add & share','No, just share'); $('#modalCancel').onclick=()=>{$('#modal').classList.remove('show'); doShareShift(false)}; }/* CHG: Yes adds it then shares; No shares without adding */
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None'};
 
