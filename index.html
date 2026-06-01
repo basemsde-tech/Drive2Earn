@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v2.6</title>
+  <title>Drive2Earn v2.7</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -203,7 +203,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.6</span></div>
+    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.7</span></div>
     <div class="settings-list">
       <button class="card setting" data-go="profile"><span><b>Profile & Sync</b><p id="syncSummary">Local only</p></span><span class="tag">Open</span></button>
       <div class="card setting full"><span><b>WhatsApp Quick Share</b><p id="quickShareSummary">No quick contact set</p></span><div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div><div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick Contact</button><button class="secondary" id="saveQuickShare">Save Contact</button><button class="secondary" id="clearQuickShare">Clear</button></div></div>
@@ -217,7 +217,7 @@
       <div class="card setting"><span><b>Appearance</b><p>Dark mode is the default</p></span><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></div>
       <button class="card setting" id="openReceipts"><span><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="tag">Open</span></button>
       <button class="card setting" id="refreshApp"><span><b>Clear Cache & Refresh</b><p>Confirmation before local cache reset</p></span><span class="tag">Refresh</span></button>
-      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.6 | build 2026-05-31</p></span><span class="tag">Gold</span></div>
+      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.7 | build 2026-06-01</p></span><span class="tag">Gold</span></div>
     </div>
   </section>
 
@@ -225,10 +225,12 @@
     <div class="subhead"><div><p>Account</p><h2>Profile</h2></div><button class="pill" data-go="shift">Done</button></div>
     <section class="card" style="padding:13px;margin-bottom:10px"><div class="row one"><input id="driverName" placeholder="Driver name"><input id="driverEmail" placeholder="Email"></div><button class="primary" id="saveProfile">Save Profile</button></section>
     <section class="card" style="padding:13px;margin-bottom:10px">
-      <h3>Firebase Sync</h3><p class="muted" style="font-size:12px">Paste a Firebase web config JSON to mirror data to Firestore. Note: this is a one-way (write-only) backup; true cross-device restore needs real authentication. The app works fully offline when this is empty.</p>
-      <textarea id="firebaseConfig" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
-      <div class="preview-actions"><button class="secondary" id="connectFirebase">Connect</button><button class="secondary" id="disconnectFirebase">Disconnect</button></div>
-      <p class="mono muted" id="syncStatus" style="font-size:12px">Sync dot: local</p>
+      <h3>Multi-device Sync</h3><p class="muted" style="font-size:12px">Sign in with the <b>same account</b> on your iPhone and Android to keep every shift, weekly report, fuel, BAS, tax expense, hail trip and rego in sync in real time. Uses your own free Firebase project (Email/Password auth + Firestore). Works offline and merges automatically when you reconnect.</p>
+      <textarea id="firebaseConfig" placeholder='Firebase web config JSON {"apiKey":"...","authDomain":"...","projectId":"..."}'></textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px"><input id="syncEmail" type="email" placeholder="Account email" autocomplete="username"><input id="syncPassword" type="password" placeholder="Password" autocomplete="current-password"></div>
+      <div class="preview-actions"><button class="secondary" id="signInBtn">Sign in</button><button class="secondary" id="createAccountBtn">Create account</button><button class="secondary" id="signOutBtn" style="display:none">Sign out</button></div>
+      <div class="preview-actions" style="margin-top:4px"><button class="secondary" id="disconnectFirebase">Disconnect this device</button></div>
+      <p class="mono muted" id="syncStatus" style="font-size:12px">Sync: local</p>
     </section>
     <section class="card" style="padding:13px;margin-bottom:10px"><h3>Backup & Restore</h3><p class="muted" style="font-size:12px">Export all local data to a JSON file, or import a previous backup. Import replaces current data.</p><div class="preview-actions"><button class="secondary" id="exportData">Export</button><button class="secondary" id="importData">Import</button></div><input type="file" id="importFile" accept="application/json,.json" style="display:none"></section>
     <section class="card" style="padding:13px"><h3>Changelog</h3><div id="changelog" class="mono muted" style="font-size:12px;line-height:1.7"></div></section>
@@ -254,8 +256,9 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='2.6', APP_BUILD='2026-05-31';
+const APP_VERSION='2.7', APP_BUILD='2026-06-01';
 const CHANGELOG=[
+  {version:'2.7',date:'01 Jun 2026',changes:['Real-time multi-device sync: sign in with the same account on iPhone and Android','Every module syncs live - shifts, weekly, fuel, BAS, tax expenses, hail trips, regos and settings','Offline-safe: changes cache locally and merge on reconnect (last-write-wins, union merge on first connect)']},
   {version:'2.6',date:'31 May 2026',changes:['New shift message format with emojis and weekday date','Per-line icons (EOS, Cash, Run (n), Accounts, Fuel); payer amounts show cents','Total relabelled TOTAL EARNINGS; empty lines hidden']},
   {version:'2.5',date:'31 May 2026',changes:['Redesigned top profile bar: fully theme-variable driven (no hardcoded colours)','Compact, premium layout with rounded avatar and pill weather/time widget','Sun/moon theme toggle and weather icon adapt automatically to light/dark']},
   {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
@@ -286,6 +289,11 @@ if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];
 if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];
 if(!Array.isArray(calc.accounts))calc.accounts=[];
 let syncTimer, db, auth, userId;
+const SYNC_DATA_KEYS=[KEYS.entries,KEYS.weekly,KEYS.fuel,KEYS.trip,KEYS.cash,KEYS.expenses,KEYS.messages,KEYS.snapshots,KEYS.regos,KEYS.quickShare,KEYS.profile];
+const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.fuelDefault,KEYS.lastRego,KEYS.tz];
+const SYNC_KEYS=[...SYNC_DATA_KEYS,...SYNC_SETTING_KEYS];
+const KEY_TO_STATE={[KEYS.entries]:'entries',[KEYS.weekly]:'weekly',[KEYS.fuel]:'fuel',[KEYS.trip]:'trip',[KEYS.cash]:'cash',[KEYS.expenses]:'expenses',[KEYS.messages]:'messages',[KEYS.snapshots]:'snapshots',[KEYS.regos]:'regos',[KEYS.quickShare]:'quickShare',[KEYS.profile]:'profile'};
+let fb={app:null,auth:null,db:null,fns:null,authFns:null}, syncOn=false, unsub=[], pushTimers={}, syncMeta=load('d2e_sync_meta',{});
 const EXPENSE_CATEGORIES=['Fuel','Car wash/detailing','Taxi lease/bailee fee','Taxi network/base fees','Booking/platform fees','Tolls','Parking','Airport fees','Vehicle registration','CTP/insurance','Repairs and maintenance','Tyres','Servicing','Oil/coolant/AdBlue','Phone plan','Mobile phone accessories','GPS/navigation','Dash cam','Cleaning supplies','Uniform/work clothing','Accounting/bookkeeping','Bank fees','E-tag fees','Safety equipment','First aid kit','Depreciating asset','Other'];
 
 function toast(t){const el=$('#toast');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2200)}
@@ -563,12 +571,12 @@ function bindExpenseReport(){
   $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?`,()=>{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports()}); return} const text=`${exp.category}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST credit estimate: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
 }
 function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase connected':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set'; }
-$('#levyRate').oninput=e=>{localStorage.setItem(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>localStorage.setItem(KEYS.fuelDefault,e.target.value);
+$('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
 $('#darkSwitch').onclick=()=>setTheme('dark'); $('#lightSwitch').onclick=()=>setTheme('light'); $('#themeBtn').onclick=e=>{e.stopPropagation();setTheme((localStorage.getItem(KEYS.theme)||'dark')==='dark'?'light':'dark')};
-if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;localStorage.setItem(KEYS.lastRego,calc.rego);renderCalc()};
-if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);if(!calc.rego){calc.rego=v;localStorage.setItem(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
+if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;setLS(KEYS.lastRego,calc.rego);renderCalc()};
+if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
 if($('#newRego'))$('#newRego').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addRego').click()}};
-if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';localStorage.setItem(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
+if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';setLS(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
 $('#saveQuickShare').onclick=()=>{state.quickShare={name:$('#quickShareName').value.trim(),number:$('#quickShareNumber').value.trim()}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact saved')};
 $('#clearQuickShare').onclick=()=>{state.quickShare={name:'',number:''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share cleared')};
 $('#pickQuickShare').onclick=async()=>{try{if(!navigator.contacts?.select){toast('Contact picker unavailable on this device');return} const contacts=await navigator.contacts.select(['name','tel'],{multiple:false}); const c=contacts?.[0]; if(!c)return; state.quickShare={name:c.name?.[0]||'',number:c.tel?.[0]||''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact selected')}catch{toast('Contact picker cancelled')}};
@@ -581,15 +589,126 @@ async function saveReceiptFile(file,shiftReceipt,date=localDateStr(new Date())){
 function renderReceipts(){const all=Object.entries(state.receipts).flatMap(([date,arr])=>arr.map(r=>({...r,date}))).filter(r=>state.receiptFilter==='all'||(state.receiptFilter==='shift'?r.shiftReceipt:!r.shiftReceipt)); $('#receiptGrid').innerHTML=all.map(r=>`<button class="receipt" data-receipt="${r.id}">${r.fileType?.startsWith('image')?`<img src="${r.fileData}" alt="">`:`<span>PDF<br>${esc(r.fileName)}</span>`}</button>`).join('')||'<p class="muted">No receipts yet.</p>'; $$('#receiptGrid [data-receipt]').forEach(b=>b.onclick=()=>{const r=all.find(x=>x.id===b.dataset.receipt); confirmBox(r.fileName,`${fmtDate(r.date)} | ${r.shiftReceipt?'Shift receipt':'Manual receipt'} - delete this receipt?`,()=>{state.receipts[r.date]=(state.receipts[r.date]||[]).filter(x=>x.id!==r.id); if(!state.receipts[r.date].length)delete state.receipts[r.date]; save(KEYS.receipts,state.receipts); renderReceipts(); renderSettings()})})}
 $('#openReceipts').onclick=()=>show('receipts'); $$('[data-receipt-filter]').forEach(b=>b.onclick=()=>{$$('[data-receipt-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.receiptFilter=b.dataset.receiptFilter;renderReceipts()}); $('#manualReceiptBtn').onclick=()=>$('#manualReceipt').click(); $('#manualReceipt').onchange=e=>e.target.files[0]&&saveReceiptFile(e.target.files[0],false).then(renderReceipts);
 
-function autoSync(k,v){clearTimeout(syncTimer);syncTimer=setTimeout(()=>cloudWrite(k,v),300)} function immediateSync(k,v){cloudWrite(k,v)}
-async function cloudWrite(k,v){if(!db||!userId)return; try{const {doc,setDoc,serverTimestamp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'); await setDoc(doc(db,'users',userId,'data',k),{value:v,_deviceId:deviceId(),updatedAt:serverTimestamp()},{merge:true}); $('#syncStatus').textContent='Sync dot: live';}catch(e){$('#syncStatus').textContent='Sync dot: error '+e.message}}
+/* ===== Real-time multi-device sync (Firebase Firestore) =====
+   Account model: the SAME email/password on every device -> same uid -> one shared data tree.
+   Real-time onSnapshot listeners + Firestore offline persistence + last-write-wins conflict handling.
+   When sync is not configured the app stays 100% local; every guard below is a no-op. */
 function deviceId(){let id=localStorage.getItem(KEYS.device); if(!id){id=uid();localStorage.setItem(KEYS.device,id)} return id}
-$('#connectFirebase').onclick=async()=>{try{const cfg=JSON.parse($('#firebaseConfig').value); localStorage.setItem(KEYS.fb,JSON.stringify(cfg)); const appMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'), authMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'), fsMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js'); const app=appMod.initializeApp(cfg); auth=authMod.getAuth(app); db=fsMod.getFirestore(app); await authMod.signInAnonymously(auth); userId=auth.currentUser.uid; $('#syncStatus').textContent='Sync dot: live (write-only backup) '+userId.slice(0,8); renderSettings(); toast('Firebase connected')}catch(e){toast('Firebase setup failed');$('#syncStatus').textContent=e.message}};
-$('#disconnectFirebase').onclick=()=>{localStorage.removeItem(KEYS.fb);db=null;auth=null;userId=null;renderSettings();toast('Firebase disconnected')};
+function setSyncStatus(s){const el=$('#syncStatus'); if(el)el.textContent='Sync: '+s; const sum=$('#syncSummary'); if(sum)sum.textContent=(syncOn&&userId)?('Synced \u00b7 '+(localStorage.getItem('d2e_sync_email')||'account')):'Local only';}
+function setLS(key,val){ if(val==null)localStorage.removeItem(key); else localStorage.setItem(key,val); queuePush(key); }/* setting writer that also pushes to the cloud */
+function localValueFor(key){ const p=KEY_TO_STATE[key]; return p!==undefined?state[p]:localStorage.getItem(key); }
+function rawPersist(key,value){ const p=KEY_TO_STATE[key]; try{ if(p!==undefined){ state[p]=value; localStorage.setItem(key,JSON.stringify(value)); } else { if(value==null)localStorage.removeItem(key); else localStorage.setItem(key,typeof value==='string'?value:String(value)); } }catch(e){} }/* persists WITHOUT pushing (prevents echo loops) */
+function autoSync(k){ queuePush(k); }
+function immediateSync(k){ queuePush(k); }
+function queuePush(key){ if(!syncOn||SYNC_KEYS.indexOf(key)<0)return; clearTimeout(pushTimers[key]); pushTimers[key]=setTimeout(()=>cloudWrite(key),200); }
+async function cloudWrite(key){
+  if(!syncOn||!fb.db||!userId||!fb.fns)return;
+  try{ await fb.fns.setDoc(fb.fns.doc(fb.db,'accounts',userId,'data',key),{value:localValueFor(key),_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()}); setSyncStatus('live'); }
+  catch(e){ setSyncStatus('offline \u2013 changes queued'); }
+}
+function tsMillis(u){ if(!u)return 0; if(typeof u.toMillis==='function')return u.toMillis(); if(u.seconds)return u.seconds*1000; const n=Date.parse(u); return isFinite(n)?n:0; }
+function applyRemote(key,data,hasPendingWrites){
+  if(!data)return;
+  if(hasPendingWrites)return;/* our own un-acknowledged write echoed from the local cache */
+  const ts=tsMillis(data.updatedAt), prev=syncMeta[key]||0;
+  if(data._deviceId===deviceId()&&ts<=prev)return;/* echo of our own most recent write */
+  if(ts&&prev&&ts<prev)return;/* we already hold a newer value (last-write-wins) */
+  rawPersist(key,data.value);
+  syncMeta[key]=ts||Date.now(); try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta))}catch(e){}
+  refreshAfterSync(key);
+}
+function refreshAfterSync(key){
+  try{renderRegoOptions();renderRegoChips();}catch(e){}
+  try{renderRows();renderCalc();}catch(e){}
+  const active=document.querySelector('.screen.active'), scr=active&&active.dataset.screen;
+  try{if(scr==='reports')renderReports();}catch(e){}
+  try{if(scr==='weekly')renderWeekly();}catch(e){}
+  try{if(scr==='settings')renderSettings();}catch(e){}
+  try{if(scr==='profile')renderProfile();}catch(e){}
+  try{if(scr==='receipts')renderReceipts();}catch(e){}
+}
+/* initial reconciliation merge so a device joining an existing account does not wipe either side */
+function mergeValues(key,localV,cloudV){
+  if(cloudV==null)return localV; if(localV==null)return cloudV;
+  if(key===KEYS.entries){ const m={}; (localV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e)); (cloudV||[]).forEach(e=>e&&(m[e.date+'|'+(e.rego||'')]=e)); return Object.keys(m).map(k=>m[k]); }
+  if(key===KEYS.expenses){ const m={}; (localV||[]).forEach(e=>e&&e.id&&(m[e.id]=e)); (cloudV||[]).forEach(e=>e&&e.id&&(m[e.id]=e)); return Object.keys(m).map(k=>m[k]); }
+  if(key===KEYS.regos){ const out=[],seen={}; (localV||[]).concat(cloudV||[]).forEach(r=>{const k=String(r).toLowerCase(); if(!seen[k]){seen[k]=1;out.push(r)}}); return out; }
+  if(Array.isArray(cloudV))return cloudV;
+  if(typeof cloudV==='object')return Object.assign({},localV,cloudV);/* object maps (fuel/trip/cash/messages/snapshots/weekly): union keys, cloud wins on collision */
+  return cloudV;/* scalar settings: take cloud value */
+}
+async function reconcile(){
+  if(!fb.db||!userId||!fb.fns||!fb.fns.getDoc)return;
+  for(let i=0;i<SYNC_KEYS.length;i++){ const key=SYNC_KEYS[i];
+    try{
+      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
+      const snap=await fb.fns.getDoc(ref);
+      const exists=snap&&(typeof snap.exists==='function'?snap.exists():snap.exists);
+      const cloudV=exists?((snap.data&&snap.data())||{}).value:undefined;
+      const merged=mergeValues(key,localValueFor(key),cloudV);
+      rawPersist(key,merged);
+      await fb.fns.setDoc(ref,{value:localValueFor(key),_deviceId:deviceId(),updatedAt:fb.fns.serverTimestamp()});
+      syncMeta[key]=Date.now();
+    }catch(e){}
+  }
+  try{localStorage.setItem('d2e_sync_meta',JSON.stringify(syncMeta))}catch(e){}
+  refreshAfterSync('*');
+}
+function attachListeners(){
+  detachListeners();
+  if(!fb.db||!userId||!fb.fns||!fb.fns.onSnapshot)return;
+  SYNC_KEYS.forEach(key=>{
+    try{
+      const ref=fb.fns.doc(fb.db,'accounts',userId,'data',key);
+      const u=fb.fns.onSnapshot(ref,snap=>{ try{ if(!snap)return; const exists=typeof snap.exists==='function'?snap.exists():snap.exists; const meta=snap.metadata||{}; if(!exists){ if(localValueFor(key)!=null&&!meta.hasPendingWrites)queuePush(key); return; } applyRemote(key,snap.data&&snap.data(),meta.hasPendingWrites); }catch(e){} }, ()=>setSyncStatus('error'));
+      unsub.push(u);
+    }catch(e){}
+  });
+}
+function detachListeners(){ unsub.forEach(u=>{try{u&&u()}catch(e){}}); unsub=[]; }
+async function initFirebase(cfg){
+  const appMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+  const authMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+  const fsMod=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+  fb.app=appMod.initializeApp(cfg);
+  fb.auth=authMod.getAuth(fb.app);
+  try{ fb.db=fsMod.initializeFirestore(fb.app,{localCache:fsMod.persistentLocalCache({tabManager:(fsMod.persistentMultipleTabManager?fsMod.persistentMultipleTabManager():undefined)})}); }
+  catch(e){ try{fb.db=fsMod.getFirestore(fb.app);}catch(_){} }
+  fb.fns={doc:fsMod.doc,setDoc:fsMod.setDoc,getDoc:fsMod.getDoc,onSnapshot:fsMod.onSnapshot,serverTimestamp:fsMod.serverTimestamp};
+  fb.authFns={signIn:authMod.signInWithEmailAndPassword,signUp:authMod.createUserWithEmailAndPassword,signOut:authMod.signOut};
+  try{ await authMod.setPersistence(fb.auth,authMod.browserLocalPersistence); }catch(e){}
+  authMod.onAuthStateChanged(fb.auth, async user=>{
+    if(user){ userId=user.uid; syncOn=true; if(user.email)localStorage.setItem('d2e_sync_email',user.email); setSyncStatus('connecting\u2026'); try{await reconcile()}catch(e){} attachListeners(); setSyncStatus('live'); }
+    else { userId=null; syncOn=false; detachListeners(); setSyncStatus('signed out'); }
+    updateSyncUI();
+  });
+}
+function updateSyncUI(){ const on=!!userId; const si=$('#signInBtn'),ca=$('#createAccountBtn'),so=$('#signOutBtn'); if(si)si.style.display=on?'none':''; if(ca)ca.style.display=on?'none':''; if(so)so.style.display=on?'':'none'; setSyncStatus(on?'live':'local'); try{renderSettings()}catch(e){} }
+async function connectAndSignIn(create){
+  let cfg; try{cfg=JSON.parse($('#firebaseConfig').value)}catch(e){toast('Invalid Firebase config JSON');return}
+  const email=($('#syncEmail').value||'').trim(), pass=$('#syncPassword').value||'';
+  if(!email||!pass){toast('Enter the account email and password');return}
+  localStorage.setItem(KEYS.fb,JSON.stringify(cfg));
+  try{
+    if(!fb.app)await initFirebase(cfg);
+    if(create) await fb.authFns.signUp(fb.auth,email,pass); else await fb.authFns.signIn(fb.auth,email,pass);
+    localStorage.setItem('d2e_sync_email',email);
+    toast(create?'Account created \u2013 syncing this device':'Signed in \u2013 syncing this device');
+  }catch(e){ toast('Sync sign-in failed: '+(e&&(e.code||e.message)||'error')); setSyncStatus('error'); }
+}
+function signOutSync(){ try{ fb.authFns&&fb.authFns.signOut&&fb.authFns.signOut(fb.auth);}catch(e){} detachListeners(); userId=null; syncOn=false; setSyncStatus('signed out'); updateSyncUI(); toast('Signed out \u2013 your data stays on this device'); }
+function disconnectFirebase(){ signOutSync(); localStorage.removeItem(KEYS.fb); fb={app:null,auth:null,db:null,fns:null,authFns:null}; toast('Sync disconnected'); }
+if($('#signInBtn'))$('#signInBtn').onclick=()=>connectAndSignIn(false);
+if($('#createAccountBtn'))$('#createAccountBtn').onclick=()=>connectAndSignIn(true);
+if($('#signOutBtn'))$('#signOutBtn').onclick=signOutSync;
+if($('#disconnectFirebase'))$('#disconnectFirebase').onclick=disconnectFirebase;
+(async()=>{ const raw=localStorage.getItem(KEYS.fb); if(raw){ try{ setSyncStatus('restoring session\u2026'); await initFirebase(JSON.parse(raw)); }catch(e){} } })();
+/* test hook: lets the sync engine be unit-tested with a mock backend; inert in production */
+window.__sync={ get on(){return syncOn}, set on(v){syncOn=v}, setUser:u=>{userId=u}, setBackend:b=>{fb=b}, deviceId, applyRemote, queuePush, cloudWrite, mergeValues, reconcile, attachListeners, detachListeners, refreshAfterSync, localValueFor, SYNC_KEYS, KEY_TO_STATE, meta:()=>syncMeta, setMeta:(k,v)=>{syncMeta[k]=v} };
 
 function weather(){const cached=load('d2e_weather_cache',null); if(cached&&Date.now()-cached.t<900000){applyWeather(cached);return} if(!navigator.geolocation){applyWeather({temp:'--',desc:'Location unavailable',suburb:'Melbourne'});return} navigator.geolocation.getCurrentPosition(async pos=>{try{const {latitude,longitude}=pos.coords; const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m`).then(r=>r.json()); let suburb='Melbourne'; try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`).then(r=>r.json()); suburb=g.address.suburb||g.address.city||g.address.town||suburb}catch{} const data={t:Date.now(),temp:Math.round(w.current.temperature_2m)+'C',desc:'Current conditions',suburb,humidity:w.current.relative_humidity_2m+'%',wind:Math.round(w.current.wind_speed_10m)+' km/h'}; save('d2e_weather_cache',data); applyWeather(data)}catch{applyWeather({temp:'--',desc:'Weather unavailable',suburb:'Melbourne'})}},()=>applyWeather({temp:'--',desc:'Location blocked',suburb:'Melbourne'}),{maximumAge:900000,timeout:5000})}
 function applyWeather(d){$('#temp').textContent=d.temp||'--';$('#weatherDesc').textContent=d.desc||'Weather';$('#suburb').textContent=d.suburb||'Melbourne';$('#humidity').textContent=d.humidity||'--';$('#wind').textContent=d.wind||'--'}
-$('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{localStorage.setItem(KEYS.tz,e.target.value);tick()};
+$('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{setLS(KEYS.tz,e.target.value);tick()};
 function tick(){const tz=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; const now=new Date(); try{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',timeZone:tz}); $('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short',timeZone:tz}); $('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',timeZone:tz})}catch{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});$('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});$('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}}
 setActiveDate(calc.date===localDateStr(new Date())?'todayBtn':'pickBtn');
 (function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();/* CHG: Weekly=Thu-Wed, Reports=last 30 days defaults */
