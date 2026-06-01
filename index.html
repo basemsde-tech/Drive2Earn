@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v2.1</title>
+  <title>Drive2Earn v2.4</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -98,6 +98,18 @@
     .modal-card .preview-message{white-space:pre-wrap;font-family:"Geist Mono",monospace;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);line-height:1.55}
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
+    .qf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+    .qf button{flex:1 1 0;min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:transform .1s,background .15s}
+    .qf button:active{transform:scale(.96)}
+    .qf button.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .daterow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+    .datefield{display:flex;flex-direction:column;gap:1px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:6px 11px;min-height:46px;justify-content:center}
+    .datefield small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px}
+    .datefield input{border:0;background:transparent;padding:0;font-weight:700;font-size:15px;color:var(--text);width:100%}
+    .weeknav{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .weeknav .wklabel{flex:1;text-align:center;font-weight:800;font-size:14px;font-family:"Bricolage Grotesque",sans-serif}
+    .weeknav button{width:48px;min-height:46px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--gold3);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:transform .1s}
+    .weeknav button:active{transform:scale(.94)}
     @media (min-width:600px){.tabbar{width:430px}.app{border-left:1px solid var(--border);border-right:1px solid var(--border)}}
   </style>
 </head>
@@ -146,21 +158,21 @@
   </section>
 
   <section class="screen" data-screen="weekly">
-    <div class="subhead"><div><p>Thu to Wed</p><h2>Weekly</h2></div><span class="tag" id="weekRange">Week</span></div>
-    <div class="grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:10px"><div class="stat"><small>Shifts</small><b id="statShifts">0</b></div><div class="stat"><small>Avg</small><b id="statAvg">$0</b></div><div class="stat"><small>Best</small><b class="gold" id="statBest">$0</b></div></div>
-    <div class="actions"><button class="pill" id="prevWeek">Prev</button><button class="pill" id="thisWeek">This week</button><button class="pill" id="nextWeek">Next</button></div>
-    <section class="card week-table" id="weekCapture"><div class="table-row head"><span>Date</span><span>Rego</span><span>Amount</span><span>View</span><span>Del</span></div><div id="weekRows"></div><div class="total-row"><span class="muted">Grand total</span><b id="weekTotal">$0.00</b></div></section>
-    <button class="primary" id="shareWeek" style="margin:10px 0 0">Share report + photo</button>
-    <article class="chip"><button id="overrideToggle"><span class="chip-title"><span class="dot"></span>Override Entry</span><b>+</b></button><div class="chip-content" id="overrideContent"><div class="row two"><input type="date" id="overrideDate"><input type="number" id="overrideAmount" placeholder="Amount"></div><div class="row two"><input id="overrideRego" placeholder="Rego"><button class="add" id="saveOverride">Save</button></div></div></article>
+    <div class="subhead"><div><h2>Weekly</h2></div></div>
+    <div class="weeknav"><button id="wkPrev" aria-label="Previous week">&lsaquo;</button><span class="wklabel" id="wkLabel">Week</span><button id="wkNext" aria-label="Next week">&rsaquo;</button></div>
+    <div class="daterow"><div class="datefield"><small>From</small><input type="date" id="wkStart"></div><div class="datefield"><small>To</small><input type="date" id="wkEnd"></div></div>
+    <section class="card week-table" id="weekCapture"><div id="weekRows"></div><div class="total-row"><span class="muted">Total</span><b id="weekTotal">$0.00</b></div></section>
+    <button class="primary" id="shareWeek" style="margin:10px 0 0">Share</button>
+    <article class="chip" style="margin-top:10px"><button id="overrideToggle"><span class="chip-title"><span class="dot"></span>Add / Override Entry</span><b>+</b></button><div class="chip-content" id="overrideContent"><div class="row two"><input type="date" id="overrideDate"><input type="number" id="overrideAmount" placeholder="Amount"></div><div class="row two"><input id="overrideRego" placeholder="Rego"><button class="add" id="saveOverride">Save</button></div></div></article>
   </section>
 
   <section class="screen" data-screen="reports">
-    <div class="subhead"><div><p>Cash, levy, fuel, BAS</p><h2>Reports</h2></div><span class="tag">CSV ready</span></div>
+    <div class="subhead"><div><h2>Reports</h2></div></div>
     <div id="reports"></div>
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.1</span></div>
+    <div class="subhead"><div><p>Defaults and data</p><h2>Settings</h2></div><span class="tag">v2.4</span></div>
     <div class="settings-list">
       <button class="card setting" data-go="profile"><span><b>Profile & Sync</b><p id="syncSummary">Local only</p></span><span class="tag">Open</span></button>
       <div class="card setting full"><span><b>WhatsApp Quick Share</b><p id="quickShareSummary">No quick contact set</p></span><div class="quick-share-grid"><input id="quickShareName" placeholder="Contact name"><input id="quickShareNumber" inputmode="tel" placeholder="WhatsApp number"></div><div class="quick-share-actions"><button class="secondary" id="pickQuickShare">Pick Contact</button><button class="secondary" id="saveQuickShare">Save Contact</button><button class="secondary" id="clearQuickShare">Clear</button></div></div>
@@ -170,7 +182,7 @@
       <div class="card setting"><span><b>Appearance</b><p>Dark mode is the default</p></span><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></div>
       <button class="card setting" id="openReceipts"><span><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="tag">Open</span></button>
       <button class="card setting" id="refreshApp"><span><b>Clear Cache & Refresh</b><p>Confirmation before local cache reset</p></span><span class="tag">Refresh</span></button>
-      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.1 | build 2026-05-31</p></span><span class="tag">Gold</span></div>
+      <div class="card setting"><span><b>App Version</b><p class="mono">APP_VERSION 2.4 | build 2026-05-31</p></span><span class="tag">Gold</span></div>
     </div>
   </section>
 
@@ -207,8 +219,11 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='2.1', APP_BUILD='2026-05-31';
+const APP_VERSION='2.4', APP_BUILD='2026-05-31';
 const CHANGELOG=[
+  {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
+  {version:'2.3',date:'31 May 2026',changes:['Compact, tactile Reports redesign','Weekly tab: auto Thu-Wed week with Prev/Next navigation','Reports tab: date range + Last Week / Last 30 Days / Last Month quick filters','Single shift card (Date - Rego - Amount) with integrated Total','Removed in-tab tax/expense breakdown for strict minimalism (data still backed up)']},
+  {version:'2.2',date:'31 May 2026',changes:['Weekly & Reports filtered by explicit Start/End date pickers','Minimal weekly card: Date - Rego - Amount rows with a single Total','Designed share photo (rows + total) with all branding removed','Removed week stat clutter and per-section text filters']},
   {version:'2.1',date:'31 May 2026',changes:['Fixed input focus loss while typing in EOS/Cash/Account rows','Accounts now included in totals bar, legend and WhatsApp message','Report period filters (Week / Month / Quarter / All) now fully functional','Proper CSV export with headers + one-tap CSV download','Hail trips no longer block saving (empty = 0 trips)','Load a saved shift back into the calculator to edit','Negative amounts clamped, safer number handling','Chip toggling scoped so Reports/Weekly chips are unaffected']},
   {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']},
   {version:'1.10',date:'27 May 2025',changes:['Weekly status and screenshot sharing']}
@@ -228,7 +243,7 @@ const ddmmyyyy=s=>parseLocal(s).toLocaleDateString('en-AU',{day:'2-digit',month:
 const csvCell=v=>{let s=String(v??''); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};/* CHG: prefix formula chars to block CSV injection */
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));/* CHG: HTML-escape user text before innerHTML to block stored XSS */
 
-let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),expenses:load(KEYS.expenses,[]),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),snapshots:load(KEYS.snapshots,{}),weekOffset:0,receiptFilter:'all',reportPeriod:'all',firebase:null};
+let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),expenses:load(KEYS.expenses,[]),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),snapshots:load(KEYS.snapshots,{}),weekOffset:0,receiptFilter:'all',firebase:null};
 let calc=load(KEYS.shift,{date:localDateStr(new Date()),rego:localStorage.getItem(KEYS.lastRego)||state.regos[0]||'',eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''});
 if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];
 if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];
@@ -288,9 +303,8 @@ async function captureImage(el,filename){
   try{const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#0b0b0b',removeContainer:true}); style.remove(); return await new Promise(res=>canvas.toBlob(b=>res(b?new File([b],filename,{type:'image/png'}):null),'image/png'));}
   catch(e){style.remove(); return null}
 }
-async function shareWithPhoto(el,text,filename){
-  toast('Preparing photo...');
-  const file=await captureImage(el,filename);
+async function captureCard(el,filename){ if(!window.html2canvas||!el)return null; try{const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#0b0b0b',removeContainer:true}); return await new Promise(res=>canvas.toBlob(b=>res(b?new File([b],filename,{type:'image/png'}):null),'image/png'));}catch(e){return null} }/* CHG: capture a designed card (no UI screenshot) */
+async function shareFileAndText(file,text){
   if(file&&navigator.share&&navigator.canShare?.({files:[file]})){
     try{await navigator.share({text,files:[file]});return}
     catch(e){if(e&&e.name==='AbortError')return}
@@ -305,7 +319,15 @@ async function shareWithPhoto(el,text,filename){
   try{location.href=whatsappUrl(text)}catch{}
   toast(file?(c?`Image saved + WhatsApp opening for ${c.name}`:'Image saved - attach it in WhatsApp'):(c?`Opening WhatsApp for ${c.name}`:'Opening WhatsApp'));
 }
-function weekShareText(){const total=$('#weekTotal').textContent, range=$('#weekRange').textContent; const rows=weekEntries(); return `*Drive2Earn Weekly Report*\n${range}\n${rows.map(r=>`${fmtDate(r.date)} - ${r.rego||'REG'} - ${money(r.amount)}`).join('\n')||'No shifts'}\n*Total Amount: ${total}*`}
+async function shareWithPhoto(el,text,filename){ toast('Preparing photo...'); const file=await captureImage(el,filename); await shareFileAndText(file,text); }
+function buildWeekShareCard(){
+  const rows=weekEntries(), total=rows.reduce((a,b)=>a+n(b.amount),0);
+  const rowsHtml=rows.map(r=>`<div style="display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid #1c1c1c;font-size:17px"><span style="color:#cdbf9f">${esc(fmtDate(r.date))}</span><span style="color:#8c8068">${esc(r.rego||'')}</span><span style="color:#f0c040;font-weight:700;text-align:right;font-variant-numeric:tabular-nums">${money(r.amount)}</span></div>`).join('')||`<div style="color:#8c8068;padding:14px 0;font-size:16px">No shifts in this range</div>`;
+  const wrap=document.createElement('div'); wrap.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1';
+  wrap.innerHTML=`<div style="width:520px;padding:28px 32px;background:#0b0b0b;color:#f5f0e8;font-family:Outfit,system-ui,sans-serif;border-radius:18px;box-sizing:border-box"><div style="font-size:13px;color:#8c8068;margin-bottom:14px;letter-spacing:.3px">${esc(wkLabel())}</div>${rowsHtml}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:2px solid #2a2a2a"><span style="font-size:14px;color:#a89878;text-transform:uppercase;letter-spacing:1px">Total</span><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;color:#f0c040;font-variant-numeric:tabular-nums">${money(total)}</span></div></div>`;
+  document.body.appendChild(wrap); return {card:wrap.firstElementChild, cleanup:()=>wrap.remove()};
+}/* CHG: minimal share card — rows + total only, no branding */
+function weekShareText(){const rows=weekEntries(); const total=rows.reduce((a,b)=>a+n(b.amount),0); return `${wkLabel()}\n*Total Amount: ${money(total)}*`}/* CHG: range + total, no branding */
 function basQuarter(dateStr){const d=parseLocal(dateStr), y=d.getFullYear(), m=d.getMonth()+1; const fyStart=m>=7?y:y-1, fy=`FY${fyStart}-${String(fyStart+1).slice(2)}`; if(m>=7&&m<=9)return `${fy} Q1 (Jul-Sep)`; if(m>=10&&m<=12)return `${fy} Q2 (Oct-Dec)`; if(m>=1&&m<=3)return `${fy} Q3 (Jan-Mar)`; return `${fy} Q4 (Apr-Jun)`}
 function expenseGst(e){return e.gstIncluded?n(e.amount)/11*(n(e.businessUse||100)/100):0}
 function expenseDeductible(e){return n(e.amount)*(n(e.businessUse||100)/100)}
@@ -381,73 +403,100 @@ $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboa
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None'};
 
 function weekStart(d=new Date()){const x=new Date(d); const day=x.getDay(); const diff=(day>=4?day-4:day+3); x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
-function weekEntries(){const start=weekStart(); start.setDate(start.getDate()+state.weekOffset*7); const end=new Date(start); end.setDate(start.getDate()+6); return state.entries.filter(e=>e.date>=localDateStr(start)&&e.date<=localDateStr(end)).sort((a,b)=>a.date.localeCompare(b.date))}
+function weekStartDate(){return weekStart()}
+function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
+function wkRange(){ if(!state.wkStart||!state.wkEnd){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);state.wkStart=localDateStr(s);state.wkEnd=localDateStr(e);} return [state.wkStart,state.wkEnd]; }
+function wkLabel(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return `${fmtDate(lo)} - ${fmtDate(hi)}`}
+function weekEntries(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return state.entries.filter(e=>e&&e.date>=lo&&e.date<=hi).sort((x,y)=>x.date.localeCompare(y.date))}
+function repMatch(d){ if(state.repAllTime)return true; const a=state.repStart,b=state.repEnd; if(!a||!b)return true; const lo=a<=b?a:b,hi=a<=b?b:a; return d>=lo&&d<=hi; }
+function repLabel(){ if(state.repAllTime)return 'All time'; const a=state.repStart,b=state.repEnd; if(!a||!b)return 'All time'; const lo=a<=b?a:b,hi=a<=b?b:a; return `${fmtDate(lo)} - ${fmtDate(hi)}`; }
+function filterMapRep(obj){const out={};Object.keys(obj||{}).forEach(d=>{if(repMatch(d))out[d]=(obj||{})[d]});return out}
+function normCash(v){return v&&typeof v==='object'?{total:n(v.total),payers:Array.isArray(v.payers)?v.payers:[]}:{total:n(v),payers:[]}}
+function normFuel(v){return v&&typeof v==='object'?{amount:n(v.amount),type:v.type||'Fuel'}:{amount:n(v),type:'Fuel'}}
+function reportEntries(){return state.entries.filter(e=>e&&repMatch(e.date)).sort((x,y)=>x.date.localeCompare(y.date))}
+function saveWk(){try{localStorage.setItem('d2e_wk_range',JSON.stringify({s:state.wkStart,e:state.wkEnd}))}catch{}}
+function saveRep(){try{localStorage.setItem('d2e_rep_range',JSON.stringify({s:state.repStart,e:state.repEnd,all:!!state.repAllTime}))}catch{}}
+function shiftRowsHTML(entries){return entries.map((r,i)=>`<div class="table-row" data-row="${i}" style="grid-template-columns:1fr auto auto 26px;cursor:pointer"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold" style="text-align:right">${money(r.amount)}</b><button class="mini" data-del-entry="${i}" aria-label="Delete" style="width:26px;height:30px;line-height:1">x</button></div>`).join('')||'<p class="muted" style="padding:10px 2px">No shifts in this range.</p>'}
+function openShiftModal(entry){ $('#modalTitle').textContent=`Shift - ${fmtDate(entry.date)}`;$('#modalText').className='preview-message';$('#modalText').textContent=shiftPreviewForEntry(entry);$('#modalCancel').textContent='Load to edit';$('#modalOk').textContent='Copy';$('#modal').classList.add('show');$('#modalCancel').onclick=()=>{$('#modal').classList.remove('show');loadShiftIntoCalc(entry)};$('#modalOk').onclick=()=>navigator.clipboard?.writeText($('#modalText').textContent).then(()=>{$('#modal').classList.remove('show');toast('Copied')}).catch(()=>$('#modal').classList.remove('show')); }
+function bindShiftRows(container,entries,rerender){ if(!container)return; container.onclick=e=>{ const del=e.target.closest('[data-del-entry]'); if(del){const r=entries[del.dataset.delEntry]; if(!r)return; confirmBox('Delete shift',`Delete ${fmtDate(r.date)} (${r.rego||'REG'}) ${money(r.amount)}? This cannot be undone.`,()=>{state.entries=state.entries.filter(x=>x!==r); delete state.messages[shiftKey(r.date,r.rego)]; delete state.snapshots[shiftKey(r.date,r.rego)]; save(KEYS.entries,state.entries); save(KEYS.messages,state.messages); save(KEYS.snapshots,state.snapshots); rerender()}); return} const row=e.target.closest('[data-row]'); if(row){const entry=entries[row.dataset.row]; if(entry)openShiftModal(entry);} }; }
 function renderWeekly(){
-  const start=weekStart(); start.setDate(start.getDate()+state.weekOffset*7); const end=new Date(start); end.setDate(start.getDate()+6);
+  wkRange();
+  if($('#wkStart'))$('#wkStart').value=state.wkStart; if($('#wkEnd'))$('#wkEnd').value=state.wkEnd; if($('#wkLabel'))$('#wkLabel').textContent=wkLabel();
   const rows=weekEntries();
-  $('#weekRange').textContent=`${fmtDate(localDateStr(start))} - ${fmtDate(localDateStr(end))}`; $('#statShifts').textContent=rows.length; $('#statAvg').textContent=money(rows.reduce((a,b)=>a+n(b.amount),0)/(rows.length||1)); $('#statBest').textContent=money(Math.max(0,...rows.map(r=>n(r.amount))));
-  $('#weekRows').innerHTML=rows.map((r,i)=>`<div class="table-row"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold">${money(r.amount)}</b><button class="view-btn" data-view-entry="${i}">View</button><button class="mini" data-del-entry="${i}" aria-label="Delete">x</button></div>`).join('')||'<p class="muted">No shifts in this week yet.</p>';
+  $('#weekRows').innerHTML=shiftRowsHTML(rows);
   $('#weekTotal').textContent=money(rows.reduce((a,b)=>a+n(b.amount),0));
-  $('#weekRows').onclick=e=>{const v=e.target.dataset.viewEntry, d=e.target.dataset.delEntry;
-    if(v!==undefined){const entry=rows[v]; $('#modalTitle').textContent=`Shift - ${fmtDate(entry.date)}`;$('#modalText').className='preview-message';$('#modalText').textContent=shiftPreviewForEntry(entry);$('#modalCancel').textContent='Load to edit';$('#modalOk').textContent='Copy';$('#modal').classList.add('show');$('#modalCancel').onclick=()=>{$('#modal').classList.remove('show');loadShiftIntoCalc(entry)};$('#modalOk').onclick=()=>navigator.clipboard?.writeText($('#modalText').textContent).then(()=>{$('#modal').classList.remove('show');toast('Copied')}).catch(()=>$('#modal').classList.remove('show'))}
-    if(d!==undefined){const r=rows[d]; confirmBox('Delete shift',`Delete ${fmtDate(r.date)} (${r.rego||'REG'}) ${money(r.amount)}? This cannot be undone.`,()=>{state.entries=state.entries.filter(x=>x!==r); delete state.messages[shiftKey(r.date,r.rego)]; delete state.snapshots[shiftKey(r.date,r.rego)]; save(KEYS.entries,state.entries); save(KEYS.messages,state.messages); save(KEYS.snapshots,state.snapshots); $('#modalCancel').onclick=()=>$('#modal').classList.remove('show'); renderWeekly()})}};
+  bindShiftRows($('#weekRows'),rows,renderWeekly);
 }
-$('#prevWeek').onclick=()=>{state.weekOffset--;renderWeekly()};$('#nextWeek').onclick=()=>{state.weekOffset++;renderWeekly()};$('#thisWeek').onclick=()=>{state.weekOffset=0;renderWeekly()};
+$('#wkPrev').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,-7);state.wkEnd=shiftDays(state.wkEnd,-7);saveWk();renderWeekly()};
+$('#wkNext').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,7);state.wkEnd=shiftDays(state.wkEnd,7);saveWk();renderWeekly()};
+$('#wkStart').onchange=e=>{state.wkStart=e.target.value;saveWk();renderWeekly()};
+$('#wkEnd').onchange=e=>{state.wkEnd=e.target.value;saveWk();renderWeekly()};/* CHG: Thu-Wed pickers + 7-day nav */
 $('#overrideToggle').onclick=()=>$('#overrideToggle').closest('.chip').classList.toggle('open');
 $('#saveOverride').onclick=()=>{const date=$('#overrideDate').value||localDateStr(new Date()), amount=n($('#overrideAmount').value), rego=$('#overrideRego').value.trim()||calc.rego||''; if(!amount){toast('Enter an amount');return} state.entries=state.entries.filter(x=>!(x.date===date&&x.rego===rego)); state.entries.push({date,amount:+amount.toFixed(2),rego}); save(KEYS.entries,state.entries); $('#overrideAmount').value='';$('#overrideRego').value=''; toast('Entry saved'); renderWeekly()};
-function shareWeek(){return shareWithPhoto($('#weekCapture'),weekShareText(),'drive2earn-week.png')}
+async function shareWeek(){ toast('Preparing photo...'); const {card,cleanup}=buildWeekShareCard(); const file=await captureCard(card,'drive2earn-week.png'); cleanup(); await shareFileAndText(file,weekShareText()); }/* CHG: share a generated card, not a screenshot */
 $('#shareWeek').onclick=shareWeek;
 
-function periodLabel(){return {all:'All time',week:'This week',month:'This month',quarter:'This quarter'}[state.reportPeriod]}
-function periodMatch(dateStr){const p=state.reportPeriod; if(p==='all')return true; const d=parseLocal(dateStr), now=new Date(); if(p==='month')return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth(); if(p==='quarter')return basQuarter(dateStr)===basQuarter(localDateStr(now)); if(p==='week'){const start=weekStart();const end=new Date(start);end.setDate(start.getDate()+6);return dateStr>=localDateStr(start)&&dateStr<=localDateStr(end)} return true}
-function filterMap(obj){const out={};Object.keys(obj||{}).forEach(d=>{if(periodMatch(d))out[d]=(obj||{})[d]});return out}/* CHG: avoid Object.fromEntries (unsupported in older mobile/in-app webviews) */
-function normCash(v){return v&&typeof v==='object'?{total:n(v.total),payers:Array.isArray(v.payers)?v.payers:[]}:{total:n(v),payers:[]}}
-function normFuel(v){return v&&typeof v==='object'?{amount:n(v.amount),type:v.type||'Fuel'}:{amount:n(v),type:'Fuel'}}/* CHG: tolerate null/legacy cache shapes */
+function applyQuickFilter(kind){
+  state.repAllTime=false; const today=new Date();
+  if(kind==='alltime'){state.repAllTime=true}
+  else if(kind==='last30'){const sdt=new Date(today);sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
+  else if(kind==='lastmonth'){const first=new Date(today.getFullYear(),today.getMonth()-1,1);const last=new Date(today.getFullYear(),today.getMonth(),0);state.repStart=localDateStr(first);state.repEnd=localDateStr(last)}
+  else if(kind==='lastweek'){const s=weekStart();s.setDate(s.getDate()-7);const e=new Date(s);e.setDate(s.getDate()+6);state.repStart=localDateStr(s);state.repEnd=localDateStr(e)}
+}
+function activeQuickFilter(){
+  if(state.repAllTime)return 'alltime';
+  const today=new Date(), s=state.repStart, e=state.repEnd; if(!s||!e)return '';
+  const d30=new Date(today);d30.setDate(today.getDate()-29);
+  if(s===localDateStr(d30)&&e===localDateStr(today))return 'last30';
+  const fm=new Date(today.getFullYear(),today.getMonth()-1,1), lm=new Date(today.getFullYear(),today.getMonth(),0);
+  if(s===localDateStr(fm)&&e===localDateStr(lm))return 'lastmonth';
+  const ws=weekStart();ws.setDate(ws.getDate()-7);const we=new Date(ws);we.setDate(ws.getDate()+6);
+  if(s===localDateStr(ws)&&e===localDateStr(we))return 'lastweek';
+  return '';
+}
 function renderReports(){ try{
+  if(!state.repAllTime && (!state.repStart||!state.repEnd)){const today=new Date(),sdt=new Date();sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
   const rate=n(localStorage.getItem(KEYS.levy)||'1.20');
-  const cash=filterMap(state.cash), trip=filterMap(state.trip), fuel=filterMap(state.fuel), entries=state.entries.filter(e=>e&&periodMatch(e.date)).sort((a,b)=>a.date.localeCompare(b.date));
-  Object.keys(cash).forEach(k=>cash[k]=normCash(cash[k])); Object.keys(fuel).forEach(k=>fuel[k]=normFuel(fuel[k])); Object.keys(trip).forEach(k=>trip[k]=n(trip[k]));/* CHG: null-proof cached report data */
-  const cashTotal=Object.values(cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(fuel).reduce((a,b)=>a+n(b.amount),0), bas=entries.reduce((a,b)=>a+n(b.amount),0);
-  const periods=[['all','All'],['week','Week'],['month','Month'],['quarter','Quarter']];
-  const sections=[
+  const entries=reportEntries(), gross=entries.reduce((a,b)=>a+n(b.amount),0), active=activeQuickFilter();
+  const cash=filterMapRep(state.cash); Object.keys(cash).forEach(k=>cash[k]=normCash(cash[k]));
+  const fuel=filterMapRep(state.fuel); Object.keys(fuel).forEach(k=>fuel[k]=normFuel(fuel[k]));
+  const trip=filterMapRep(state.trip); Object.keys(trip).forEach(k=>trip[k]=n(trip[k]));
+  const exps=state.expenses.filter(e=>repMatch(e.date));
+  const cashTotal=Object.values(cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(fuel).reduce((a,b)=>a+n(b.amount),0);
+  const expDeduct=exps.reduce((a,e)=>a+expenseDeductible(e),0), expGst=exps.reduce((a,e)=>a+expenseGst(e),0);
+  const modules=[
+    {title:'BAS Gross',total:gross,lines:entries.map(e=>`${fmtDate(e.date)} | ${e.rego||'REG'} | ${money(e.amount)}`),csv:'Date,Quarter,Rego,Amount\n'+entries.map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.rego||''),n(e.amount).toFixed(2)].join(',')).join('\n')},
     {title:'Cash Income',total:cashTotal,lines:Object.entries(cash).map(([d,v])=>`${fmtDate(d)} | ${(v.payers||[]).map(p=>p.name||'Cash').join(', ')||'Cash'} | ${money(v.total)}`),csv:'Date,Payers,Amount\n'+Object.entries(cash).map(([d,v])=>[ddmmyyyy(d),csvCell((v.payers||[]).map(p=>p.name||'Cash').join('; ')||'Cash'),n(v.total).toFixed(2)].join(',')).join('\n')},
-    {title:'Passenger Levy',total:trips*rate,lines:Object.entries(trip).map(([d,v])=>`${fmtDate(d)} | ${v} trips | ${money(v*rate)}`),csv:'Date,Trips,Levy\n'+Object.entries(trip).map(([d,v])=>[ddmmyyyy(d),v,(v*rate).toFixed(2)].join(',')).join('\n')},
-    {title:'Fuel Tracker',total:fuelTotal,lines:Object.entries(fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`),csv:'Date,Type,Amount\n'+Object.entries(fuel).map(([d,v])=>[ddmmyyyy(d),csvCell(v.type),n(v.amount).toFixed(2)].join(',')).join('\n')},
-    {title:'BAS Gross',total:bas,lines:entries.map(e=>`${fmtDate(e.date)} | ${e.rego||'REG'} | ${money(e.amount)}`),csv:'Date,Quarter,Rego,Amount\n'+entries.map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.rego||''),n(e.amount).toFixed(2)].join(',')).join('\n')}
+    {title:'Hail Trips',total:trips*rate,lines:Object.entries(trip).map(([d,v])=>`${fmtDate(d)} | ${v} trips | ${money(v*rate)}`),csv:'Date,Trips,Levy\n'+Object.entries(trip).map(([d,v])=>[ddmmyyyy(d),v,(v*rate).toFixed(2)].join(',')).join('\n')},
+    {title:'Fuel Tracker',total:fuelTotal,lines:Object.entries(fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`),csv:'Date,Type,Amount\n'+Object.entries(fuel).map(([d,v])=>[ddmmyyyy(d),csvCell(v.type),n(v.amount).toFixed(2)].join(',')).join('\n')}
   ];
-  const periodBar=`<div class="filter" style="margin-bottom:10px">${periods.map(([k,l])=>`<button class="pill ${state.reportPeriod===k?'active':''}" data-period="${k}">${l}</button>`).join('')}<button class="pill" id="downloadAllCsv">Download CSV</button></div>`;
-  $('#reports').innerHTML=periodBar+sections.map((s,i)=>`<article class="card report-chip ${i===0?'open':''}"><button class="chip"><span class="chip-title"><span class="dot"></span>${s.title}</span><b>${money(s.total)}</b></button><div class="report-body"><p class="muted" style="font-size:11px;margin-bottom:6px">${periodLabel()}</p><div class="filter"><button class="pill" data-copy-report="${i}">Copy CSV</button><button class="pill" data-dl-report="${i}">Download</button></div><pre class="preview">${esc(s.lines.join('\n'))||'No data for this period.'}</pre></div></article>`).join('')+
-  `<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(state.expenses.filter(e=>periodMatch(e.date)).reduce((a,e)=>a+expenseDeductible(e),0))}</b></button><div class="report-body">
-    <div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(state.expenses.filter(e=>periodMatch(e.date)).reduce((a,e)=>a+expenseDeductible(e),0))}</b></div><div class="stat"><small>GST Credits</small><b>${money(state.expenses.filter(e=>periodMatch(e.date)).reduce((a,e)=>a+expenseGst(e),0))}</b></div><div class="stat"><small>Receipts</small><b>${state.expenses.filter(e=>periodMatch(e.date)&&e.attachment).length}/${state.expenses.filter(e=>periodMatch(e.date)).length}</b></div></div>
-    <div class="expense-form">
-      <div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div>
-      <div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div>
-      <div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div>
-      <div class="row one"><input id="expenseNote" placeholder="Note"></div>
-      <label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label>
-      <label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label>
-      <input id="expenseAttachment" type="file" accept="image/*,application/pdf">
-      <div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div>
-      <p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p>
-    </div>
-    <div class="expense-list" id="expenseList"></div>
-  </div></article>`;
-  $$('#reports [data-period]').forEach(b=>b.onclick=()=>{state.reportPeriod=b.dataset.period;renderReports()});
-  $('#downloadAllCsv').onclick=()=>{const all=sections.map(s=>`# ${s.title} (${periodLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${periodLabel()})\n${expensesCsv()}`; downloadText(`drive2earn-${state.reportPeriod}-${localDateStr(new Date())}.csv`,all); toast('CSV downloaded')};
+  const qf=[['lastweek','Last Week'],['last30','Last 30 Days'],['lastmonth','Last Month'],['alltime','All Time']];
+  const modHTML=modules.map((s,i)=>`<article class="card report-chip ${i===0?'open':''}"><button class="chip"><span class="chip-title"><span class="dot"></span>${s.title}</span><b>${money(s.total)}</b></button><div class="report-body"><p class="muted" style="font-size:11px;margin-bottom:6px">${repLabel()} &middot; ${s.lines.length} item${s.lines.length===1?'':'s'}</p><div class="filter"><button class="pill" data-copy-report="${i}">Copy CSV</button><button class="pill" data-dl-report="${i}">Download</button></div><pre class="preview">${esc(s.lines.join('\n'))||'No data in this range.'}</pre></div></article>`).join('');
+  const expHTML=`<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expDeduct)}</b></button><div class="report-body"><div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${exps.filter(e=>e.attachment).length}/${exps.length}</b></div></div><div class="expense-form"><div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div><div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div><div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div><div class="row one"><input id="expenseNote" placeholder="Note"></div><label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label><label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label><input id="expenseAttachment" type="file" accept="image/*,application/pdf"><div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div><p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p></div><div class="expense-list" id="expenseList" style="margin-top:10px"></div></div></article>`;
+  $('#reports').innerHTML=
+    `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
+    `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
+    modHTML+expHTML+
+    `<button class="secondary" id="downloadAllCsv" style="width:100%;margin-top:8px">Download all CSV</button>`;
+  if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
+  if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
+  $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
   $$('#reports .report-chip>button.chip').forEach(b=>b.onclick=()=>{$$('.report-chip').forEach(x=>x!==b.parentElement&&x.classList.remove('open'));b.parentElement.classList.toggle('open')});
-  $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(sections[b.dataset.copyReport].csv||'').then(()=>toast('CSV copied')).catch(()=>toast('Copy unavailable')));
-  $$('[data-dl-report]').forEach(b=>b.onclick=()=>{const s=sections[b.dataset.dlReport];downloadText(`${s.title.toLowerCase().replace(/\s+/g,'-')}-${state.reportPeriod}.csv`,s.csv||'No data');toast('Downloaded')});
+  $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(modules[b.dataset.copyReport].csv||'').then(()=>toast('CSV copied')).catch(()=>toast('Copy unavailable')));
+  $$('[data-dl-report]').forEach(b=>b.onclick=()=>{const s=modules[b.dataset.dlReport];downloadText(`${s.title.toLowerCase().replace(/\s+/g,'-')}.csv`,s.csv||'No data');toast('Downloaded')});
+  $('#downloadAllCsv').onclick=()=>{const all=modules.map(s=>`# ${s.title} (${repLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${repLabel()})\n${expensesCsv()}`; downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all); toast('CSV downloaded')};
   bindExpenseReport();
- }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel report data? Your saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }/* CHG: error boundary — show a message + recovery instead of a blank tab */
-function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Frequent,Attachment,Note',...state.expenses.filter(e=>periodMatch(e.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),e.frequent?'Yes':'No',csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
+ }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel data? Saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }
+function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Frequent,Attachment,Note',...state.expenses.filter(e=>repMatch(e.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),e.frequent?'Yes':'No',csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
 function renderExpenseList(){
   const box=$('#expenseList'); if(!box)return;
-  const list=state.expenses.filter(e=>periodMatch(e.date)).sort((a,b)=>b.date.localeCompare(a.date));
-  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''} | GST ${money(expenseGst(e))}</small><small>${e.frequent?'Frequent | ':''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e.id}">View</button><button class="mini" data-del-expense="${e.id}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses for this period.</p>';
+  const list=state.expenses.filter(e=>repMatch(e.date)).sort((a,b)=>b.date.localeCompare(a.date));
+  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''} | GST ${money(expenseGst(e))}</small><small>${e.frequent?'Frequent | ':''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e.id}">View</button><button class="mini" data-del-expense="${e.id}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses in this range.</p>';
 }
 function bindExpenseReport(){
   renderExpenseList();
   const date=$('#expenseDate'), category=$('#expenseCategory'), manual=$('#expenseManual'), q=$('#expenseQuarterPreview');
+  if(!date)return;
   const updateQuarter=()=>{q.textContent=`BAS quarter: ${basQuarter(date.value||localDateStr(new Date()))}`};
   updateQuarter(); date.onchange=updateQuarter;
   category.onchange=()=>{manual.style.display=category.value==='__manual'?'block':'none'};
@@ -455,7 +504,7 @@ function bindExpenseReport(){
   $('#addExpense').onclick=async()=>{
     const file=$('#expenseAttachment').files[0], categoryValue=category.value==='__manual'?manual.value.trim():category.value;
     if(!date.value||!nn($('#expenseAmount').value)||!categoryValue){toast('Add date, amount and category');return}
-    let attachment=null; try{if(file){const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null}}catch{toast('Could not read attachment')}/* CHG: compress+cap attachment */
+    let attachment=null; try{if(file){const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null}}catch{toast('Could not read attachment')}
     state.expenses.push({id:uid(),date:date.value,amount:nn($('#expenseAmount').value),category:categoryValue,supplier:$('#expenseSupplier').value.trim(),businessUse:nn($('#expenseBusinessUse').value)||100,gstIncluded:$('#expenseGst').checked,frequent:$('#expenseFrequent').checked,note:$('#expenseNote').value.trim(),attachment,quarter:basQuarter(date.value),savedAt:new Date().toISOString()});
     save(KEYS.expenses,state.expenses); toast('Expense saved'); renderReports();
   };
@@ -489,6 +538,7 @@ function applyWeather(d){$('#temp').textContent=d.temp||'--';$('#weatherDesc').t
 $('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{localStorage.setItem(KEYS.tz,e.target.value);tick()};
 function tick(){const tz=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; const now=new Date(); try{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',timeZone:tz}); $('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short',timeZone:tz}); $('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',timeZone:tz})}catch{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});$('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});$('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}}
 setActiveDate(calc.date===localDateStr(new Date())?'todayBtn':'pickBtn');
+(function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();/* CHG: Weekly=Thu-Wed, Reports=last 30 days defaults */
 renderProfile(); renderRows(); bindCalc(); renderCalc(); renderSettings(); weather(); tick(); setInterval(tick,1000);
 
 </script>
