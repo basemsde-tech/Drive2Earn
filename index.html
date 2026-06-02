@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.0 | build 2026-06-02 | single-file PWA -->
+<!-- Drive2Earn v3.1 | build 2026-06-02 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.0</title>
+  <title>Drive2Earn v3.1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -110,6 +110,18 @@
     .view-btn{height:34px;border-radius:8px;background:rgba(212,160,23,.16);border:1px solid rgba(212,160,23,.35);color:var(--gold3);font-size:12px;font-weight:900}
     .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#151515;color:#fff;border:1px solid #333;border-radius:999px;padding:10px 14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;place-items:center;padding:20px}.modal.show{display:grid}.modal-card{width:min(100%,390px);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
+    /* ── Bottom action sheet ── */
+    .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
+    .sheet-overlay.show{opacity:1;pointer-events:auto}
+    .sheet-card{position:absolute;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,430px);background:var(--bg2);border:1px solid var(--border);border-bottom:0;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px rgba(0,0,0,.45);transition:transform .32s cubic-bezier(.32,.72,0,1);touch-action:none;will-change:transform}
+    .sheet-overlay.show .sheet-card{transform:translate(-50%,0)}
+    .sheet-grip{width:42px;height:5px;border-radius:999px;background:var(--border);margin:6px auto 12px}
+    .sheet-title{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:800;text-align:center}
+    .sheet-sub{color:var(--muted);font-size:12.5px;text-align:center;margin:4px 12px 16px;line-height:1.45}
+    .sheet-btn{width:100%;border-radius:14px;padding:15px;font-weight:800;font-size:15px;margin-bottom:9px;transition:transform .1s}
+    .sheet-btn:active{transform:scale(.98)}
+    .sheet-btn.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    .sheet-btn.secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
     .modal-card .preview-message{white-space:pre-wrap;font-family:"Geist Mono",monospace;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);line-height:1.55}
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
@@ -267,7 +279,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.0</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.1</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -308,7 +320,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.0 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.1 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -351,10 +363,20 @@
 
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
+<div class="sheet-overlay" id="shareSheet">
+  <div class="sheet-card" id="shareSheetCard" role="dialog" aria-modal="true" aria-label="Finish shift">
+    <div class="sheet-grip" aria-hidden="true"></div>
+    <div class="sheet-title">Finish shift</div>
+    <div class="sheet-sub">Add this shift to your weekly report first, or share it straight away.</div>
+    <button class="sheet-btn primary" id="sheetLog">Log Shift</button>
+    <button class="sheet-btn secondary" id="sheetShare">Just Share</button>
+  </div>
+</div>
 
 <script type="module">
-const APP_VERSION='3.0', APP_BUILD='2026-06-02';
+const APP_VERSION='3.1', APP_BUILD='2026-06-02';
 const CHANGELOG=[
+  {version:'3.1',date:'02 Jun 2026',changes:['Share End of Shift now slides up a bottom action sheet instead of a centre pop-up','Two thumb-friendly options: Log Shift (primary - routes to Weekly) and Just Share (neutral - opens WhatsApp now)','WhatsApp is held until you explicitly choose; swipe the sheet down or tap the backdrop to dismiss without losing any shift details']},
   {version:'3.0',date:'02 Jun 2026',changes:['Visual clock-style week-cycle selector in Settings: two draggable pins (Start + End) on a 7-day dial','Tap a day or drag either pin - the End pin auto-locks to a complete 7-day window so an invalid/broken cycle is impossible','Works with touch on iOS/Android and pointer/mouse on desktop','The clock selection is the global calendar rule: Weekly filtering, totals and the Current/Credited status badge all follow the pinned cycle instantly']},
   {version:'2.9',date:'02 Jun 2026',changes:['Customizable work-week cycle: pick any 7-day start (Thursday-Wednesday, Monday-Sunday, etc) in Settings','Chosen cycle is the global calendar rule - Weekly tab filtering, grouping, totals and the Reports Last-Week filter all adapt automatically','Configurable Credited pay-day: the green Credited badge now fires on your chosen milestone day after each custom week ends','Week cycle and pay-day settings sync across iPhone and Android in real time']},
   {version:'2.8',date:'01 Jun 2026',changes:['Hardened real-time multi-device sync engine with zero-debounce immediate writes for shift saves','Network-aware sync: detects online/offline transitions and flushes queued writes on reconnect','Live sync-dot indicator in Profile (green pulsing = connected, grey = offline, red = error)','Initial join reconciliation: union-merge so neither phone loses data when a second device signs in','Echo prevention upgraded: deviceId tag + serverTimestamp guard prevents double-renders','Smart per-key refresh: only re-renders the affected screen, not the whole app','All 15 data keys covered: shifts, weekly, fuel, trips, cash, expenses, messages, snapshots, regos, quickShare, profile, levy, fuelDefault, lastRego, timezone','Firebase offline persistence enabled (multi-tab safe) — full offline operation guaranteed']},
@@ -927,14 +949,32 @@ function showShareValidation(v){
   if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
 }
 /* Req 7: Yes = already logged, share immediately. No = pause so they can log it first. */
+/* Req: after validation passes, slide up a bottom action sheet instead of a center modal.
+   The native WhatsApp intent is held until the user explicitly picks an option.
+   Dismissing (overlay tap / swipe down) never touches the filled-in shift data. */
 function shareShift(){
   clearShareValidationUI();
   const v=shareValidation();
   if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
-  confirmBox('Weekly report','Have you added this shift to your weekly report?',()=>doShareShift(false),'Yes, share now','No, log it first');
-  // "No, log it first" pauses: jump to the weekly tab to log, no share happens
-  $('#modalCancel').onclick=()=>{ $('#modal').classList.remove('show'); toast('Log it in Weekly, then share'); };
+  openShareSheet();
 }
+function openShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.add('show'); }
+function closeShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.remove('show'); }
+(function bindShareSheet(){
+  const ov=$('#shareSheet'), card=$('#shareSheetCard'); if(!ov||!card)return;
+  // Overlay (background) tap dismisses safely — no share, no data loss
+  ov.addEventListener('click',e=>{ if(e.target===ov)closeShareSheet(); });
+  // Option 1 — Log Shift: pause sharing, route to the Weekly tab
+  $('#sheetLog').onclick=()=>{ closeShareSheet(); show('weekly'); toast('Log this shift, then share'); };
+  // Option 2 — Just Share: bypass weekly check, open WhatsApp now
+  $('#sheetShare').onclick=()=>{ closeShareSheet(); doShareShift(false); };
+  // Swipe-down to dismiss (touch + pointer); buttons keep their own taps
+  let startY=null, dy=0, dragging=false;
+  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.sheet-btn'))return; startY=e.clientY; dy=0; dragging=true; card.style.transition='none'; try{card.setPointerCapture(e.pointerId);}catch(_){} });
+  card.addEventListener('pointermove',e=>{ if(!dragging)return; dy=Math.max(0,e.clientY-startY); card.style.transform=`translate(-50%,${dy}px)`; });
+  const endDrag=e=>{ if(!dragging)return; dragging=false; card.style.transition=''; card.style.transform=''; if(dy>90)closeShareSheet(); try{card.releasePointerCapture(e.pointerId);}catch(_){} };
+  card.addEventListener('pointerup',endDrag); card.addEventListener('pointercancel',endDrag);
+})();
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None';if(e.target.files[0]){$('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}};
 
@@ -1041,143 +1081,4 @@ function renderReports(){ try{
   const hero=modules[0];
   const heroHTML=`<section class="card hero-sum"><span class="chip-title"><span class="dot"></span>${hero.title}</span><div class="hs-total">${money(hero.total)}</div><div class="hs-sub">${repLabel()} &middot; ${hero.lines.length} item${hero.lines.length===1?'':'s'}</div><div class="filter" style="margin-top:10px"><button class="pill" data-copy-report="0">Copy CSV</button><button class="pill" data-dl-report="0">Download</button></div></section>`;
   const cardHTML=modules.slice(1).map((s,j)=>{const i=j+1;return `<article class="card sum-card"><div class="sc-row"><span class="chip-title"><span class="dot"></span>${s.title}</span><b class="sc-total">${money(s.total)}</b></div><div class="muted sc-sub">${repLabel()} &middot; ${s.lines.length} item${s.lines.length===1?'':'s'}</div><div class="filter"><button class="pill" data-copy-report="${i}">Copy CSV</button><button class="pill" data-dl-report="${i}">Download</button></div></article>`}).join('');
-  const expHTML=`<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expDeduct)}</b></button><div class="report-body"><div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${exps.filter(e=>e.attachment).length}/${exps.length}</b></div></div><div class="expense-form"><div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div><div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div><div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div><div class="row one"><input id="expenseNote" placeholder="Note"></div><label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label><label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label><input id="expenseAttachment" type="file" accept="image/*,application/pdf"><div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div><p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p></div><div class="expense-list" id="expenseList" style="margin-top:10px"></div></div></article>`;
-  $('#reports').innerHTML=
-    `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
-    `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
-    heroHTML+cardHTML+expHTML+
-    `<button class="secondary" id="downloadAllCsv" style="width:100%;margin-top:8px">Download all CSV</button>`;
-  if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
-  if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
-  $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
-  $$('#reports .report-chip>button.chip').forEach(b=>b.onclick=()=>{$$('.report-chip').forEach(x=>x!==b.parentElement&&x.classList.remove('open'));b.parentElement.classList.toggle('open')});
-  $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(modules[b.dataset.copyReport].csv||'').then(()=>toast('CSV copied')).catch(()=>toast('Copy unavailable')));
-  $$('[data-dl-report]').forEach(b=>b.onclick=()=>{const s=modules[b.dataset.dlReport];downloadText(`${s.title.toLowerCase().replace(/\s+/g,'-')}.csv`,s.csv||'No data');toast('Downloaded')});
-  $('#downloadAllCsv').onclick=()=>{const all=modules.map(s=>`# ${s.title} (${repLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${repLabel()})\n${expensesCsv()}`; downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all); toast('CSV downloaded')};
-  bindExpenseReport();
- }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel data? Saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }
-function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Frequent,Attachment,Note',...state.expenses.filter(e=>repMatch(e.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),e.frequent?'Yes':'No',csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
-function renderExpenseList(){
-  const box=$('#expenseList'); if(!box)return;
-  const list=state.expenses.filter(e=>repMatch(e.date)).sort((a,b)=>b.date.localeCompare(a.date));
-  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''} | GST ${money(expenseGst(e))}</small><small>${e.frequent?'Frequent | ':''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e.id}">View</button><button class="mini" data-del-expense="${e.id}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses in this range.</p>';
-}
-function bindExpenseReport(){
-  renderExpenseList();
-  const date=$('#expenseDate'), category=$('#expenseCategory'), manual=$('#expenseManual'), q=$('#expenseQuarterPreview');
-  if(!date)return;
-  const updateQuarter=()=>{q.textContent=`BAS quarter: ${basQuarter(date.value||localDateStr(new Date()))}`};
-  updateQuarter(); date.onchange=updateQuarter;
-  category.onchange=()=>{manual.style.display=category.value==='__manual'?'block':'none'};
-  $('#copyExpensesCsv').onclick=()=>navigator.clipboard?.writeText(expensesCsv()).then(()=>toast('Expenses CSV copied')).catch(()=>toast('Copy unavailable'));
-  $('#addExpense').onclick=async()=>{
-    const file=$('#expenseAttachment').files[0], categoryValue=category.value==='__manual'?manual.value.trim():category.value;
-    if(!date.value||!nn($('#expenseAmount').value)||!categoryValue){toast('Add date, amount and category');return}
-    let attachment=null; try{if(file){const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null}}catch{toast('Could not read attachment')}
-    state.expenses.push({id:uid(),date:date.value,amount:nn($('#expenseAmount').value),category:categoryValue,supplier:$('#expenseSupplier').value.trim(),businessUse:nn($('#expenseBusinessUse').value)||100,gstIncluded:$('#expenseGst').checked,frequent:$('#expenseFrequent').checked,note:$('#expenseNote').value.trim(),attachment,quarter:basQuarter(date.value),savedAt:new Date().toISOString()});
-    save(KEYS.expenses,state.expenses); toast('Expense saved'); renderReports();
-  };
-  $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?`,()=>{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports()}); return} const text=`${exp.category}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST credit estimate: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
-}
-function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
-  try{renderWeekClock();}catch(_){}
-  const cs=$('#creditDaySelect'); if(cs){cs.innerHTML=DAY_NAMES.map((d,i)=>`<option value="${i}">${d}</option>`).join('');cs.value=String(creditDay());}
-}
-$('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
-/* Flexible week cycle: changing it re-snaps the Weekly view to the new cycle's current week
-   and refreshes all weekly summaries + the status badge globally. */
-function applyWeekCycleChange(){
-  const s=weekStart(); const e=new Date(s); e.setDate(s.getDate()+6);
-  state.wkStart=localDateStr(s); state.wkEnd=localDateStr(e); saveWk();
-  try{renderWeekly();}catch(_){}
-}
-if($('#creditDaySelect'))$('#creditDaySelect').onchange=e=>{setLS(KEYS.creditDay,String(parseInt(e.target.value,10)));try{renderWeekStatus();}catch(_){}toast('Credited on '+DAY_NAMES[creditDay()]);};
-
-/* ── Clock-style week-cycle selector ──────────────────────────────────
-   7 days arranged in a circle (Sun at top, clockwise). Two pins:
-   • Start (filled gold knob) — the day the work week begins
-   • End   (outlined knob)    — auto-locked to start+6 (full 7-day window)
-   Dragging Start moves End to start+6; dragging End sets Start to end+1.
-   This makes an invalid/overlapping/broken window impossible by construction. */
-const WC={cx:120,cy:120,ring:84,lab:54,dot:4.5};
-const DAY2=['Su','Mo','Tu','We','Th','Fr','Sa'];
-function wcAngle(i){return -90 + i*(360/7);}
-function wcPolar(r,deg){const a=deg*Math.PI/180;return [WC.cx+r*Math.cos(a),WC.cy+r*Math.sin(a)];}
-function wcArcPath(sDeg,eDeg){const [x1,y1]=wcPolar(WC.ring,sDeg);const [x2,y2]=wcPolar(WC.ring,eDeg);return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${WC.ring} ${WC.ring} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;}
-function renderWeekClock(){
-  const host=document.getElementById('weekClock'); if(!host)return;
-  if(document.getElementById('weekClockSvg')){updateWeekClock();return;}
-  let nodes='';
-  for(let i=0;i<7;i++){
-    const [lx,ly]=wcPolar(WC.lab,wcAngle(i)), [dx,dy]=wcPolar(WC.ring,wcAngle(i));
-    nodes+=`<circle class="wc-dot-mark" cx="${dx.toFixed(2)}" cy="${dy.toFixed(2)}" r="${WC.dot}" data-day="${i}"></circle>`;
-    nodes+=`<text class="wc-label" x="${lx.toFixed(2)}" y="${ly.toFixed(2)}" data-day="${i}">${DAY2[i]}</text>`;
-  }
-  host.innerHTML=`<svg id="weekClockSvg" viewBox="0 0 240 240" role="group" aria-label="Week cycle selector clock">
-    <defs><linearGradient id="wcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold3)"/><stop offset="1" stop-color="var(--gold2)"/></linearGradient></defs>
-    <circle class="wc-track" cx="120" cy="120" r="84"></circle>
-    <path id="wcArc" class="wc-arc" d=""></path>
-    ${nodes}
-    <text id="wcCenter" class="wc-center" x="120" y="114"></text>
-    <text id="wcCenterSub" class="wc-center-sub" x="120" y="132">tap or drag</text>
-    <circle id="wcEndC" class="wc-pin wc-pin-end" r="15" data-pin="end"></circle>
-    <text id="wcEndT" class="wc-pin-txt" style="fill:var(--gold3)">E</text>
-    <circle id="wcStartC" class="wc-pin wc-pin-start" r="15" data-pin="start"></circle>
-    <text id="wcStartT" class="wc-pin-txt" style="fill:#150d00">S</text>
-  </svg>`;
-  bindWeekClock();
-  updateWeekClock();
-}
-function updateWeekClock(){
-  const svg=document.getElementById('weekClockSvg'); if(!svg)return;
-  const s=weekStartDay(), e=weekEndDay();
-  document.getElementById('wcArc').setAttribute('d',wcArcPath(wcAngle(s),wcAngle(e)));
-  const [sx,sy]=wcPolar(WC.ring,wcAngle(s)), [ex,ey]=wcPolar(WC.ring,wcAngle(e));
-  const setPin=(cid,tid,x,y)=>{const c=document.getElementById(cid);c.setAttribute('cx',x.toFixed(2));c.setAttribute('cy',y.toFixed(2));const t=document.getElementById(tid);t.setAttribute('x',x.toFixed(2));t.setAttribute('y',y.toFixed(2));};
-  setPin('wcStartC','wcStartT',sx,sy); setPin('wcEndC','wcEndT',ex,ey);
-  svg.querySelectorAll('.wc-dot-mark,.wc-label').forEach(d=>{const i=+d.getAttribute('data-day');d.classList.toggle('startday',i===s);d.classList.toggle('endday',i===e);});
-  document.getElementById('wcCenter').textContent=`${DAY2[s]} → ${DAY2[e]}`;
-  const hint=document.getElementById('weekCycleHint'); if(hint)hint.textContent=weekCycleLabel();
-}
-function setWeekStartDayValue(day){ day=((day%7)+7)%7; if(day===weekStartDay())return false; setLS(KEYS.weekStartDay,String(day)); applyWeekCycleChange(); updateWeekClock(); return true; }
-function bindWeekClock(){
-  const svg=document.getElementById('weekClockSvg'); if(!svg||svg._bound)return; svg._bound=true;
-  let drag=null;
-  const nearestDay=e=>{ const r=svg.getBoundingClientRect(); if(!r.width)return weekStartDay(); const px=(e.clientX-r.left)*(240/r.width), py=(e.clientY-r.top)*(240/r.height); const a=Math.atan2(py-WC.cy,px-WC.cx)*180/Math.PI; let best=0,bd=1e9; for(let i=0;i<7;i++){const d=Math.abs(((a-wcAngle(i)+540)%360)-180); if(d<bd){bd=d;best=i;}} return best; };
-  const apply=day=>{ if(drag==='end')setWeekStartDayValue((day+1)%7); else setWeekStartDayValue(day); };
-  svg.addEventListener('pointerdown',e=>{ const pin=e.target.getAttribute&&e.target.getAttribute('data-pin'); drag=pin==='end'?'end':'start'; try{svg.setPointerCapture(e.pointerId);}catch(_){} apply(nearestDay(e)); e.preventDefault(); });
-  svg.addEventListener('pointermove',e=>{ if(!drag)return; apply(nearestDay(e)); e.preventDefault(); });
-  const stop=e=>{ if(drag){ drag=null; try{svg.releasePointerCapture(e.pointerId);}catch(_){} toast('Week cycle: '+weekCycleLabel()); } };
-  svg.addEventListener('pointerup',stop); svg.addEventListener('pointercancel',stop);
-}
-$('#darkSwitch').onclick=()=>setTheme('dark'); $('#lightSwitch').onclick=()=>setTheme('light'); $('#themeBtn').onclick=e=>{e.stopPropagation();setTheme((localStorage.getItem(KEYS.theme)||'dark')==='dark'?'light':'dark')};
-if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;setLS(KEYS.lastRego,calc.rego);renderCalc()};
-if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
-if($('#newRego'))$('#newRego').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addRego').click()}};
-if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';setLS(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
-$('#saveQuickShare').onclick=()=>{state.quickShare={name:$('#quickShareName').value.trim(),number:$('#quickShareNumber').value.trim()}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact saved')};
-$('#clearQuickShare').onclick=()=>{state.quickShare={name:'',number:''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share cleared')};
-$('#pickQuickShare').onclick=async()=>{try{if(!navigator.contacts?.select){toast('Contact picker unavailable on this device');return} const contacts=await navigator.contacts.select(['name','tel'],{multiple:false}); const c=contacts?.[0]; if(!c)return; state.quickShare={name:c.name?.[0]||'',number:c.tel?.[0]||''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact selected')}catch{toast('Contact picker cancelled')}};
-function renderProfile(){ $('#driverName').value=state.profile.name||''; $('#driverEmail').value=state.profile.email||''; $('#firebaseConfig').value=localStorage.getItem(KEYS.fb)||''; $('#changelog').innerHTML=CHANGELOG.map(c=>`v${c.version} | ${c.date}<br>${c.changes.map(x=>' - '+x).join('<br>')}`).join('<br><br>'); $('#greeting').textContent=`Hey, ${state.profile.name||'Driver'}`; $('#avatar').textContent=(state.profile.name||'D2').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(); setSyncStatus(syncOn&&userId?'live':'local');}
-$('#saveProfile').onclick=()=>{state.profile={name:$('#driverName').value.trim()||'Driver',email:$('#driverEmail').value.trim()};save(KEYS.profile,state.profile);renderProfile();toast('Profile saved')};
-$('#exportData').onclick=()=>{const dump={};Object.values(KEYS).forEach(k=>{const v=localStorage.getItem(k);if(v!==null)dump[k]=v});downloadText(`drive2earn-backup-${localDateStr(new Date())}.json`,JSON.stringify({app:'drive2earn',version:APP_VERSION,exported:new Date().toISOString(),data:dump},null,2),'application/json');toast('Backup exported')};
-$('#importData').onclick=()=>$('#importFile').click();
-$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const text=await f.text();const obj=JSON.parse(text);const data=obj&&obj.data?obj.data:obj;if(!data||typeof data!=='object')throw 0;confirmBox('Import backup','Replace all current data with this backup? This cannot be undone.',()=>{Object.entries(data).forEach(([k,v])=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}});toast('Backup imported - reloading');setTimeout(()=>location.reload(),600)})}catch{toast('Invalid backup file')}finally{e.target.value=''}};
-async function saveReceiptFile(file,shiftReceipt,date=localDateStr(new Date())){try{const data=await prepMedia(file); if(!data)return; const rec={id:uid(),fileName:file.name,fileData:data,fileType:file.type,savedAt:new Date().toISOString(),shiftReceipt}; state.receipts[date]=state.receipts[date]||[]; state.receipts[date].push(rec); save(KEYS.receipts,state.receipts); toast('Receipt saved to Docs')}catch{toast('Could not save receipt')}}
-function renderReceipts(){const all=Object.entries(state.receipts).flatMap(([date,arr])=>arr.map(r=>({...r,date}))).filter(r=>state.receiptFilter==='all'||(state.receiptFilter==='shift'?r.shiftReceipt:!r.shiftReceipt)); $('#receiptGrid').innerHTML=all.map(r=>`<button class="receipt" data-receipt="${r.id}">${r.fileType?.startsWith('image')?`<img src="${r.fileData}" alt="">`:`<span>PDF<br>${esc(r.fileName)}</span>`}</button>`).join('')||'<p class="muted">No receipts yet.</p>'; $$('#receiptGrid [data-receipt]').forEach(b=>b.onclick=()=>{const r=all.find(x=>x.id===b.dataset.receipt); confirmBox(r.fileName,`${fmtDate(r.date)} | ${r.shiftReceipt?'Shift receipt':'Manual receipt'} - delete this receipt?`,()=>{state.receipts[r.date]=(state.receipts[r.date]||[]).filter(x=>x.id!==r.id); if(!state.receipts[r.date].length)delete state.receipts[r.date]; save(KEYS.receipts,state.receipts); renderReceipts(); renderSettings()})})}
-$('#openReceipts').onclick=()=>show('receipts'); $$('[data-receipt-filter]').forEach(b=>b.onclick=()=>{$$('[data-receipt-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.receiptFilter=b.dataset.receiptFilter;renderReceipts()}); $('#manualReceiptBtn').onclick=()=>$('#manualReceipt').click(); $('#manualReceipt').onchange=e=>e.target.files[0]&&saveReceiptFile(e.target.files[0],false).then(renderReceipts);
-$('#signInBtn').onclick=()=>connectAndSignIn(false);
-$('#createAccountBtn').onclick=()=>connectAndSignIn(true);
-$('#signOutBtn').onclick=signOutSync;
-$('#disconnectFirebase').onclick=disconnectFirebase;
-
-function weather(){const cached=load('d2e_weather_cache',null); if(cached&&Date.now()-cached.t<900000){applyWeather(cached);return} if(!navigator.geolocation){applyWeather({temp:'--',desc:'Location unavailable',suburb:'Melbourne'});return} navigator.geolocation.getCurrentPosition(async pos=>{try{const {latitude,longitude}=pos.coords; const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m`).then(r=>r.json()); let suburb='Melbourne'; try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`).then(r=>r.json()); suburb=g.address.suburb||g.address.city||g.address.town||suburb}catch{} const data={t:Date.now(),temp:Math.round(w.current.temperature_2m)+'C',desc:'Current conditions',suburb,humidity:w.current.relative_humidity_2m+'%',wind:Math.round(w.current.wind_speed_10m)+' km/h'}; save('d2e_weather_cache',data); applyWeather(data)}catch{applyWeather({temp:'--',desc:'Weather unavailable',suburb:'Melbourne'})}},()=>applyWeather({temp:'--',desc:'Location blocked',suburb:'Melbourne'}),{maximumAge:900000,timeout:5000})}
-function applyWeather(d){$('#temp').textContent=d.temp||'--';$('#weatherDesc').textContent=d.desc||'Weather';$('#suburb').textContent=d.suburb||'Melbourne';$('#humidity').textContent=d.humidity||'--';$('#wind').textContent=d.wind||'--'}
-$('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{setLS(KEYS.tz,e.target.value);tick()};
-function tick(){const tz=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; const now=new Date(); try{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',timeZone:tz}); $('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short',timeZone:tz}); $('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',timeZone:tz})}catch{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});$('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});$('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}}
-setActiveDate(calc.date===localDateStr(new Date())?'todayBtn':'pickBtn');
-(function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();
-renderProfile(); renderRows(); bindCalc(); renderCalc(); renderSettings(); weather(); tick(); setInterval(tick,1000);
-</script>
-</body>
-</html>
+  const expHTML=`<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expDeduct)}</b></button><div class="report-body"><div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${exps.filter(e=>e.attachment).length}/${exps.length}</b></div></div><div class="expense-form"><div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div><div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div><div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div><div class="row one"><input id="expenseNote" placeholder="Note"></div><label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label><label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label><input id="expenseAttachment" type="file" accept="image/*,application/pdf"><div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</b
