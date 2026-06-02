@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.0 | build 2026-06-02 | single-file PWA -->
+<!-- Drive2Earn v3.1 | build 2026-06-02 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.0</title>
+  <title>Drive2Earn v3.1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -114,6 +114,18 @@
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
     .qf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+    /* ── BAS Quarter Quick Pull ── */
+    .bas-pull{padding:12px 13px;margin-bottom:9px;border-top:3px solid var(--gold)}
+    .bas-pull-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+    .bas-fy{font-size:11px;font-weight:700;color:var(--muted)}
+    .bas-pull-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+    .bas-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 3px;min-height:48px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);transition:transform .1s,background .15s,border-color .15s}
+    .bas-chip:active{transform:scale(.95)}
+    .bas-chip b{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;line-height:1.05}
+    .bas-chip small{font-size:9.5px;color:var(--muted);line-height:1;white-space:nowrap}
+    .bas-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .bas-chip.active small{color:#3a2a00}
+    @media (max-width:340px){.bas-chip small{font-size:9px}.bas-chip b{font-size:14px}}
     .qf button{flex:1 1 0;min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:transform .1s,background .15s}
     .qf button:active{transform:scale(.96)}
     .qf button.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
@@ -267,7 +279,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.0</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.1</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -308,7 +320,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.0 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.1 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -353,8 +365,9 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='3.0', APP_BUILD='2026-06-02';
+const APP_VERSION='3.1', APP_BUILD='2026-06-02';
 const CHANGELOG=[
+  {version:'3.1',date:'02 Jun 2026',changes:['Reports: new BAS Quarter Quick Pull - one-tap Q1/Q2/Q3/Q4 chips for the current financial year','Tapping a quarter instantly filters BAS Gross, Fuel Tracker and Tax Expenses to that quarter\u2019s exact dates','Isolated filter: only overrides the active date range - underlying shifts, fuel, cash and expenses are untouched, and Copy CSV / Download adapt automatically']},
   {version:'3.0',date:'02 Jun 2026',changes:['Visual clock-style week-cycle selector in Settings: two draggable pins (Start + End) on a 7-day dial','Tap a day or drag either pin - the End pin auto-locks to a complete 7-day window so an invalid/broken cycle is impossible','Works with touch on iOS/Android and pointer/mouse on desktop','The clock selection is the global calendar rule: Weekly filtering, totals and the Current/Credited status badge all follow the pinned cycle instantly']},
   {version:'2.9',date:'02 Jun 2026',changes:['Customizable work-week cycle: pick any 7-day start (Thursday-Wednesday, Monday-Sunday, etc) in Settings','Chosen cycle is the global calendar rule - Weekly tab filtering, grouping, totals and the Reports Last-Week filter all adapt automatically','Configurable Credited pay-day: the green Credited badge now fires on your chosen milestone day after each custom week ends','Week cycle and pay-day settings sync across iPhone and Android in real time']},
   {version:'2.8',date:'01 Jun 2026',changes:['Hardened real-time multi-device sync engine with zero-debounce immediate writes for shift saves','Network-aware sync: detects online/offline transitions and flushes queued writes on reconnect','Live sync-dot indicator in Profile (green pulsing = connected, grey = offline, red = error)','Initial join reconciliation: union-merge so neither phone loses data when a second device signs in','Echo prevention upgraded: deviceId tag + serverTimestamp guard prevents double-renders','Smart per-key refresh: only re-renders the affected screen, not the whole app','All 15 data keys covered: shifts, weekly, fuel, trips, cash, expenses, messages, snapshots, regos, quickShare, profile, levy, fuelDefault, lastRego, timezone','Firebase offline persistence enabled (multi-tab safe) — full offline operation guaranteed']},
@@ -1010,6 +1023,40 @@ function applyQuickFilter(kind){
   else if(kind==='lastmonth'){const first=new Date(today.getFullYear(),today.getMonth()-1,1);const last=new Date(today.getFullYear(),today.getMonth(),0);state.repStart=localDateStr(first);state.repEnd=localDateStr(last)}
   else if(kind==='lastweek'){const s=weekStart();s.setDate(s.getDate()-7);const e=new Date(s);e.setDate(s.getDate()+6);state.repStart=localDateStr(s);state.repEnd=localDateStr(e)}
 }
+/* ── BAS Quarter Quick Pull (isolated, non-destructive) ───────────────
+   These helpers only override the active UI date-range filter (repStart/
+   repEnd). They never touch state.entries/fuel/cash/trip/expenses, so the
+   underlying transactions and the Copy CSV / Download pipelines are safe —
+   those read whatever range repMatch() currently reflects. */
+const BAS_QUARTERS=[
+  {q:1,label:'Q1',months:'Jul\u2013Sep'},
+  {q:2,label:'Q2',months:'Oct\u2013Dec'},
+  {q:3,label:'Q3',months:'Jan\u2013Mar'},
+  {q:4,label:'Q4',months:'Apr\u2013Jun'}
+];
+function currentFyStart(){ const d=new Date(), y=d.getFullYear(), m=d.getMonth()+1; return m>=7?y:y-1; }
+function basQuarterRange(q,fyStart){
+  // Australian financial year quarters for the FY beginning July of fyStart
+  const map={
+    1:[new Date(fyStart,6,1),   new Date(fyStart,8,30)],      // Jul 1  – Sep 30
+    2:[new Date(fyStart,9,1),   new Date(fyStart,11,31)],     // Oct 1  – Dec 31
+    3:[new Date(fyStart+1,0,1), new Date(fyStart+1,2,31)],    // Jan 1  – Mar 31
+    4:[new Date(fyStart+1,3,1), new Date(fyStart+1,5,30)]     // Apr 1  – Jun 30
+  };
+  const [s,e]=map[q]||map[1];
+  return [localDateStr(s),localDateStr(e)];
+}
+function pullBasQuarter(q){
+  const [s,e]=basQuarterRange(q,currentFyStart());
+  state.repAllTime=false; state.repStart=s; state.repEnd=e;
+  saveRep(); renderReports();
+}
+function activeBasQuarter(){
+  if(state.repAllTime)return 0;
+  const fy=currentFyStart();
+  for(const x of BAS_QUARTERS){ const [s,e]=basQuarterRange(x.q,fy); if(state.repStart===s&&state.repEnd===e)return x.q; }
+  return 0;
+}
 function activeQuickFilter(){
   if(state.repAllTime)return 'alltime';
   const today=new Date(), s=state.repStart, e=state.repEnd; if(!s||!e)return '';
@@ -1042,7 +1089,10 @@ function renderReports(){ try{
   const heroHTML=`<section class="card hero-sum"><span class="chip-title"><span class="dot"></span>${hero.title}</span><div class="hs-total">${money(hero.total)}</div><div class="hs-sub">${repLabel()} &middot; ${hero.lines.length} item${hero.lines.length===1?'':'s'}</div><div class="filter" style="margin-top:10px"><button class="pill" data-copy-report="0">Copy CSV</button><button class="pill" data-dl-report="0">Download</button></div></section>`;
   const cardHTML=modules.slice(1).map((s,j)=>{const i=j+1;return `<article class="card sum-card"><div class="sc-row"><span class="chip-title"><span class="dot"></span>${s.title}</span><b class="sc-total">${money(s.total)}</b></div><div class="muted sc-sub">${repLabel()} &middot; ${s.lines.length} item${s.lines.length===1?'':'s'}</div><div class="filter"><button class="pill" data-copy-report="${i}">Copy CSV</button><button class="pill" data-dl-report="${i}">Download</button></div></article>`}).join('');
   const expHTML=`<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expDeduct)}</b></button><div class="report-body"><div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${exps.filter(e=>e.attachment).length}/${exps.length}</b></div></div><div class="expense-form"><div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div><div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div><div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div><div class="row one"><input id="expenseNote" placeholder="Note"></div><label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label><label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label><input id="expenseAttachment" type="file" accept="image/*,application/pdf"><div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div><p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p></div><div class="expense-list" id="expenseList" style="margin-top:10px"></div></div></article>`;
+  const fyS=currentFyStart(), fyLabel=`FY${String(fyS).slice(2)}\u2013${String(fyS+1).slice(2)}`, activeQ=activeBasQuarter();
+  const basPullHTML=`<section class="card bas-pull"><div class="bas-pull-head"><span class="chip-title"><span class="dot"></span>BAS Quarter Quick Pull</span><span class="bas-fy mono">${fyLabel}</span></div><div class="bas-pull-grid">${BAS_QUARTERS.map(x=>`<button class="bas-chip${activeQ===x.q?' active':''}" data-bas-q="${x.q}" aria-label="${x.label} ${x.months}"><b>${x.label}</b><small>${x.months}</small></button>`).join('')}</div></section>`;
   $('#reports').innerHTML=
+    basPullHTML+
     `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
     `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
     heroHTML+cardHTML+expHTML+
@@ -1050,6 +1100,7 @@ function renderReports(){ try{
   if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
   if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
   $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
+  $$('#reports [data-bas-q]').forEach(b=>b.onclick=()=>pullBasQuarter(+b.dataset.basQ));
   $$('#reports .report-chip>button.chip').forEach(b=>b.onclick=()=>{$$('.report-chip').forEach(x=>x!==b.parentElement&&x.classList.remove('open'));b.parentElement.classList.toggle('open')});
   $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(modules[b.dataset.copyReport].csv||'').then(()=>toast('CSV copied')).catch(()=>toast('Copy unavailable')));
   $$('[data-dl-report]').forEach(b=>b.onclick=()=>{const s=modules[b.dataset.dlReport];downloadText(`${s.title.toLowerCase().replace(/\s+/g,'-')}.csv`,s.csv||'No data');toast('Downloaded')});
