@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.5 | build 2026-06-02 | single-file PWA -->
+<!-- Drive2Earn v3.6 | build 2026-06-07 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.5</title>
+  <title>Drive2Earn v3.6</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -97,7 +97,7 @@
     .week-table{padding:12px;border-top:4px solid var(--gold);overflow:hidden}.table-row{display:grid;grid-template-columns:1fr .7fr .78fr 52px 38px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
     .table-row.head{color:var(--muted);font-size:11px;text-transform:uppercase}.tag{display:inline-flex;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--gold3);border-radius:999px;padding:4px 7px;font-size:11px}
     .total-row{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);margin-top:10px;padding-top:13px}.total-row b{font-family:"Bricolage Grotesque";font-size:28px;color:var(--gold3)}
-    .report-chip{margin-bottom:9px}.report-body{display:none;padding:0 12px 12px}.report-chip.open .report-body{display:block}.filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
+    .filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
     .expense-form{display:grid;gap:8px;margin:8px 0}.expense-form .row{margin:0}.expense-list{display:grid;gap:7px;margin-top:10px}.expense-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px}.expense-item small{display:block;color:var(--muted);font-size:11px}.expense-item b{color:var(--gold3)}
     .checkline{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}.checkline input{width:auto}
     .settings-list{display:grid;gap:9px}.setting{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px}.setting p{margin:2px 0 0;color:var(--muted);font-size:12px}
@@ -205,10 +205,6 @@
     .hero-sum{padding:16px;margin-bottom:10px;border-top:3px solid var(--gold)}
     .hero-sum .hs-total{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1;color:var(--gold3);margin:8px 0 4px;font-variant-numeric:tabular-nums}
     .hero-sum .hs-sub{color:var(--muted);font-size:12px}
-    .sum-card{padding:12px 14px;margin-bottom:8px}
-    .sum-card .sc-row{display:flex;align-items:center;justify-content:space-between}
-    .sum-card .sc-total{font-family:"Bricolage Grotesque",sans-serif;font-size:20px;color:var(--gold3)}
-    .sum-card .sc-sub{font-size:11px;margin:4px 0 8px}
     /* ── Sync dot indicator ── */
     .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 auto;transition:background .3s}
     .sync-dot.live{background:var(--green);box-shadow:0 0 0 3px rgba(50,213,131,.2);animation:syncPulse 2.5s ease-in-out infinite}
@@ -344,7 +340,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.5</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.6</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -385,7 +381,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.5 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.6 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -431,8 +427,9 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='3.5', APP_BUILD='2026-06-02';
+const APP_VERSION='3.6', APP_BUILD='2026-06-07';
 const CHANGELOG=[
+  {version:'3.6',date:'07 Jun 2026',changes:['Stability release: hardened all state loading so a corrupted or legacy storage row (e.g. entries saved as a non-array) can no longer freeze the UI','Inbound sync values are now type-coerced before use, preventing a bad remote payload from breaking buttons or tabs','Removed dead CSS remnants from earlier Reports layouts; full nav, validation, clock and share flows re-verified end-to-end']},
   {version:'3.5',date:'02 Jun 2026',changes:['Receipts audit now only applies to shifts logged in-app (which can carry a receipt) - imported, backdated and override entries are exempt','Old historical receipts are no longer required, so the import no longer reads as receipts outstanding']},
   {version:'3.4',date:'02 Jun 2026',changes:['Historical import / backdating: one-tap upsert of your earlier weekly sheets (Sep 2025 \u2013 Apr 2026)','Non-destructive: only missing days are inserted and changed amounts amended; nothing is ever wiped or reset','Every row passes an isolated sanitation filter \u2013 corrupted dates/amounts are rejected individually, the rest still import','Weekly totals recalculate through a pure, isolated utility with no effect on the active week view or core state']},
   {version:'3.3',date:'02 Jun 2026',changes:['Tax Expenses rebuilt as a distinct collapsible card - state persists across tab switches and reloads','Quick-log preset chips (Tolls, Vehicle Wash, Parking, Phone/Internet, Servicing/Parts, Tools/Supplies and more) autofill category and pop the keypad','Quick Capture: amount + chip + receipt photo in one streamlined flow; details (supplier, %, note) tuck behind a disclosure','Recurring Expense toggle (weekly/monthly) auto-populates fixed overheads into every active reporting period without re-logging','Per-item GST input tax credit shown beside the gross; live Total Tax Deductions summary feeds the global Net Revenue even while the card is collapsed']},
@@ -462,7 +459,11 @@ const ddmmyyyy=s=>parseLocal(s).toLocaleDateString('en-AU',{day:'2-digit',month:
 const csvCell=v=>{let s=String(v??''); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),expenses:load(KEYS.expenses,[]),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),snapshots:load(KEYS.snapshots,{}),weekOffset:0,receiptFilter:'all',firebase:null};
+/* Defensive loaders — guarantee the correct type/shape no matter what is in storage,
+   so a corrupted or legacy row can never crash a render (.filter/.map/.push etc). */
+const loadArr=(k)=>{const v=load(k,[]);return Array.isArray(v)?v.filter(x=>x!=null):[]};
+const loadObj=(k)=>{const v=load(k,{});return (v&&typeof v==='object'&&!Array.isArray(v))?v:{}};
+let state={entries:loadArr(KEYS.entries),weekly:loadObj(KEYS.weekly),fuel:loadObj(KEYS.fuel),trip:loadObj(KEYS.trip),cash:loadObj(KEYS.cash),receipts:loadObj(KEYS.receipts),expenses:loadArr(KEYS.expenses),messages:loadObj(KEYS.messages),quickShare:(()=>{const q=load(KEYS.quickShare,{name:'',number:''});return (q&&typeof q==='object'&&!Array.isArray(q))?{name:q.name||'',number:q.number||''}:{name:'',number:''}})(),regos:(()=>{const r=loadArr(KEYS.regos).filter(x=>typeof x==='string'&&x.trim());return r.length?r:['ABC 123']})(),profile:(()=>{const p=load(KEYS.profile,{name:'Driver',email:''});return (p&&typeof p==='object'&&!Array.isArray(p))?{name:p.name||'Driver',email:p.email||''}:{name:'Driver',email:''}})(),snapshots:loadObj(KEYS.snapshots),weekOffset:0,receiptFilter:'all',firebase:null};
 let calc=load(KEYS.shift,{date:localDateStr(new Date()),rego:localStorage.getItem(KEYS.lastRego)||state.regos[0]||'',eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''});
 if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];
 if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];
@@ -524,7 +525,13 @@ function localValueFor(key){
 function rawPersist(key,value){
   const p=KEY_TO_STATE[key];
   try{
-    if(p!==undefined){state[p]=value;localStorage.setItem(key,JSON.stringify(value));}
+    if(p!==undefined){
+      // Coerce to the shape this state field must have so a corrupt remote payload can't crash the UI
+      const arrayKeys=[KEYS.entries,KEYS.expenses,KEYS.regos];
+      if(arrayKeys.indexOf(key)>=0) value=Array.isArray(value)?value.filter(x=>x!=null):[];
+      else if(value==null||typeof value!=='object'||Array.isArray(value)) value={};
+      state[p]=value; localStorage.setItem(key,JSON.stringify(value));
+    }
     else{if(value==null)localStorage.removeItem(key);else localStorage.setItem(key,typeof value==='string'?value:String(value));}
   }catch(e){}
 }
@@ -1079,4 +1086,442 @@ function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate
    • recalcWeeklyTotals() is a PURE read-only utility — it derives
      weekly figures from records without touching global state.
 =================================================================== */
-const HISTORICAL_IMPORT=[{d:'2025-09-18',a:393.87},{d:'2025-09-19',a:481.45},{d:'2025-09-20',a:272.6},{d:'2025-09-21',a:156.4},{d:'2025-09-22',a:348.68},{d:'2025-09-23',a:551},{d:'2025-09-24',a:537},{d:'2025-09-25',a:318.8},{d:'2025-09-27',a:259.5},{d:'2025-09-28',a:270.5},{d:'2025-09-29',a:337.4},{d:'2025-09-30',a:437},{d:'2025-10-01',a:472.65},{d:'2025-10-02',a:375.9},{d:'2025-10-03',a:553},{d:'2025-10-04',a:274.8},{d:'2025-10-05',a:236.3},{d:'2025-10-06',a:307.3},{d:'2025-10-07',a:533},{d:'2025-10-08',a:537.7},{d:'2025-10-10',a:598.6},{d:'2025-10-11',a:213},{d:'2025-10-12',a:188.5},{d:'2025-10-13',a:377.9},{d:'2025-10-14',a:384},{d:'2025-10-15',a:628.8},{d:'2025-10-16',a:420},{d:'2025-10-17',a:411.78},{d:'2025-10-18',a:281.79},{d:'2025-10-20',a:515},{d:'2025-10-21',a:436},{d:'2025-10-22',a:402.6},{d:'2025-10-23',a:587.7},{d:'2025-10-24',a:426.75},{d:'2025-10-27',a:360},{d:'2025-10-28',a:487},{d:'2025-10-29',a:382.9},{d:'2025-10-30',a:289.3},{d:'2025-10-31',a:394.5},{d:'2025-11-01',a:399.6},{d:'2025-11-02',a:119},{d:'2025-11-03',a:451.46},{d:'2025-11-05',a:470},{d:'2025-11-06',a:461.6},{d:'2025-11-07',a:489.7},{d:'2025-11-09',a:213},{d:'2025-11-10',a:412.69},{d:'2025-11-11',a:474},{d:'2025-11-12',a:273.4},{d:'2025-11-13',a:337.4},{d:'2025-11-14',a:476.8},{d:'2025-11-16',a:458},{d:'2025-11-17',a:421.96},{d:'2025-11-18',a:463.3},{d:'2025-11-19',a:412},{d:'2025-11-20',a:137.9},{d:'2025-11-21',a:277.3},{d:'2025-11-23',a:350},{d:'2025-11-24',a:399},{d:'2025-11-25',a:548.3},{d:'2025-11-26',a:468.4},{d:'2025-11-27',a:62},{d:'2025-11-28',a:378},{d:'2025-11-29',a:190},{d:'2025-11-30',a:315.7},{d:'2025-12-01',a:406.6},{d:'2025-12-02',a:336},{d:'2025-12-03',a:497.62},{d:'2025-12-04',a:431.9},{d:'2025-12-05',a:468.9},{d:'2025-12-07',a:284.75},{d:'2025-12-08',a:407},{d:'2025-12-12',a:310.75},{d:'2025-12-13',a:332.67},{d:'2025-12-14',a:122.35},{d:'2025-12-15',a:410.66},{d:'2025-12-16',a:464.3},{d:'2025-12-17',a:530.63},{d:'2025-12-18',a:434},{d:'2025-12-19',a:351.14},{d:'2025-12-21',a:147},{d:'2025-12-22',a:304.5},{d:'2025-12-23',a:257.31},{d:'2025-12-24',a:330.4},{d:'2025-12-25',a:484},{d:'2025-12-27',a:313.83},{d:'2025-12-28',a:175.79},{d:'2025-12-29',a:472.36},{d:'2025-12-30',a:400.72},{d:'2025-12-31',a:421.5},{d:'2026-01-02',a:303.92},{d:'2026-01-03',a:221.21},{d:'2026-01-05',a:530.44},{d:'2026-01-06',a:479.2},{d:'2026-01-07',a:516.61},{d:'2026-01-08',a:509.88},{d:'2026-01-09',a:304.59},{d:'2026-01-10',a:442.36},{d:'2026-01-11',a:32.45},{d:'2026-01-12',a:481.27},{d:'2026-01-13',a:526.23},{d:'2026-01-14',a:412.56},{d:'2026-01-15',a:317.66},{d:'2026-01-16',a:337},{d:'2026-01-17',a:390.77},{d:'2026-01-18',a:182.6},{d:'2026-01-19',a:547.37},{d:'2026-01-20',a:388.25},{d:'2026-01-21',a:261.61},{d:'2026-01-22',a:499},{d:'2026-01-23',a:480},{d:'2026-01-24',a:303},{d:'2026-01-27',a:547.82},{d:'2026-01-28',a:319.3},{d:'2026-01-29',a:369.28},{d:'2026-01-30',a:483.8},{d:'2026-02-01',a:249},{d:'2026-02-02',a:469},{d:'2026-02-03',a:286.5},{d:'2026-02-04',a:378},{d:'2026-02-05',a:486.3},{d:'2026-02-06',a:465.15},{d:'2026-02-07',a:297.8},{d:'2026-02-09',a:348},{d:'2026-02-10',a:542.4},{d:'2026-02-11',a:332.65},{d:'2026-02-12',a:372.9},{d:'2026-02-15',a:111.4},{d:'2026-02-16',a:560},{d:'2026-02-17',a:591.7},{d:'2026-02-18',a:507.6},{d:'2026-02-19',a:420.9},{d:'2026-02-21',a:148.5},{d:'2026-02-22',a:150.7},{d:'2026-02-23',a:577.5},{d:'2026-02-24',a:468.3},{d:'2026-02-25',a:608.5},{d:'2026-02-26',a:413.5},{d:'2026-02-28',a:152},{d:'2026-03-01',a:68
+const HISTORICAL_IMPORT=[{d:'2025-09-18',a:393.87},{d:'2025-09-19',a:481.45},{d:'2025-09-20',a:272.6},{d:'2025-09-21',a:156.4},{d:'2025-09-22',a:348.68},{d:'2025-09-23',a:551},{d:'2025-09-24',a:537},{d:'2025-09-25',a:318.8},{d:'2025-09-27',a:259.5},{d:'2025-09-28',a:270.5},{d:'2025-09-29',a:337.4},{d:'2025-09-30',a:437},{d:'2025-10-01',a:472.65},{d:'2025-10-02',a:375.9},{d:'2025-10-03',a:553},{d:'2025-10-04',a:274.8},{d:'2025-10-05',a:236.3},{d:'2025-10-06',a:307.3},{d:'2025-10-07',a:533},{d:'2025-10-08',a:537.7},{d:'2025-10-10',a:598.6},{d:'2025-10-11',a:213},{d:'2025-10-12',a:188.5},{d:'2025-10-13',a:377.9},{d:'2025-10-14',a:384},{d:'2025-10-15',a:628.8},{d:'2025-10-16',a:420},{d:'2025-10-17',a:411.78},{d:'2025-10-18',a:281.79},{d:'2025-10-20',a:515},{d:'2025-10-21',a:436},{d:'2025-10-22',a:402.6},{d:'2025-10-23',a:587.7},{d:'2025-10-24',a:426.75},{d:'2025-10-27',a:360},{d:'2025-10-28',a:487},{d:'2025-10-29',a:382.9},{d:'2025-10-30',a:289.3},{d:'2025-10-31',a:394.5},{d:'2025-11-01',a:399.6},{d:'2025-11-02',a:119},{d:'2025-11-03',a:451.46},{d:'2025-11-05',a:470},{d:'2025-11-06',a:461.6},{d:'2025-11-07',a:489.7},{d:'2025-11-09',a:213},{d:'2025-11-10',a:412.69},{d:'2025-11-11',a:474},{d:'2025-11-12',a:273.4},{d:'2025-11-13',a:337.4},{d:'2025-11-14',a:476.8},{d:'2025-11-16',a:458},{d:'2025-11-17',a:421.96},{d:'2025-11-18',a:463.3},{d:'2025-11-19',a:412},{d:'2025-11-20',a:137.9},{d:'2025-11-21',a:277.3},{d:'2025-11-23',a:350},{d:'2025-11-24',a:399},{d:'2025-11-25',a:548.3},{d:'2025-11-26',a:468.4},{d:'2025-11-27',a:62},{d:'2025-11-28',a:378},{d:'2025-11-29',a:190},{d:'2025-11-30',a:315.7},{d:'2025-12-01',a:406.6},{d:'2025-12-02',a:336},{d:'2025-12-03',a:497.62},{d:'2025-12-04',a:431.9},{d:'2025-12-05',a:468.9},{d:'2025-12-07',a:284.75},{d:'2025-12-08',a:407},{d:'2025-12-12',a:310.75},{d:'2025-12-13',a:332.67},{d:'2025-12-14',a:122.35},{d:'2025-12-15',a:410.66},{d:'2025-12-16',a:464.3},{d:'2025-12-17',a:530.63},{d:'2025-12-18',a:434},{d:'2025-12-19',a:351.14},{d:'2025-12-21',a:147},{d:'2025-12-22',a:304.5},{d:'2025-12-23',a:257.31},{d:'2025-12-24',a:330.4},{d:'2025-12-25',a:484},{d:'2025-12-27',a:313.83},{d:'2025-12-28',a:175.79},{d:'2025-12-29',a:472.36},{d:'2025-12-30',a:400.72},{d:'2025-12-31',a:421.5},{d:'2026-01-02',a:303.92},{d:'2026-01-03',a:221.21},{d:'2026-01-05',a:530.44},{d:'2026-01-06',a:479.2},{d:'2026-01-07',a:516.61},{d:'2026-01-08',a:509.88},{d:'2026-01-09',a:304.59},{d:'2026-01-10',a:442.36},{d:'2026-01-11',a:32.45},{d:'2026-01-12',a:481.27},{d:'2026-01-13',a:526.23},{d:'2026-01-14',a:412.56},{d:'2026-01-15',a:317.66},{d:'2026-01-16',a:337},{d:'2026-01-17',a:390.77},{d:'2026-01-18',a:182.6},{d:'2026-01-19',a:547.37},{d:'2026-01-20',a:388.25},{d:'2026-01-21',a:261.61},{d:'2026-01-22',a:499},{d:'2026-01-23',a:480},{d:'2026-01-24',a:303},{d:'2026-01-27',a:547.82},{d:'2026-01-28',a:319.3},{d:'2026-01-29',a:369.28},{d:'2026-01-30',a:483.8},{d:'2026-02-01',a:249},{d:'2026-02-02',a:469},{d:'2026-02-03',a:286.5},{d:'2026-02-04',a:378},{d:'2026-02-05',a:486.3},{d:'2026-02-06',a:465.15},{d:'2026-02-07',a:297.8},{d:'2026-02-09',a:348},{d:'2026-02-10',a:542.4},{d:'2026-02-11',a:332.65},{d:'2026-02-12',a:372.9},{d:'2026-02-15',a:111.4},{d:'2026-02-16',a:560},{d:'2026-02-17',a:591.7},{d:'2026-02-18',a:507.6},{d:'2026-02-19',a:420.9},{d:'2026-02-21',a:148.5},{d:'2026-02-22',a:150.7},{d:'2026-02-23',a:577.5},{d:'2026-02-24',a:468.3},{d:'2026-02-25',a:608.5},{d:'2026-02-26',a:413.5},{d:'2026-02-28',a:152},{d:'2026-03-01',a:68.7},{d:'2026-03-02',a:353.4},{d:'2026-03-03',a:397.44},{d:'2026-03-04',a:290},{d:'2026-03-05',a:356},{d:'2026-03-07',a:160},{d:'2026-03-08',a:114},{d:'2026-03-09',a:248},{d:'2026-03-10',a:368.6},{d:'2026-03-11',a:379.5},{d:'2026-03-12',a:361.4},{d:'2026-03-13',a:401},{d:'2026-03-15',a:353.6},{d:'2026-03-16',a:319},{d:'2026-03-17',a:395.59},{d:'2026-03-18',a:337},{d:'2026-03-19',a:370},{d:'2026-03-20',a:359.7},{d:'2026-03-21',a:120},{d:'2026-03-27',a:355.3},{d:'2026-03-28',a:263.5},{d:'2026-03-29',a:149.3},{d:'2026-04-02',a:422},{d:'2026-04-03',a:302.3},{d:'2026-04-05',a:147.3},{d:'2026-04-06',a:254.4},{d:'2026-04-07',a:504.69},{d:'2026-04-11',a:279.5},{d:'2026-04-12',a:450},{d:'2026-04-14',a:365},{d:'2026-04-18',a:406.7},{d:'2026-04-19',a:268.9},{d:'2026-04-20',a:459.5},{d:'2026-04-24',a:515.4},{d:'2026-04-26',a:321},{d:'2026-04-27',a:577.7},{d:'2026-04-28',a:331.9}];
+// Isolated per-row validator — guarantees schema match before commit
+function sanitizeImportRow(row){
+  try{
+    if(!row||typeof row!=='object')return {ok:false,reason:'bad row'};
+    const d=String(row.d!==undefined?row.d:row.date||'').trim();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return {ok:false,reason:'bad date format'};
+    const dt=parseLocal(d); if(!dt||isNaN(dt.getTime())||localDateStr(dt)!==d)return {ok:false,reason:'invalid calendar date'};
+    let a=row.a!==undefined?row.a:row.amount;
+    if(typeof a==='string')a=Number(a.replace(/[^0-9.\-]/g,''));
+    a=Number(a);
+    if(!isFinite(a)||a<0||a>100000)return {ok:false,reason:'bad amount'};
+    return {ok:true,entry:{date:d,amount:+a.toFixed(2)}};
+  }catch(e){ return {ok:false,reason:'exception'}; }
+}
+// Dry-run: classify rows as insert / amend / unchanged / rejected WITHOUT mutating anything
+function previewHistoricalImport(dataset,rego){
+  const useRego=(rego!==undefined?rego:((state.regos&&state.regos[0])||''));
+  const res={inserted:0,amended:0,unchanged:0,rejected:0,rejects:[],valid:[],rego:useRego};
+  const existing={}; (state.entries||[]).forEach(e=>{ if(e&&e.date!==undefined)existing[e.date+'|'+(e.rego||'')]=+Number(e.amount).toFixed(2); });
+  (dataset||[]).forEach(row=>{
+    const v=sanitizeImportRow(row);
+    if(!v.ok){res.rejected++;res.rejects.push((row&&(row.d||row.date))+': '+v.reason);return;}
+    const key=v.entry.date+'|'+useRego, en={date:v.entry.date,amount:v.entry.amount,rego:useRego};
+    res.valid.push(en);
+    if(existing[key]===undefined)res.inserted++;
+    else if(existing[key]!==v.entry.amount)res.amended++;
+    else res.unchanged++;
+  });
+  return res;
+}
+// Commit: applies ONLY the validated entries via upsert to state.entries (nothing else touched)
+function commitHistoricalImport(valid){
+  let ins=0,amd=0;
+  try{
+    const byKey={}; state.entries.forEach((e,i)=>{ if(e&&e.date!==undefined)byKey[e.date+'|'+(e.rego||'')]=i; });
+    valid.forEach(en=>{
+      const key=en.date+'|'+(en.rego||''), idx=byKey[key];
+      if(idx===undefined){ state.entries.push({date:en.date,amount:en.amount,rego:en.rego}); byKey[key]=state.entries.length-1; ins++; }
+      else if(+Number(state.entries[idx].amount).toFixed(2)!==en.amount){ state.entries[idx].amount=en.amount; amd++; }
+    });
+    save(KEYS.entries,state.entries); immediateSync(KEYS.entries);
+  }catch(e){ /* non-fatal: leave already-applied rows intact */ }
+  return {ins,amd};
+}
+// PURE isolated recalculation utility — derives weekly (cycle-aware) totals, mutates nothing
+function recalcWeeklyTotals(entries){
+  try{
+    const b={};
+    (entries||[]).forEach(e=>{ if(!e||!e.date)return; const amt=Number(e.amount); if(!isFinite(amt))return; const s=localDateStr(weekStart(parseLocal(e.date))); (b[s]||(b[s]={start:s,total:0,count:0})); b[s].total+=amt; b[s].count++; });
+    return Object.values(b).map(w=>({start:w.start,end:shiftDays(w.start,6),total:+w.total.toFixed(2),count:w.count})).sort((x,y)=>x.start.localeCompare(y.start));
+  }catch(e){ return []; }
+}
+// Orchestrator wired to the Profile button
+function importHistoricalData(){
+  let pre;
+  try{ pre=previewHistoricalImport(HISTORICAL_IMPORT); }
+  catch(e){ toast('Import preview failed'); return; }
+  const wk=recalcWeeklyTotals(pre.valid);
+  const grand=pre.valid.reduce((a,b)=>a+b.amount,0);
+  const msg=`Ready to import ${pre.valid.length} day${pre.valid.length===1?'':'s'} (rego ${pre.rego||'none'}).\n\n`+
+            `New: ${pre.inserted}   Amended: ${pre.amended}\nUnchanged: ${pre.unchanged}   Rejected: ${pre.rejected}\n\n`+
+            `${wk.length} weeks \u00b7 total ${money(grand)}.\n\nExisting shifts on other dates stay untouched.`;
+  confirmBox('Import historical totals',msg,()=>{
+    const r=commitHistoricalImport(pre.valid);
+    toast(`Imported \u2014 ${r.ins} new, ${r.amd} amended`);
+    // single, loop-free refresh of whatever screen is active
+    try{const scr=document.querySelector('.screen.active')?.dataset.screen; if(scr==='weekly')renderWeekly(); else if(scr==='reports')renderReports();}catch(_){}
+  },'Import','Cancel');
+}
+function wkRange(){ if(!state.wkStart||!state.wkEnd){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);state.wkStart=localDateStr(s);state.wkEnd=localDateStr(e);} return [state.wkStart,state.wkEnd]; }
+function wkLabel(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return `${fmtDate(lo)} - ${fmtDate(hi)}`}
+function weekEntries(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return state.entries.filter(e=>e&&e.date>=lo&&e.date<=hi).sort((x,y)=>x.date.localeCompare(y.date))}
+function repMatch(d){ if(state.repAllTime)return true; const a=state.repStart,b=state.repEnd; if(!a||!b)return true; const lo=a<=b?a:b,hi=a<=b?b:a; return d>=lo&&d<=hi; }
+function repLabel(){ if(state.repAllTime)return 'All time'; const a=state.repStart,b=state.repEnd; if(!a||!b)return 'All time'; const lo=a<=b?a:b,hi=a<=b?b:a; return `${fmtDate(lo)} - ${fmtDate(hi)}`; }
+function filterMapRep(obj){const out={};Object.keys(obj||{}).forEach(d=>{if(repMatch(d))out[d]=(obj||{})[d]});return out}
+function normCash(v){return v&&typeof v==='object'?{total:n(v.total),payers:Array.isArray(v.payers)?v.payers:[]}:{total:n(v),payers:[]}}
+function normFuel(v){return v&&typeof v==='object'?{amount:n(v.amount),type:v.type||'Fuel'}:{amount:n(v),type:'Fuel'}}
+function reportEntries(){return state.entries.filter(e=>e&&repMatch(e.date)).sort((x,y)=>x.date.localeCompare(y.date))}
+function saveWk(){try{localStorage.setItem('d2e_wk_range',JSON.stringify({s:state.wkStart,e:state.wkEnd}))}catch{}}
+function saveRep(){try{localStorage.setItem('d2e_rep_range',JSON.stringify({s:state.repStart,e:state.repEnd,all:!!state.repAllTime}))}catch{}}
+function shiftRowsHTML(entries){return entries.map((r,i)=>`<div class="table-row" data-row="${i}" style="grid-template-columns:1fr auto auto 26px;cursor:pointer"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold" style="text-align:right">${money(r.amount)}</b><button class="mini" data-del-entry="${i}" aria-label="Delete" style="width:26px;height:30px;line-height:1">x</button></div>`).join('')||'<p class="muted" style="padding:10px 2px">No shifts in this range.</p>'}
+function openShiftModal(entry){ $('#modalTitle').textContent=`Shift - ${fmtDate(entry.date)}`;$('#modalText').className='preview-message';$('#modalText').textContent=shiftPreviewForEntry(entry);$('#modalCancel').textContent='Load to edit';$('#modalOk').textContent='Copy';$('#modal').classList.add('show');$('#modalCancel').onclick=()=>{$('#modal').classList.remove('show');loadShiftIntoCalc(entry)};$('#modalOk').onclick=()=>navigator.clipboard?.writeText($('#modalText').textContent).then(()=>{$('#modal').classList.remove('show');toast('Copied')}).catch(()=>$('#modal').classList.remove('show')); }
+function bindShiftRows(container,entries,rerender){ if(!container)return; container.onclick=e=>{ const del=e.target.closest('[data-del-entry]'); if(del){const r=entries[del.dataset.delEntry]; if(!r)return; confirmBox('Delete shift',`Delete ${fmtDate(r.date)} (${r.rego||'REG'}) ${money(r.amount)}? This cannot be undone.`,()=>{state.entries=state.entries.filter(x=>x!==r); delete state.messages[shiftKey(r.date,r.rego)]; delete state.snapshots[shiftKey(r.date,r.rego)]; save(KEYS.entries,state.entries); save(KEYS.messages,state.messages); save(KEYS.snapshots,state.snapshots); rerender()}); return} const row=e.target.closest('[data-row]'); if(row){const entry=entries[row.dataset.row]; if(entry)openShiftModal(entry);} }; }
+/* Req 8: Thu-Wed status badge — Current (this week) vs Credited (past Friday after week end) */
+function weekStatus(){
+  const [a,b]=wkRange();
+  const lo=a<=b?a:b, hi=a<=b?b:a;
+  const today=new Date(); today.setHours(0,0,0,0);
+  // Credited once the calendar reaches the configured pay/milestone day that falls
+  // immediately after this week's end. We advance from the week-end date to the first
+  // occurrence of the credit weekday strictly after it (e.g. Wed end + next Friday).
+  const cd=creditDay();
+  const creditDate=parseLocal(hi); creditDate.setHours(0,0,0,0);
+  do{creditDate.setDate(creditDate.getDate()+1);}while(creditDate.getDay()!==cd);
+  return today>=creditDate ? 'credited' : 'current';
+}
+function renderWeekStatus(){
+  const badge=$('#wkBadge'); if(!badge)return;
+  const st=weekStatus();
+  badge.className='wk-badge '+st;
+  badge.textContent=st==='credited'?'Credited':'Current';
+}
+function applyWkStatusVisibility(){
+  const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';
+  $('#wkStatusBar')?.classList.toggle('collapsed',hidden);
+  $('#wkStatusToggle')?.classList.toggle('hidden',hidden);
+}
+function renderWeekly(){
+  wkRange();
+  if($('#wkStart'))$('#wkStart').value=state.wkStart; if($('#wkEnd'))$('#wkEnd').value=state.wkEnd; if($('#wkLabel'))$('#wkLabel').textContent=wkLabel();
+  const rows=weekEntries();
+  $('#weekRows').innerHTML=shiftRowsHTML(rows);
+  $('#weekTotal').textContent=money(rows.reduce((a,b)=>a+n(b.amount),0));
+  bindShiftRows($('#weekRows'),rows,renderWeekly);
+  renderWeekStatus(); applyWkStatusVisibility();
+}
+$('#wkPrev').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,-7);state.wkEnd=shiftDays(state.wkEnd,-7);saveWk();renderWeekly()};
+$('#wkStatusToggle').onclick=()=>{const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';localStorage.setItem('d2e_wk_status_hidden',hidden?'0':'1');applyWkStatusVisibility()};
+$('#wkNext').onclick=()=>{wkRange();state.wkStart=shiftDays(state.wkStart,7);state.wkEnd=shiftDays(state.wkEnd,7);saveWk();renderWeekly()};
+$('#wkStart').onchange=e=>{state.wkStart=e.target.value;saveWk();renderWeekly()};
+$('#wkEnd').onchange=e=>{state.wkEnd=e.target.value;saveWk();renderWeekly()};
+$('#overrideToggle').onclick=()=>$('#overrideToggle').closest('.chip').classList.toggle('open');
+$('#saveOverride').onclick=()=>{const date=$('#overrideDate').value||localDateStr(new Date()), amount=n($('#overrideAmount').value), rego=$('#overrideRego').value.trim()||calc.rego||''; if(!amount){toast('Enter an amount');return} state.entries=state.entries.filter(x=>!(x.date===date&&x.rego===rego)); state.entries.push({date,amount:+amount.toFixed(2),rego}); save(KEYS.entries,state.entries); immediateSync(KEYS.entries); $('#overrideAmount').value='';$('#overrideRego').value=''; toast('Entry saved'); renderWeekly()};
+async function shareWeek(){ toast('Preparing photo...'); const {card,cleanup}=buildWeekShareCard(); const file=await captureCard(card,'drive2earn-week.png'); cleanup(); await shareFileAndText(file,weekShareText()); }
+$('#shareWeek').onclick=shareWeek;
+
+function applyQuickFilter(kind){
+  state.repAllTime=false; const today=new Date();
+  if(kind==='alltime'){state.repAllTime=true}
+  else if(kind==='last30'){const sdt=new Date(today);sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
+  else if(kind==='lastmonth'){const first=new Date(today.getFullYear(),today.getMonth()-1,1);const last=new Date(today.getFullYear(),today.getMonth(),0);state.repStart=localDateStr(first);state.repEnd=localDateStr(last)}
+  else if(kind==='lastweek'){const s=weekStart();s.setDate(s.getDate()-7);const e=new Date(s);e.setDate(s.getDate()+6);state.repStart=localDateStr(s);state.repEnd=localDateStr(e)}
+}
+/* ── BAS Quarter Quick Pull (isolated, non-destructive) ───────────────
+   These helpers only override the active UI date-range filter (repStart/
+   repEnd). They never touch state.entries/fuel/cash/trip/expenses, so the
+   underlying transactions and the Copy CSV / Download pipelines are safe —
+   those read whatever range repMatch() currently reflects. */
+const BAS_QUARTERS=[
+  {q:1,label:'Q1',months:'Jul\u2013Sep'},
+  {q:2,label:'Q2',months:'Oct\u2013Dec'},
+  {q:3,label:'Q3',months:'Jan\u2013Mar'},
+  {q:4,label:'Q4',months:'Apr\u2013Jun'}
+];
+function currentFyStart(){ const d=new Date(), y=d.getFullYear(), m=d.getMonth()+1; return m>=7?y:y-1; }
+function basQuarterRange(q,fyStart){
+  // Australian financial year quarters for the FY beginning July of fyStart
+  const map={
+    1:[new Date(fyStart,6,1),   new Date(fyStart,8,30)],      // Jul 1  – Sep 30
+    2:[new Date(fyStart,9,1),   new Date(fyStart,11,31)],     // Oct 1  – Dec 31
+    3:[new Date(fyStart+1,0,1), new Date(fyStart+1,2,31)],    // Jan 1  – Mar 31
+    4:[new Date(fyStart+1,3,1), new Date(fyStart+1,5,30)]     // Apr 1  – Jun 30
+  };
+  const [s,e]=map[q]||map[1];
+  return [localDateStr(s),localDateStr(e)];
+}
+function pullBasQuarter(q){
+  const [s,e]=basQuarterRange(q,currentFyStart());
+  state.repAllTime=false; state.repStart=s; state.repEnd=e;
+  saveRep(); renderReports();
+}
+function activeBasQuarter(){
+  if(state.repAllTime)return 0;
+  const fy=currentFyStart();
+  for(const x of BAS_QUARTERS){ const [s,e]=basQuarterRange(x.q,fy); if(state.repStart===s&&state.repEnd===e)return x.q; }
+  return 0;
+}
+function activeQuickFilter(){
+  if(state.repAllTime)return 'alltime';
+  const today=new Date(), s=state.repStart, e=state.repEnd; if(!s||!e)return '';
+  const d30=new Date(today);d30.setDate(today.getDate()-29);
+  if(s===localDateStr(d30)&&e===localDateStr(today))return 'last30';
+  const fm=new Date(today.getFullYear(),today.getMonth()-1,1), lm=new Date(today.getFullYear(),today.getMonth(),0);
+  if(s===localDateStr(fm)&&e===localDateStr(lm))return 'lastmonth';
+  const ws=weekStart();ws.setDate(ws.getDate()-7);const we=new Date(ws);we.setDate(ws.getDate()+6);
+  if(s===localDateStr(ws)&&e===localDateStr(we))return 'lastweek';
+  return '';
+}
+function renderReports(){ try{
+  if(!state.repAllTime && (!state.repStart||!state.repEnd)){const today=new Date(),sdt=new Date();sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
+  const rate=n(localStorage.getItem(KEYS.levy)||'1.20');
+  const entries=reportEntries(), gross=entries.reduce((a,b)=>a+n(b.amount),0), active=activeQuickFilter();
+  const cash=filterMapRep(state.cash); Object.keys(cash).forEach(k=>cash[k]=normCash(cash[k]));
+  const fuel=filterMapRep(state.fuel); Object.keys(fuel).forEach(k=>fuel[k]=normFuel(fuel[k]));
+  const trip=filterMapRep(state.trip); Object.keys(trip).forEach(k=>trip[k]=n(trip[k]));
+  const exps=expandExpenses();
+  const cashTotal=Object.values(cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(fuel).reduce((a,b)=>a+n(b.amount),0);
+  const expDeduct=exps.reduce((a,e)=>a+expenseDeductible(e),0), expGst=exps.reduce((a,e)=>a+expenseGst(e),0);
+  const modules=[
+    {title:'BAS Gross',total:gross,lines:entries.map(e=>`${fmtDate(e.date)} | ${e.rego||'REG'} | ${money(e.amount)}`),csv:'Date,Quarter,Rego,Amount\n'+entries.map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.rego||''),n(e.amount).toFixed(2)].join(',')).join('\n')},
+    {title:'Cash Income',total:cashTotal,lines:Object.entries(cash).map(([d,v])=>`${fmtDate(d)} | ${(v.payers||[]).map(p=>p.name||'Cash').join(', ')||'Cash'} | ${money(v.total)}`),csv:'Date,Payers,Amount\n'+Object.entries(cash).map(([d,v])=>[ddmmyyyy(d),csvCell((v.payers||[]).map(p=>p.name||'Cash').join('; ')||'Cash'),n(v.total).toFixed(2)].join(',')).join('\n')},
+    {title:'Hail Trips',total:trips*rate,lines:Object.entries(trip).map(([d,v])=>`${fmtDate(d)} | ${v} trips | ${money(v*rate)}`),csv:'Date,Trips,Levy\n'+Object.entries(trip).map(([d,v])=>[ddmmyyyy(d),v,(v*rate).toFixed(2)].join(',')).join('\n')},
+    {title:'Fuel Tracker',total:fuelTotal,lines:Object.entries(fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`),csv:'Date,Type,Amount\n'+Object.entries(fuel).map(([d,v])=>[ddmmyyyy(d),csvCell(v.type),n(v.amount).toFixed(2)].join(',')).join('\n')}
+  ];
+  const qf=[['lastweek','Last Week'],['last30','Last 30 Days'],['lastmonth','Last Month'],['alltime','All Time']];
+  // ── Smart figures (all derived; underlying data never mutated) ──
+  const gstSetAside=gross/11;                              // GST portion of income to set aside (1/11)
+  const netRev=gross-fuelTotal-gstSetAside-expDeduct;      // live Net Revenue
+  const shiftDates=[...new Set(entries.map(e=>e.date))];
+  const opDays=shiftDates.length;                          // operational days in period
+  // Receipts audit: ONLY count shifts logged through the app's own calculator (those have a
+  // saved snapshot and could carry a receipt). Imported / backdated / override entries are
+  // exempt — old historical receipts aren't required, so they never read as "outstanding".
+  const loggedDates=[...new Set(entries.filter(e=>e&&state.snapshots[shiftKey(e.date,e.rego||'')]).map(e=>e.date))];
+  const outstanding=loggedDates.filter(d=>!((state.receipts[d]||[]).some(r=>r&&r.shiftReceipt&&r.fileData))).length;
+  const perDay=opDays?fuelTotal/opDays:0;
+  const warnSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
+  const fyS=currentFyStart(), fyLabel=`FY${String(fyS).slice(2)}\u2013${String(fyS+1).slice(2)}`, activeQ=activeBasQuarter();
+  const basPullHTML=`<section class="card bas-pull"><div class="bas-pull-head"><span class="chip-title"><span class="dot"></span>BAS Quarter Quick Pull</span><span class="bas-fy mono">${fyLabel}</span></div><div class="bas-pull-grid">${BAS_QUARTERS.map(x=>`<button class="bas-chip${activeQ===x.q?' active':''}" data-bas-q="${x.q}" aria-label="${x.label} ${x.months}"><b>${x.label}</b><small>${x.months}</small></button>`).join('')}</div></section>`;
+  // ── Net Revenue hero ──
+  const netHTML=`<section class="card rep-net"><div class="rn-label">Net Revenue</div><div class="rn-val${netRev<0?' neg':''}">${money(netRev)}</div><div class="rn-sub">${repLabel()} &middot; after fuel, GST set-aside &amp; tax expenses</div><div class="net-tiles"><div class="net-tile"><small>Gross</small><b>${money(gross)}</b></div><div class="net-tile minus"><small>− Fuel</small><b>${money(fuelTotal)}</b></div><div class="net-tile minus"><small>− GST</small><b>${money(gstSetAside)}</b></div><div class="net-tile minus"><small>− Tax</small><b>${money(expDeduct)}</b></div></div></section>`;
+  // ── Compact metric grid (totals + counts only; logs hidden) ──
+  const metricGrid=`<div class="metric-grid">`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>BAS Gross</div><div class="m-val">${money(gross)}</div><div class="m-sub">${entries.length} shift${entries.length===1?'':'s'} &middot; ${opDays} day${opDays===1?'':'s'}</div>${outstanding>0?`<div class="m-warn">${warnSvg}${outstanding} receipt${outstanding===1?'':'s'} outstanding</div>`:''}</div>`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>Cash Income</div><div class="m-val">${money(cashTotal)}</div><div class="m-sub">${Object.keys(cash).length} day${Object.keys(cash).length===1?'':'s'} logged</div></div>`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>Hail Trips</div><div class="m-val">${money(trips*rate)}</div><div class="m-sub">${trips} trip${trips===1?'':'s'} &middot; levy @ ${money(rate)}</div></div>`+
+    `<div class="metric"><div class="m-top"><span class="dot"></span>Fuel Tracker</div><div class="m-val">${money(fuelTotal)}</div><div class="m-sub">${Object.keys(fuel).length} fill${Object.keys(fuel).length===1?'':'s'}</div><div class="fuel-pill" title="Spend vs operational days">${money(fuelTotal)} / ${opDays}d &middot; <b>${money(perDay)}/day</b></div></div>`+
+    `</div>`;
+  const expCollapsed=localStorage.getItem('d2e_exp_collapsed')!=='0'; // default collapsed
+  const chevSvg='<svg class="exp-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+  const recurCount=(state.expenses||[]).filter(e=>e&&e.recurring).length;
+  const presetChips=EXPENSE_PRESETS.map(pp=>`<button class="exp-chip${expDraft.category===pp.cat?' active':''}" data-preset-cat="${esc(pp.cat)}" data-preset-gst="${pp.gst?1:0}">${esc(pp.label)}</button>`).join('')+`<button class="exp-chip more${expDraft.moreOpen?' active':''}" id="expMoreChip">More\u2026</button>`;
+  const fullSelect=`<select id="expenseCategory" style="margin-top:7px;display:${expDraft.moreOpen?'block':'none'}">${EXPENSE_CATEGORIES.map(c=>`<option${expDraft.category===c?' selected':''}>${c}</option>`).join('')}</select>`;
+  const expHTML=`<section class="card exp-card${expCollapsed?'':' open'}" id="expenseReport">
+    <button class="exp-head" id="expToggle" aria-expanded="${expCollapsed?'false':'true'}"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><span class="exp-head-right"><b class="exp-total">${money(expDeduct)}</b>${chevSvg}</span></button>
+    <div class="exp-body">
+      <div class="exp-summary"><div class="stat"><small>Tax Deductions</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Items</small><b>${exps.length}</b></div></div>
+      ${recurCount?`<div class="exp-recur-note">${recurCount} recurring overhead${recurCount===1?'':'s'} auto-included in this period</div>`:''}
+      <div class="exp-quick">
+        <input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount $" class="exp-amount">
+        <div class="exp-chips">${presetChips}</div>
+        ${fullSelect}
+        <div class="exp-actions">
+          <label class="exp-receipt" for="expenseAttachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg><span id="expReceiptLabel">Receipt</span></label>
+          <input id="expenseAttachment" type="file" accept="image/*,application/pdf" style="display:none">
+          <button class="exp-recur-toggle${expDraft.recurring?' on':''}" id="expRecurToggle" type="button"><span class="ert-dot"></span>Recurring</button>
+          <select id="expFrequency" class="exp-freq" style="display:${expDraft.recurring?'block':'none'}"><option value="monthly"${expDraft.frequency==='monthly'?' selected':''}>Monthly</option><option value="weekly"${expDraft.frequency==='weekly'?' selected':''}>Weekly</option></select>
+        </div>
+        <button class="exp-details-toggle" id="expDetailsToggle" type="button">${expDraft.detailsOpen?'Hide details':'More details (supplier, %, note)'}</button>
+        <div class="exp-more-fields" style="display:${expDraft.detailsOpen?'block':'none'}">
+          <div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div>
+          <div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><label class="checkline" style="margin:0"><input type="checkbox" id="expenseGst" ${expDraft.gstIncluded?'checked':''}> GST incl.</label></div>
+          <div class="row one"><input id="expenseNote" placeholder="Note"></div>
+        </div>
+        <button class="primary exp-save" id="addExpense" style="margin:10px 0 0">Log Expense</button>
+        <p class="mono muted" id="expenseQuarterPreview" style="font-size:11px;margin:7px 0 0"></p>
+        <button class="secondary" id="copyExpensesCsv" style="width:100%;margin-top:8px">Copy Expenses CSV</button>
+      </div>
+      <div class="expense-list" id="expenseList" style="margin-top:10px"></div>
+    </div>
+  </section>`;
+  // ── Unified export hub ──
+  const exportHTML=`<section class="card export-hub"><div class="exp-head"><span class="chip-title"><span class="dot"></span>Export</span><span class="muted" style="font-size:11px">${repLabel()}</span></div><div class="export-cluster"><button class="exp-copy" id="expCopy">Copy CSV</button><button class="exp-dl" id="expDl">Download Report</button></div></section>`;
+  $('#reports').innerHTML=
+    basPullHTML+
+    `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
+    `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
+    netHTML+metricGrid+expHTML+exportHTML;
+  if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
+  if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
+  $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
+  $$('#reports [data-bas-q]').forEach(b=>b.onclick=()=>pullBasQuarter(+b.dataset.basQ));
+  // Unified export — runs in the background (yields a frame) so the UI never freezes
+  const combinedCsv=()=>modules.map(s=>`# ${s.title} (${repLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${repLabel()})\n${expensesCsv()}`;
+  const doExport=async dl=>{ toast('Preparing export\u2026'); await new Promise(r=>setTimeout(r,0)); try{ const all=combinedCsv(); if(dl){downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all);toast('Report downloaded');} else { if(navigator.clipboard){await navigator.clipboard.writeText(all);toast('CSV copied');} else {downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all);toast('Copy unavailable - downloaded instead');} } }catch(e){ toast('Export failed - try again'); } };
+  if($('#expCopy'))$('#expCopy').onclick=()=>doExport(false);
+  if($('#expDl'))$('#expDl').onclick=()=>doExport(true);
+  bindExpenseReport();
+ }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel data? Saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }
+function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Recurring,Attachment,Note',...expandExpenses().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),(e.recurring?('Yes ('+(e.frequency||'monthly')+')'):'No'),csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
+function renderExpenseList(){
+  const box=$('#expenseList'); if(!box)return;
+  const list=expandExpenses().sort((a,b)=>b.date.localeCompare(a.date));
+  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> ${expenseGst(e)>0?`<span class="exp-gst">+GST ${money(expenseGst(e))}</span>`:''} <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''}</small><small>${e._recurring?`<span class="exp-recur-tag">Recurring \u00b7 ${esc(e.frequency||'monthly')}</span> `:''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e._baseId}">View</button><button class="mini" data-del-expense="${e._baseId}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses in this range.</p>';
+}
+function bindExpenseReport(){
+  renderExpenseList();
+  // ── Collapse toggle (persists across tab switches & reloads) ──
+  const card=$('#expenseReport'), toggle=$('#expToggle');
+  if(toggle)toggle.onclick=()=>{const open=card.classList.toggle('open');localStorage.setItem('d2e_exp_collapsed',open?'0':'1');toggle.setAttribute('aria-expanded',open?'true':'false')};
+  const date=$('#expenseDate'), category=$('#expenseCategory'), amount=$('#expenseAmount'), q=$('#expenseQuarterPreview');
+  if(!amount)return;
+  const updateQuarter=()=>{ if(q)q.textContent=`BAS quarter: ${basQuarter((date&&date.value)||localDateStr(new Date()))}`; };
+  updateQuarter(); if(date)date.onchange=updateQuarter;
+  // ── Preset quick-log chips: autofill category + GST, then pop the numeric keypad ──
+  $$('#reports [data-preset-cat]').forEach(b=>b.onclick=()=>{
+    const cat=b.dataset.presetCat;
+    expDraft.category=cat; expDraft.gstIncluded=b.dataset.presetGst==='1'; expDraft.moreOpen=false;
+    $$('#reports .exp-chip').forEach(c=>c.classList.remove('active')); b.classList.add('active');
+    if(category){category.value=cat; category.style.display='none';}
+    const gc=$('#expenseGst'); if(gc)gc.checked=expDraft.gstIncluded;
+    try{amount.focus({preventScroll:false});}catch(_){amount.focus();} // opens decimal keypad on mobile
+  });
+  const moreChip=$('#expMoreChip');
+  if(moreChip)moreChip.onclick=()=>{ expDraft.moreOpen=!expDraft.moreOpen; if(category)category.style.display=expDraft.moreOpen?'block':'none'; moreChip.classList.toggle('active',expDraft.moreOpen); };
+  if(category)category.onchange=()=>{ expDraft.category=category.value; $$('#reports .exp-chip:not(.more)').forEach(c=>c.classList.toggle('active',c.dataset.presetCat===category.value)); };
+  // ── Recurring toggle + frequency ──
+  const recBtn=$('#expRecurToggle'), freq=$('#expFrequency');
+  if(recBtn)recBtn.onclick=()=>{ expDraft.recurring=!expDraft.recurring; recBtn.classList.toggle('on',expDraft.recurring); if(freq)freq.style.display=expDraft.recurring?'block':'none'; };
+  if(freq)freq.onchange=()=>{expDraft.frequency=freq.value;};
+  // ── Details disclosure ──
+  const detToggle=$('#expDetailsToggle'), detBox=$('#reports .exp-more-fields');
+  if(detToggle)detToggle.onclick=()=>{ expDraft.detailsOpen=!expDraft.detailsOpen; if(detBox)detBox.style.display=expDraft.detailsOpen?'block':'none'; detToggle.textContent=expDraft.detailsOpen?'Hide details':'More details (supplier, %, note)'; };
+  // ── Receipt label reflects attachment ──
+  const att=$('#expenseAttachment'), attLabel=$('#expReceiptLabel');
+  if(att)att.onchange=()=>{ if(attLabel)attLabel.textContent=att.files[0]?'Attached':'Receipt'; };
+  // ── Copy expenses CSV (background) ──
+  const copyBtn=$('#copyExpensesCsv');
+  if(copyBtn)copyBtn.onclick=async()=>{ await new Promise(r=>setTimeout(r,0)); try{ const csv=expensesCsv(); if(navigator.clipboard){await navigator.clipboard.writeText(csv);toast('Expenses CSV copied');} else {downloadText('drive2earn-expenses.csv',csv);toast('Copy unavailable - downloaded');} }catch(e){ toast('Copy failed'); } };
+  // ── Save (Quick Capture) — strict validation + try-catch ──
+  const addBtn=$('#addExpense');
+  if(addBtn)addBtn.onclick=async()=>{
+    try{
+      const cat=expDraft.category || (category&&category.value) || '';
+      const amt=nn(amount.value);
+      if(!amt){ toast('Enter an amount'); try{amount.focus();}catch(_){} return; }
+      if(!cat){ toast('Tap a category chip'); return; }
+      const dval=(date&&date.value)||localDateStr(new Date());
+      const bu=$('#expenseBusinessUse'); const businessUse=bu?(nn(bu.value)||100):100;
+      const gc=$('#expenseGst'); const gstIncluded=gc?gc.checked:expDraft.gstIncluded;
+      const sup=$('#expenseSupplier'); const note=$('#expenseNote');
+      const file=att&&att.files[0];
+      let attachment=null;
+      try{ if(file){ const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null; } }
+      catch(_){ toast('Could not read receipt'); }
+      state.expenses.push({id:uid(),date:dval,amount:amt,category:cat,supplier:sup?sup.value.trim():'',businessUse,gstIncluded,recurring:expDraft.recurring,frequency:expDraft.recurring?expDraft.frequency:null,note:note?note.value.trim():'',attachment,quarter:basQuarter(dval),savedAt:new Date().toISOString()});
+      save(KEYS.expenses,state.expenses);
+      toast(expDraft.recurring?'Recurring expense saved':'Expense logged');
+      // reset transient draft amount/recurring but keep details-open preference
+      expDraft.recurring=false;
+      renderReports();
+    }catch(err){ toast('Could not save expense - try again'); }
+  };
+  $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){const rl=exp.recurring?' (recurring \u2013 removes all future occurrences)':''; confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?${rl}`,()=>{try{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports();}catch(_){toast('Delete failed');}}); return} const text=`${exp.category}${exp.recurring?' (recurring '+(exp.frequency||'monthly')+')':''}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST input credit: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
+}
+function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
+  try{renderWeekClock();}catch(_){}
+  const cs=$('#creditDaySelect'); if(cs){cs.innerHTML=DAY_NAMES.map((d,i)=>`<option value="${i}">${d}</option>`).join('');cs.value=String(creditDay());}
+}
+$('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
+/* Flexible week cycle: changing it re-snaps the Weekly view to the new cycle's current week
+   and refreshes all weekly summaries + the status badge globally. */
+function applyWeekCycleChange(){
+  const s=weekStart(); const e=new Date(s); e.setDate(s.getDate()+6);
+  state.wkStart=localDateStr(s); state.wkEnd=localDateStr(e); saveWk();
+  try{renderWeekly();}catch(_){}
+}
+if($('#creditDaySelect'))$('#creditDaySelect').onchange=e=>{setLS(KEYS.creditDay,String(parseInt(e.target.value,10)));try{renderWeekStatus();}catch(_){}toast('Credited on '+DAY_NAMES[creditDay()]);};
+
+/* ── Clock-style week-cycle selector ──────────────────────────────────
+   7 days arranged in a circle (Sun at top, clockwise). Two pins:
+   • Start (filled gold knob) — the day the work week begins
+   • End   (outlined knob)    — auto-locked to start+6 (full 7-day window)
+   Dragging Start moves End to start+6; dragging End sets Start to end+1.
+   This makes an invalid/overlapping/broken window impossible by construction. */
+const WC={cx:120,cy:120,ring:84,lab:54,dot:4.5};
+const DAY2=['Su','Mo','Tu','We','Th','Fr','Sa'];
+function wcAngle(i){return -90 + i*(360/7);}
+function wcPolar(r,deg){const a=deg*Math.PI/180;return [WC.cx+r*Math.cos(a),WC.cy+r*Math.sin(a)];}
+function wcArcPath(sDeg,eDeg){const [x1,y1]=wcPolar(WC.ring,sDeg);const [x2,y2]=wcPolar(WC.ring,eDeg);return `M ${x1.toFixed(2)} ${y1.toFixed(2)} A ${WC.ring} ${WC.ring} 0 1 1 ${x2.toFixed(2)} ${y2.toFixed(2)}`;}
+function renderWeekClock(){
+  const host=document.getElementById('weekClock'); if(!host)return;
+  if(document.getElementById('weekClockSvg')){updateWeekClock();return;}
+  let nodes='';
+  for(let i=0;i<7;i++){
+    const [lx,ly]=wcPolar(WC.lab,wcAngle(i)), [dx,dy]=wcPolar(WC.ring,wcAngle(i));
+    nodes+=`<circle class="wc-dot-mark" cx="${dx.toFixed(2)}" cy="${dy.toFixed(2)}" r="${WC.dot}" data-day="${i}"></circle>`;
+    nodes+=`<text class="wc-label" x="${lx.toFixed(2)}" y="${ly.toFixed(2)}" data-day="${i}">${DAY2[i]}</text>`;
+  }
+  host.innerHTML=`<svg id="weekClockSvg" viewBox="0 0 240 240" role="group" aria-label="Week cycle selector clock">
+    <defs><linearGradient id="wcg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--gold3)"/><stop offset="1" stop-color="var(--gold2)"/></linearGradient></defs>
+    <circle class="wc-track" cx="120" cy="120" r="84"></circle>
+    <path id="wcArc" class="wc-arc" d=""></path>
+    ${nodes}
+    <text id="wcCenter" class="wc-center" x="120" y="114"></text>
+    <text id="wcCenterSub" class="wc-center-sub" x="120" y="132">tap or drag</text>
+    <circle id="wcEndC" class="wc-pin wc-pin-end" r="15" data-pin="end"></circle>
+    <text id="wcEndT" class="wc-pin-txt" style="fill:var(--gold3)">E</text>
+    <circle id="wcStartC" class="wc-pin wc-pin-start" r="15" data-pin="start"></circle>
+    <text id="wcStartT" class="wc-pin-txt" style="fill:#150d00">S</text>
+  </svg>`;
+  bindWeekClock();
+  updateWeekClock();
+}
+function updateWeekClock(){
+  const svg=document.getElementById('weekClockSvg'); if(!svg)return;
+  const s=weekStartDay(), e=weekEndDay();
+  document.getElementById('wcArc').setAttribute('d',wcArcPath(wcAngle(s),wcAngle(e)));
+  const [sx,sy]=wcPolar(WC.ring,wcAngle(s)), [ex,ey]=wcPolar(WC.ring,wcAngle(e));
+  const setPin=(cid,tid,x,y)=>{const c=document.getElementById(cid);c.setAttribute('cx',x.toFixed(2));c.setAttribute('cy',y.toFixed(2));const t=document.getElementById(tid);t.setAttribute('x',x.toFixed(2));t.setAttribute('y',y.toFixed(2));};
+  setPin('wcStartC','wcStartT',sx,sy); setPin('wcEndC','wcEndT',ex,ey);
+  svg.querySelectorAll('.wc-dot-mark,.wc-label').forEach(d=>{const i=+d.getAttribute('data-day');d.classList.toggle('startday',i===s);d.classList.toggle('endday',i===e);});
+  document.getElementById('wcCenter').textContent=`${DAY2[s]} → ${DAY2[e]}`;
+  const hint=document.getElementById('weekCycleHint'); if(hint)hint.textContent=weekCycleLabel();
+}
+function setWeekStartDayValue(day){ day=((day%7)+7)%7; if(day===weekStartDay())return false; setLS(KEYS.weekStartDay,String(day)); applyWeekCycleChange(); updateWeekClock(); return true; }
+function bindWeekClock(){
+  const svg=document.getElementById('weekClockSvg'); if(!svg||svg._bound)return; svg._bound=true;
+  let drag=null;
+  const nearestDay=e=>{ const r=svg.getBoundingClientRect(); if(!r.width)return weekStartDay(); const px=(e.clientX-r.left)*(240/r.width), py=(e.clientY-r.top)*(240/r.height); const a=Math.atan2(py-WC.cy,px-WC.cx)*180/Math.PI; let best=0,bd=1e9; for(let i=0;i<7;i++){const d=Math.abs(((a-wcAngle(i)+540)%360)-180); if(d<bd){bd=d;best=i;}} return best; };
+  const apply=day=>{ if(drag==='end')setWeekStartDayValue((day+1)%7); else setWeekStartDayValue(day); };
+  svg.addEventListener('pointerdown',e=>{ const pin=e.target.getAttribute&&e.target.getAttribute('data-pin'); drag=pin==='end'?'end':'start'; try{svg.setPointerCapture(e.pointerId);}catch(_){} apply(nearestDay(e)); e.preventDefault(); });
+  svg.addEventListener('pointermove',e=>{ if(!drag)return; apply(nearestDay(e)); e.preventDefault(); });
+  const stop=e=>{ if(drag){ drag=null; try{svg.releasePointerCapture(e.pointerId);}catch(_){} toast('Week cycle: '+weekCycleLabel()); } };
+  svg.addEventListener('pointerup',stop); svg.addEventListener('pointercancel',stop);
+}
+$('#darkSwitch').onclick=()=>setTheme('dark'); $('#lightSwitch').onclick=()=>setTheme('light'); $('#themeBtn').onclick=e=>{e.stopPropagation();setTheme((localStorage.getItem(KEYS.theme)||'dark')==='dark'?'light':'dark')};
+if($('#regoSelect'))$('#regoSelect').onchange=e=>{calc.rego=e.target.value;setLS(KEYS.lastRego,calc.rego);renderCalc()};
+if($('#addRego'))$('#addRego').onclick=()=>{const v=($('#newRego').value||'').trim();if(!v){toast('Enter a rego');return}if(state.regos.some(r=>r.toLowerCase()===v.toLowerCase())){toast('Already saved');$('#newRego').value='';return}state.regos.push(v);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(!calc.rego){calc.rego=v;setLS(KEYS.lastRego,calc.rego)}$('#newRego').value='';renderSettings();renderCalc();toast('Rego added')};
+if($('#newRego'))$('#newRego').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();$('#addRego').click()}};
+if($('#regoChips'))$('#regoChips').onclick=e=>{const b=e.target.closest('[data-del-rego]');if(!b)return;const r=b.dataset.delRego;confirmBox('Remove rego',`Remove "${r}" from your saved regos?`,()=>{state.regos=state.regos.filter(x=>x!==r);save(KEYS.regos,state.regos);immediateSync(KEYS.regos);if(calc.rego===r){calc.rego=state.regos[0]||'';setLS(KEYS.lastRego,calc.rego)}renderSettings();renderCalc()})};
+$('#saveQuickShare').onclick=()=>{state.quickShare={name:$('#quickShareName').value.trim(),number:$('#quickShareNumber').value.trim()}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact saved')};
+$('#clearQuickShare').onclick=()=>{state.quickShare={name:'',number:''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share cleared')};
+$('#pickQuickShare').onclick=async()=>{try{if(!navigator.contacts?.select){toast('Contact picker unavailable on this device');return} const contacts=await navigator.contacts.select(['name','tel'],{multiple:false}); const c=contacts?.[0]; if(!c)return; state.quickShare={name:c.name?.[0]||'',number:c.tel?.[0]||''}; save(KEYS.quickShare,state.quickShare); renderSettings(); toast('Quick share contact selected')}catch{toast('Contact picker cancelled')}};
+function renderProfile(){ $('#driverName').value=state.profile.name||''; $('#driverEmail').value=state.profile.email||''; $('#firebaseConfig').value=localStorage.getItem(KEYS.fb)||''; $('#changelog').innerHTML=CHANGELOG.map(c=>`v${c.version} | ${c.date}<br>${c.changes.map(x=>' - '+x).join('<br>')}`).join('<br><br>'); $('#greeting').textContent=`Hey, ${state.profile.name||'Driver'}`; $('#avatar').textContent=(state.profile.name||'D2').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(); setSyncStatus(syncOn&&userId?'live':'local');}
+$('#saveProfile').onclick=()=>{state.profile={name:$('#driverName').value.trim()||'Driver',email:$('#driverEmail').value.trim()};save(KEYS.profile,state.profile);renderProfile();toast('Profile saved')};
+$('#exportData').onclick=()=>{const dump={};Object.values(KEYS).forEach(k=>{const v=localStorage.getItem(k);if(v!==null)dump[k]=v});downloadText(`drive2earn-backup-${localDateStr(new Date())}.json`,JSON.stringify({app:'drive2earn',version:APP_VERSION,exported:new Date().toISOString(),data:dump},null,2),'application/json');toast('Backup exported')};
+if($('#importHistoryBtn'))$('#importHistoryBtn').onclick=()=>importHistoricalData();
+$('#importData').onclick=()=>$('#importFile').click();
+$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const text=await f.text();const obj=JSON.parse(text);const data=obj&&obj.data?obj.data:obj;if(!data||typeof data!=='object')throw 0;confirmBox('Import backup','Replace all current data with this backup? This cannot be undone.',()=>{Object.entries(data).forEach(([k,v])=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}});toast('Backup imported - reloading');setTimeout(()=>location.reload(),600)})}catch{toast('Invalid backup file')}finally{e.target.value=''}};
+async function saveReceiptFile(file,shiftReceipt,date=localDateStr(new Date())){try{const data=await prepMedia(file); if(!data)return; const rec={id:uid(),fileName:file.name,fileData:data,fileType:file.type,savedAt:new Date().toISOString(),shiftReceipt}; state.receipts[date]=state.receipts[date]||[]; state.receipts[date].push(rec); save(KEYS.receipts,state.receipts); toast('Receipt saved to Docs')}catch{toast('Could not save receipt')}}
+function renderReceipts(){const all=Object.entries(state.receipts).flatMap(([date,arr])=>arr.map(r=>({...r,date}))).filter(r=>state.receiptFilter==='all'||(state.receiptFilter==='shift'?r.shiftReceipt:!r.shiftReceipt)); $('#receiptGrid').innerHTML=all.map(r=>`<button class="receipt" data-receipt="${r.id}">${r.fileType?.startsWith('image')?`<img src="${r.fileData}" alt="">`:`<span>PDF<br>${esc(r.fileName)}</span>`}</button>`).join('')||'<p class="muted">No receipts yet.</p>'; $$('#receiptGrid [data-receipt]').forEach(b=>b.onclick=()=>{const r=all.find(x=>x.id===b.dataset.receipt); confirmBox(r.fileName,`${fmtDate(r.date)} | ${r.shiftReceipt?'Shift receipt':'Manual receipt'} - delete this receipt?`,()=>{state.receipts[r.date]=(state.receipts[r.date]||[]).filter(x=>x.id!==r.id); if(!state.receipts[r.date].length)delete state.receipts[r.date]; save(KEYS.receipts,state.receipts); renderReceipts(); renderSettings()})})}
+$('#openReceipts').onclick=()=>show('receipts'); $$('[data-receipt-filter]').forEach(b=>b.onclick=()=>{$$('[data-receipt-filter]').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.receiptFilter=b.dataset.receiptFilter;renderReceipts()}); $('#manualReceiptBtn').onclick=()=>$('#manualReceipt').click(); $('#manualReceipt').onchange=e=>e.target.files[0]&&saveReceiptFile(e.target.files[0],false).then(renderReceipts);
+$('#signInBtn').onclick=()=>connectAndSignIn(false);
+$('#createAccountBtn').onclick=()=>connectAndSignIn(true);
+$('#signOutBtn').onclick=signOutSync;
+$('#disconnectFirebase').onclick=disconnectFirebase;
+
+function weather(){const cached=load('d2e_weather_cache',null); if(cached&&Date.now()-cached.t<900000){applyWeather(cached);return} if(!navigator.geolocation){applyWeather({temp:'--',desc:'Location unavailable',suburb:'Melbourne'});return} navigator.geolocation.getCurrentPosition(async pos=>{try{const {latitude,longitude}=pos.coords; const w=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m`).then(r=>r.json()); let suburb='Melbourne'; try{const g=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`).then(r=>r.json()); suburb=g.address.suburb||g.address.city||g.address.town||suburb}catch{} const data={t:Date.now(),temp:Math.round(w.current.temperature_2m)+'C',desc:'Current conditions',suburb,humidity:w.current.relative_humidity_2m+'%',wind:Math.round(w.current.wind_speed_10m)+' km/h'}; save('d2e_weather_cache',data); applyWeather(data)}catch{applyWeather({temp:'--',desc:'Weather unavailable',suburb:'Melbourne'})}},()=>applyWeather({temp:'--',desc:'Location blocked',suburb:'Melbourne'}),{maximumAge:900000,timeout:5000})}
+function applyWeather(d){$('#temp').textContent=d.temp||'--';$('#weatherDesc').textContent=d.desc||'Weather';$('#suburb').textContent=d.suburb||'Melbourne';$('#humidity').textContent=d.humidity||'--';$('#wind').textContent=d.wind||'--'}
+$('#islandToggle').onclick=e=>{if(e.target.closest('#themeBtn'))return;$('#island').classList.toggle('open')}; $('#timezone').value=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; $('#timezone').onchange=e=>{setLS(KEYS.tz,e.target.value);tick()};
+function tick(){const tz=localStorage.getItem(KEYS.tz)||'Australia/Melbourne'; const now=new Date(); try{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',timeZone:tz}); $('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short',timeZone:tz}); $('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit',timeZone:tz})}catch{$('#todayLabel').textContent=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long'});$('#miniDate').textContent=now.toLocaleDateString('en-AU',{day:'2-digit',month:'short'});$('#clock').textContent=now.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'})}}
+setActiveDate(calc.date===localDateStr(new Date())?'todayBtn':'pickBtn');
+(function initRanges(){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);const wk=load('d2e_wk_range',null);state.wkStart=(wk&&wk.s)||localDateStr(s);state.wkEnd=(wk&&wk.e)||localDateStr(e);const rp=load('d2e_rep_range',null);const re=new Date();const rs=new Date();rs.setDate(re.getDate()-29);state.repStart=(rp&&rp.s)||localDateStr(rs);state.repEnd=(rp&&rp.e)||localDateStr(re);state.repAllTime=!!(rp&&rp.all);})();
+renderProfile(); renderRows(); bindCalc(); renderCalc(); renderSettings(); weather(); tick(); setInterval(tick,1000);
+</script>
+</body>
+</html>
