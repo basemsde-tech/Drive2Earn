@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.7 | build 2026-06-07 | single-file PWA -->
+<!-- Drive2Earn v3.8 | build 2026-06-07 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.7</title>
+  <title>Drive2Earn v3.8</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,12 +15,12 @@
   <style>
     :root {
       --bg:#080808; --bg2:#111111; --bg3:#191919; --border:#242424; --text:#f5f0e8; --muted:#a89878;
-      --gold:#d4a017; --gold2:#b8860b; --gold3:#f0c040; --red:#e05252; --green:#32d583; --purple:#a78bfa;
+      --gold:#d4a017; --gold2:#b8860b; --gold3:#f0c040; --red:#e05252; --green:#32d583; --purple:#a78bfa; --slate:#8fb0f0;
       --shadow:0 22px 70px rgba(0,0,0,.38); --radius:8px;
     }
     [data-theme="light"] {
       --bg:#f5f0e8; --bg2:#ffffff; --bg3:#ede8da; --border:#d8d0b8; --text:#180e00; --muted:#6f624a;
-      --gold:#b8860b; --gold2:#936800; --gold3:#d4a017; --red:#c04040; --green:#087f5b; --purple:#6d28d9;
+      --gold:#b8860b; --gold2:#936800; --gold3:#d4a017; --red:#c04040; --green:#087f5b; --purple:#6d28d9; --slate:#3f5bb5;
       --shadow:0 18px 55px rgba(60,38,0,.16);
     }
     *{box-sizing:border-box}
@@ -235,6 +235,7 @@
     .wk-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
     .wk-badge.current{background:rgba(212,160,23,.15);color:var(--gold3);border:1px solid rgba(212,160,23,.4)}
     .wk-badge.credited{background:rgba(50,213,131,.13);color:var(--green);border:1px solid rgba(50,213,131,.4)}
+    .wk-badge.pending{background:rgba(125,162,255,.12);color:var(--slate);border:1px solid rgba(125,162,255,.42)}
     /* ── Redesigned settings groups ── */
     .set-group{margin-bottom:14px}
     .set-group-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:800;margin:0 0 8px 4px}
@@ -352,7 +353,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.7</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.8</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -393,7 +394,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.7 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.8 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -448,8 +449,9 @@
 </div>
 
 <script type="module">
-const APP_VERSION='3.7', APP_BUILD='2026-06-07';
+const APP_VERSION='3.8', APP_BUILD='2026-06-07';
 const CHANGELOG=[
+  {version:'3.8',date:'07 Jun 2026',changes:['Weekly status bar gains a 3rd state: Pending (slate-blue badge) for weeks viewed ahead of the live cycle','Joins Current (amber) and Credited (green); the live week boundary is derived from your 2-pin clock cycle','Status recalculates instantly when navigating weeks forward/back, with no UI lag']},
   {version:'3.7',date:'07 Jun 2026',changes:['Share End of Shift now opens a dual-action bottom sheet: Add to Weekly & Share (primary) or Just Share (neutral)','Add to Weekly logs the shift to the database first then opens WhatsApp in one flow; Just Share skips logging and shares instantly','Native share is held until you choose; tapping outside or swiping down cancels without clearing receipt or shift details','Both paths are guarded \u2013 if the weekly save fails it alerts and still shares rather than breaking the sequence']},
   {version:'3.6',date:'07 Jun 2026',changes:['Stability release: hardened all state loading so a corrupted or legacy storage row (e.g. entries saved as a non-array) can no longer freeze the UI','Inbound sync values are now type-coerced before use, preventing a bad remote payload from breaking buttons or tabs','Removed dead CSS remnants from earlier Reports layouts; full nav, validation, clock and share flows re-verified end-to-end']},
   {version:'3.5',date:'02 Jun 2026',changes:['Receipts audit now only applies to shifts logged in-app (which can carry a receipt) - imported, backdated and override entries are exempt','Old historical receipts are no longer required, so the import no longer reads as receipts outstanding']},
@@ -1227,6 +1229,10 @@ function weekStatus(){
   const [a,b]=wkRange();
   const lo=a<=b?a:b, hi=a<=b?b:a;
   const today=new Date(); today.setHours(0,0,0,0);
+  // The live operational week start is derived from the 2-pin clock cycle (weekStart()).
+  // Any viewed week that begins after the live week's start sits entirely in the future.
+  const liveStart=localDateStr(weekStart());
+  if(lo>liveStart) return 'pending';
   // Credited once the calendar reaches the configured pay/milestone day that falls
   // immediately after this week's end. We advance from the week-end date to the first
   // occurrence of the credit weekday strictly after it (e.g. Wed end + next Friday).
@@ -1239,7 +1245,7 @@ function renderWeekStatus(){
   const badge=$('#wkBadge'); if(!badge)return;
   const st=weekStatus();
   badge.className='wk-badge '+st;
-  badge.textContent=st==='credited'?'Credited':'Current';
+  badge.textContent=st==='credited'?'Credited':st==='pending'?'Pending':'Current';
 }
 function applyWkStatusVisibility(){
   const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';
