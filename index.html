@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.6 | build 2026-06-07 | single-file PWA -->
+<!-- Drive2Earn v3.7 | build 2026-06-07 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.6</title>
+  <title>Drive2Earn v3.7</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -110,6 +110,18 @@
     .view-btn{height:34px;border-radius:8px;background:rgba(212,160,23,.16);border:1px solid rgba(212,160,23,.35);color:var(--gold3);font-size:12px;font-weight:900}
     .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#151515;color:#fff;border:1px solid #333;border-radius:999px;padding:10px 14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;place-items:center;padding:20px}.modal.show{display:grid}.modal-card{width:min(100%,390px);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
+    /* ── Dual-action share sheet ── */
+    .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
+    .sheet-overlay.show{opacity:1;pointer-events:auto}
+    .sheet-card{position:absolute;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,430px);background:var(--bg2);border:1px solid var(--border);border-bottom:0;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px rgba(0,0,0,.45);transition:transform .32s cubic-bezier(.32,.72,0,1);touch-action:none;will-change:transform}
+    .sheet-overlay.show .sheet-card{transform:translate(-50%,0)}
+    .sheet-grip{width:42px;height:5px;border-radius:999px;background:var(--border);margin:6px auto 12px}
+    .sheet-title{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:800;text-align:center}
+    .sheet-sub{color:var(--muted);font-size:12.5px;text-align:center;margin:4px 12px 16px;line-height:1.45}
+    .sheet-btn{width:100%;border-radius:14px;padding:15px;font-weight:800;font-size:15px;margin-bottom:9px;transition:transform .1s}
+    .sheet-btn:active{transform:scale(.98)}
+    .sheet-btn.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    .sheet-btn.secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
     .modal-card .preview-message{white-space:pre-wrap;font-family:"Geist Mono",monospace;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);line-height:1.55}
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
@@ -340,7 +352,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.6</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.7</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -381,7 +393,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.6 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.7 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -425,10 +437,20 @@
 
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
+<div class="sheet-overlay" id="shareSheet">
+  <div class="sheet-card" id="shareSheetCard" role="dialog" aria-modal="true" aria-label="Share shift">
+    <div class="sheet-grip" aria-hidden="true"></div>
+    <div class="sheet-title">Share shift</div>
+    <div class="sheet-sub">Log this shift to your weekly report first, or just share it now.</div>
+    <button class="sheet-btn primary" id="sheetAdd">Add to Weekly &amp; Share</button>
+    <button class="sheet-btn secondary" id="sheetSkip">Just Share</button>
+  </div>
+</div>
 
 <script type="module">
-const APP_VERSION='3.6', APP_BUILD='2026-06-07';
+const APP_VERSION='3.7', APP_BUILD='2026-06-07';
 const CHANGELOG=[
+  {version:'3.7',date:'07 Jun 2026',changes:['Share End of Shift now opens a dual-action bottom sheet: Add to Weekly & Share (primary) or Just Share (neutral)','Add to Weekly logs the shift to the database first then opens WhatsApp in one flow; Just Share skips logging and shares instantly','Native share is held until you choose; tapping outside or swiping down cancels without clearing receipt or shift details','Both paths are guarded \u2013 if the weekly save fails it alerts and still shares rather than breaking the sequence']},
   {version:'3.6',date:'07 Jun 2026',changes:['Stability release: hardened all state loading so a corrupted or legacy storage row (e.g. entries saved as a non-array) can no longer freeze the UI','Inbound sync values are now type-coerced before use, preventing a bad remote payload from breaking buttons or tabs','Removed dead CSS remnants from earlier Reports layouts; full nav, validation, clock and share flows re-verified end-to-end']},
   {version:'3.5',date:'02 Jun 2026',changes:['Receipts audit now only applies to shifts logged in-app (which can carry a receipt) - imported, backdated and override entries are exempt','Old historical receipts are no longer required, so the import no longer reads as receipts outstanding']},
   {version:'3.4',date:'02 Jun 2026',changes:['Historical import / backdating: one-tap upsert of your earlier weekly sheets (Sep 2025 \u2013 Apr 2026)','Non-destructive: only missing days are inserted and changed amounts amended; nothing is ever wiped or reset','Every row passes an isolated sanitation filter \u2013 corrupted dates/amounts are rejected individually, the rest still import','Weekly totals recalculate through a pure, isolated utility with no effect on the active week view or core state']},
@@ -1027,7 +1049,21 @@ async function saveShift(){
   }catch(e){ toast('Could not save shift - try again'); return false; }
 }
 async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }
-async function doShareShift(addToWeekly){ try{ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }catch(e){ toast('Share failed - try again'); } }
+/* Dual-action share. addToWeekly=true logs the shift first (DB save) then shares;
+   false skips logging and shares directly. Both paths are guarded so a save failure
+   alerts the user without breaking the subsequent share. */
+async function doShareShift(addToWeekly){
+  closeShareSheet();
+  try{
+    if(addToWeekly){
+      let ok=false;
+      try{ ok=await saveShift(); }
+      catch(e){ ok=false; }
+      if(!ok) toast('Could not log to weekly \u2013 sharing anyway');
+    }
+    await performShare();
+  }catch(e){ toast('Share failed - try again'); }
+}
 /* Req 5: receipt photo + hail trips are strictly mandatory before sharing */
 function shareValidation(){
   const errors=[];
@@ -1055,15 +1091,31 @@ function showShareValidation(v){
   const firstFail=!v.hasReceipt?rc:hc;
   if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
 }
-/* Req 7: Yes = already logged, share immediately. No = pause so they can log it first. */
+/* On valid share, present the dual-action sheet. The native share intent is held
+   until the user explicitly picks Add-to-Weekly or Just-Share. Dismissing (overlay
+   tap / swipe down) cancels safely and never clears the entered shift details. */
 function shareShift(){
   clearShareValidationUI();
   const v=shareValidation();
   if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
-  confirmBox('Weekly report','Have you added this shift to your weekly report?',()=>doShareShift(false),'Yes, share now','No, log it first');
-  // "No, log it first" pauses: jump to the weekly tab to log, no share happens
-  $('#modalCancel').onclick=()=>{ $('#modal').classList.remove('show'); toast('Log it in Weekly, then share'); };
+  openShareSheet();
 }
+function openShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.add('show'); }
+function closeShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.remove('show'); }
+(function bindShareSheet(){
+  const ov=$('#shareSheet'), card=$('#shareSheetCard'); if(!ov||!card)return;
+  // Outside / backdrop tap cancels — no share fired, no data cleared
+  ov.addEventListener('click',e=>{ if(e.target===ov)closeShareSheet(); });
+  const addBtn=$('#sheetAdd'), skipBtn=$('#sheetSkip');
+  if(addBtn)addBtn.onclick=()=>doShareShift(true);   // log to weekly, then share
+  if(skipBtn)skipBtn.onclick=()=>doShareShift(false); // skip logging, share now
+  // Swipe-down to dismiss (buttons keep their own taps)
+  let startY=null, dy=0, drag=false;
+  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.sheet-btn'))return; startY=e.clientY; dy=0; drag=true; card.style.transition='none'; try{card.setPointerCapture(e.pointerId);}catch(_){} });
+  card.addEventListener('pointermove',e=>{ if(!drag)return; dy=Math.max(0,e.clientY-startY); card.style.transform=`translate(-50%,${dy}px)`; });
+  const end=e=>{ if(!drag)return; drag=false; card.style.transition=''; card.style.transform=''; if(dy>90)closeShareSheet(); try{card.releasePointerCapture(e.pointerId);}catch(_){} };
+  card.addEventListener('pointerup',end); card.addEventListener('pointercancel',end);
+})();
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None';if(e.target.files[0]){$('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}};
 
