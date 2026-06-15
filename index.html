@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.11 | build 2026-06-15 | single-file PWA -->
+<!-- Drive2Earn v3.12 | build 2026-06-15 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.11</title>
+  <title>Drive2Earn v3.12</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -122,6 +122,18 @@
     .sheet-btn:active{transform:scale(.98)}
     .sheet-btn.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
     .sheet-btn.secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+    .sheet-btn:disabled{opacity:.38;pointer-events:none}
+    /* ── Unified sheet rego section ── */
+    .us-rego-section{margin-bottom:4px}
+    .us-rego-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:0 0 10px;text-align:center}
+    .us-rego-default{display:flex;flex-direction:column;align-items:center;gap:7px}
+    .us-rego-default-btn{width:100%;border-radius:13px;padding:13px;font-weight:800;font-size:15px;font-family:"Bricolage Grotesque",sans-serif;letter-spacing:.03em;background:var(--bg3);border:2px solid var(--gold3);color:var(--gold3);transition:.15s}
+    .us-rego-default-btn.confirmed{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .us-change-link{font-size:12px;font-weight:700;color:var(--gold3);cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:2px 0}
+    .us-rego-picker-row{margin-top:4px}
+    .us-rego-select{width:100%;padding:12px 14px;border-radius:13px;border:2px solid var(--border);background:var(--bg3);color:var(--text);font-size:15px;font-weight:700}
+    .us-rego-select.error{border-color:var(--red)}
+    .us-divider{height:1px;background:var(--border);margin:14px 0 10px}
     /* ── Rego gate sheet ── */
     .rg-hint{font-size:11.5px;color:var(--muted);text-align:center;margin:0 0 10px}
     .rg-sub{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 8px 12px;line-height:1.45}
@@ -364,7 +376,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.11</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.12</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -407,7 +419,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.11 · build 2026-06-15</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.12 · build 2026-06-15</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -452,12 +464,28 @@
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 <div class="sheet-overlay" id="shareSheet">
-  <div class="sheet-card" id="shareSheetCard" role="dialog" aria-modal="true" aria-label="Share shift">
+  <div class="sheet-card" id="shareSheetCard" role="dialog" aria-modal="true" aria-label="End of shift actions">
     <div class="sheet-grip" aria-hidden="true"></div>
-    <div class="sheet-title">Share shift</div>
-    <div class="sheet-sub">Log this shift to your weekly report first, or just share it now.</div>
-    <button class="sheet-btn primary" id="sheetAdd">Add to Weekly &amp; Share</button>
-    <button class="sheet-btn secondary" id="sheetSkip">Just Share</button>
+    <div class="sheet-title">End of Shift</div>
+    <!-- ── Rego verification section ── -->
+    <div class="us-rego-section">
+      <p class="us-rego-label">Confirm vehicle for this shift calculation:</p>
+      <!-- Scenario A: default set — shows one-tap confirm row -->
+      <div id="usRegoDefault" class="us-rego-default" style="display:none">
+        <button class="us-rego-default-btn" id="usRegoDefaultBtn"></button>
+        <a class="us-change-link" id="usRegoChangeLink" role="button" tabindex="0">Change vehicle for this shift ›</a>
+      </div>
+      <!-- Scenario B / expanded picker: dropdown -->
+      <div id="usRegoPickerRow" class="us-rego-picker-row" style="display:none">
+        <select id="usRegoSelect" class="us-rego-select" aria-label="Select vehicle">
+          <option value="">— Select vehicle —</option>
+        </select>
+      </div>
+    </div>
+    <!-- ── Action buttons (locked until rego confirmed) ── -->
+    <div class="us-divider"></div>
+    <button class="sheet-btn primary" id="sheetAdd" disabled>Add to Weekly &amp; Share</button>
+    <button class="sheet-btn secondary" id="sheetSkip" disabled>Just Share</button>
   </div>
 </div>
 <div class="sheet-overlay" id="regoGate">
@@ -475,8 +503,9 @@
 </div>
 
 <script type="module">
-const APP_VERSION='3.11', APP_BUILD='2026-06-15';
+const APP_VERSION='3.12', APP_BUILD='2026-06-15';
 const CHANGELOG=[
+  {version:'3.12',date:'15 Jun 2026',changes:['End-of-Shift sheet now contains the rego verification inline — one unified popup instead of two sequential sheets','Scenario A (default vehicle set): one-tap gold confirm button pre-confirmed; actions unlock immediately; Change Vehicle link expands dropdown','Scenario B (no default): dropdown starts blank with error border; action buttons stay locked until a plate is selected','Rego is stamped to the shift before weekly save and share execute; no calc data cleared on cancel or dismiss']},
   {version:'3.11',date:'15 Jun 2026',changes:['Settings: new Default Shift Vehicle dropdown under Vehicle Regos — single-van drivers set it once and skip manual selection each shift','Rego gate Scenario A (default set): gate opens pre-confirmed with one-tap primary button; Change vehicle link expands the full grid for loaner or backup van shifts','Rego gate Scenario B (no default): grid shown immediately, confirm locked until driver explicitly taps a plate','Default rego syncs across devices via the settings sync pipeline']},
   {version:'3.10',date:'15 Jun 2026',changes:['Rego Gatekeeper: all save and share paths now intercept at a bottom sheet requiring explicit vehicle confirmation before any shift data is committed','Rego button grid pre-highlights the current vehicle but the Confirm button stays disabled until the driver physically taps a plate','Changing rego at the gate instantly rebinds the entire shift dataset to the new plate before saving','Cancel or swipe-down dismisses cleanly without altering any entered trip data, cash totals or receipts']},
   {version:'3.9',date:'15 Jun 2026',changes:['Settings: new Driver Share % field (default 55.00, range 0–100, decimals supported)','Formula refactored from hardcoded 0.55 to dynamic driverSharePct() so every shift auto-reflects the saved rate','Shift calculator and formula display update instantly when the % is changed in Settings','Synced across devices via the existing settings sync pipeline; finalized historical entries are not altered']},
@@ -1195,26 +1224,84 @@ function showShareValidation(v){
   const firstFail=!v.hasReceipt?rc:hc;
   if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
 }
-/* On valid share, present the rego gate first. Once rego is confirmed,
-   the dual-action share sheet opens. Both cancels are safe — no data cleared. */
+/* On valid share: open the unified End-of-Shift sheet directly.
+   The rego section is rendered fresh each open (Scenario A/B).
+   Action buttons stay disabled until rego is confirmed.
+   No calc data is ever cleared by this layer. */
 function shareShift(){
   clearShareValidationUI();
   const v=shareValidation();
   if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
-  openRegoGate(()=>openShareSheet());
+  openShareSheet();
 }
-function openShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.add('show'); }
+function openShareSheet(){
+  const ov=$('#shareSheet'); if(!ov)return;
+  // ── Render rego section fresh every open ──
+  const defaultRego=localStorage.getItem(KEYS.defaultRego)||'';
+  const list=state.regos.length?state.regos:calc.rego?[calc.rego]:[];
+  const hasDefault=!!(defaultRego&&list.includes(defaultRego));
+  const addBtn=$('#sheetAdd'), skipBtn=$('#sheetSkip');
+  const defRow=$('#usRegoDefault'), defBtn=$('#usRegoDefaultBtn');
+  const changeLink=$('#usRegoChangeLink');
+  const pickerRow=$('#usRegoPickerRow'), sel=$('#usRegoSelect');
+  let confirmedRego=hasDefault?defaultRego:'';
+  const unlock=()=>{ if(addBtn)addBtn.disabled=false; if(skipBtn)skipBtn.disabled=false; };
+  const lock=()=>{   if(addBtn)addBtn.disabled=true;  if(skipBtn)skipBtn.disabled=true;  };
+  lock();
+  // populate dropdown options
+  if(sel){
+    sel.innerHTML=`<option value="">— Select vehicle —</option>`+
+      list.map(r=>`<option value="${esc(r)}"${r===confirmedRego?' selected':''}>${esc(r)}</option>`).join('');
+    sel.className='us-rego-select'+(hasDefault?'':' error');
+    sel.onchange=()=>{
+      confirmedRego=sel.value;
+      sel.classList.toggle('error',!confirmedRego);
+      if(confirmedRego) unlock(); else lock();
+    };
+  }
+  if(hasDefault){
+    // Scenario A: one-tap default confirm row
+    if(defRow)  defRow.style.display='flex';
+    if(pickerRow) pickerRow.style.display='none';
+    if(defBtn){
+      defBtn.textContent=`✓  ${defaultRego}`;
+      defBtn.className='us-rego-default-btn confirmed';
+      defBtn.onclick=()=>{ confirmedRego=defaultRego; unlock(); };
+    }
+    if(changeLink){
+      changeLink.onclick=()=>{
+        if(defRow) defRow.style.display='none';
+        if(pickerRow) pickerRow.style.display='block';
+        confirmedRego=''; lock();
+        if(sel){ sel.value=''; sel.className='us-rego-select error'; }
+      };
+    }
+    // pre-confirm the default immediately so single-tap "Add"/"Just Share" works
+    unlock();
+  } else {
+    // Scenario B: blank picker, must select
+    if(defRow)  defRow.style.display='none';
+    if(pickerRow) pickerRow.style.display='block';
+  }
+  // ── Action buttons ──
+  if(addBtn) addBtn.onclick=()=>{
+    if(!confirmedRego){toast('Select a vehicle first');return;}
+    calc.rego=confirmedRego; setLS(KEYS.lastRego,calc.rego); renderCalc();
+    closeShareSheet(); doShareShift(true);
+  };
+  if(skipBtn) skipBtn.onclick=()=>{
+    if(!confirmedRego){toast('Select a vehicle first');return;}
+    calc.rego=confirmedRego; setLS(KEYS.lastRego,calc.rego); renderCalc();
+    closeShareSheet(); doShareShift(false);
+  };
+  ov.classList.add('show');
+}
 function closeShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.remove('show'); }
 (function bindShareSheet(){
   const ov=$('#shareSheet'), card=$('#shareSheetCard'); if(!ov||!card)return;
-  // Outside / backdrop tap cancels — no share fired, no data cleared
   ov.addEventListener('click',e=>{ if(e.target===ov)closeShareSheet(); });
-  const addBtn=$('#sheetAdd'), skipBtn=$('#sheetSkip');
-  if(addBtn)addBtn.onclick=()=>doShareShift(true);   // log to weekly, then share
-  if(skipBtn)skipBtn.onclick=()=>doShareShift(false); // skip logging, share now
-  // Swipe-down to dismiss (buttons keep their own taps)
   let startY=null, dy=0, drag=false;
-  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.sheet-btn'))return; startY=e.clientY; dy=0; drag=true; card.style.transition='none'; try{card.setPointerCapture(e.pointerId);}catch(_){} });
+  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.sheet-btn,.us-rego-default-btn,.us-change-link'))return; startY=e.clientY; dy=0; drag=true; card.style.transition='none'; try{card.setPointerCapture(e.pointerId);}catch(_){} });
   card.addEventListener('pointermove',e=>{ if(!drag)return; dy=Math.max(0,e.clientY-startY); card.style.transform=`translate(-50%,${dy}px)`; });
   const end=e=>{ if(!drag)return; drag=false; card.style.transition=''; card.style.transform=''; if(dy>90)closeShareSheet(); try{card.releasePointerCapture(e.pointerId);}catch(_){} };
   card.addEventListener('pointerup',end); card.addEventListener('pointercancel',end);
