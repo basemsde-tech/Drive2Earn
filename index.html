@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.8 | build 2026-06-07 | single-file PWA -->
+<!-- Drive2Earn v3.11 | build 2026-06-15 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.8</title>
+  <title>Drive2Earn v3.11</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -122,6 +122,17 @@
     .sheet-btn:active{transform:scale(.98)}
     .sheet-btn.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
     .sheet-btn.secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+    /* ── Rego gate sheet ── */
+    .rg-hint{font-size:11.5px;color:var(--muted);text-align:center;margin:0 0 10px}
+    .rg-sub{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 8px 12px;line-height:1.45}
+    .rg-change-link{display:none;text-align:center;color:var(--gold3);font-size:12.5px;font-weight:700;cursor:pointer;padding:2px 0 12px;text-decoration:underline;text-underline-offset:2px}
+    .rg-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;min-height:44px;max-height:160px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+    .rg-btn{flex:0 0 auto;background:var(--bg3);border:2px solid var(--border);color:var(--text);border-radius:13px;padding:11px 16px;font-size:15px;font-weight:800;font-family:"Bricolage Grotesque",sans-serif;letter-spacing:.04em;transition:transform .1s,background .15s,border-color .15s;min-width:88px;min-height:48px}
+    .rg-btn:active{transform:scale(.96)}
+    .rg-btn.sel{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent;box-shadow:0 0 0 3px rgba(212,160,23,.25)}
+    .rg-action{display:flex;flex-direction:column;gap:8px}
+    /* Gate card: compact, never taller than 70vh */
+    #regoGateCard{padding:8px 14px calc(14px + env(safe-area-inset-bottom));max-height:70vh;overflow-y:auto}
     .modal-card .preview-message{white-space:pre-wrap;font-family:"Geist Mono",monospace;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);line-height:1.55}
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
@@ -353,7 +364,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.8</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.11</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -370,11 +381,13 @@
       <p class="set-group-title">Shift Defaults</p>
       <div class="set-card">
         <div class="set-item"><span class="si-label"><b>Hail Trip Levy</b><p>Per trip ($)</p></span><span class="si-control"><input id="levyRate" type="number" min="0" step="0.01"></span></div>
+        <div class="set-item"><span class="si-label"><b>Driver Share</b><p>% of gross earnings (default 55)</p></span><span class="si-control"><input id="driverShareInput" type="number" min="0" max="100" step="0.01" style="width:80px"></span></div>
         <div class="set-item"><span class="si-label"><b>Default Fuel</b><p>New shift forms</p></span><span class="si-control"><select id="defaultFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></span></div>
         <div class="set-item stack"><span class="si-label"><b>Vehicle Regos</b><p>Shown in the shift rego dropdown</p></span>
           <div style="display:grid;grid-template-columns:1fr auto;gap:8px;width:100%"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters" autocomplete="off"><button class="secondary" id="addRego" style="white-space:nowrap">Add</button></div>
           <div id="regoChips" class="rego-chips"></div>
         </div>
+        <div class="set-item"><span class="si-label"><b>Default Shift Vehicle</b><p>Pre-selected in the end-of-shift rego check. Leave blank to always choose manually.</p></span><span class="si-control"><select id="defaultRegoSelect" style="min-width:130px;max-width:165px"><option value="">— None —</option></select></span></div>
       </div>
     </div>
 
@@ -394,7 +407,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.8 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.11 · build 2026-06-15</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -447,10 +460,26 @@
     <button class="sheet-btn secondary" id="sheetSkip">Just Share</button>
   </div>
 </div>
+<div class="sheet-overlay" id="regoGate">
+  <div class="sheet-card" id="regoGateCard" role="dialog" aria-modal="true" aria-label="Confirm vehicle rego">
+    <div class="sheet-grip" aria-hidden="true"></div>
+    <div class="sheet-title">Verify your vehicle</div>
+    <p class="rg-sub" id="regoGateSub">Please verify your vehicle registration for this calculation.</p>
+    <div id="regoGateAltRow" class="rg-list"></div>
+    <a id="regoGateChange" class="rg-change-link" role="button" tabindex="0">Change vehicle for this shift ›</a>
+    <div class="rg-action">
+      <button class="sheet-btn primary" id="regoGateConfirm" disabled>Confirm Vehicle</button>
+      <button class="sheet-btn secondary" id="regoGateCancel">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <script type="module">
-const APP_VERSION='3.8', APP_BUILD='2026-06-07';
+const APP_VERSION='3.11', APP_BUILD='2026-06-15';
 const CHANGELOG=[
+  {version:'3.11',date:'15 Jun 2026',changes:['Settings: new Default Shift Vehicle dropdown under Vehicle Regos — single-van drivers set it once and skip manual selection each shift','Rego gate Scenario A (default set): gate opens pre-confirmed with one-tap primary button; Change vehicle link expands the full grid for loaner or backup van shifts','Rego gate Scenario B (no default): grid shown immediately, confirm locked until driver explicitly taps a plate','Default rego syncs across devices via the settings sync pipeline']},
+  {version:'3.10',date:'15 Jun 2026',changes:['Rego Gatekeeper: all save and share paths now intercept at a bottom sheet requiring explicit vehicle confirmation before any shift data is committed','Rego button grid pre-highlights the current vehicle but the Confirm button stays disabled until the driver physically taps a plate','Changing rego at the gate instantly rebinds the entire shift dataset to the new plate before saving','Cancel or swipe-down dismisses cleanly without altering any entered trip data, cash totals or receipts']},
+  {version:'3.9',date:'15 Jun 2026',changes:['Settings: new Driver Share % field (default 55.00, range 0–100, decimals supported)','Formula refactored from hardcoded 0.55 to dynamic driverSharePct() so every shift auto-reflects the saved rate','Shift calculator and formula display update instantly when the % is changed in Settings','Synced across devices via the existing settings sync pipeline; finalized historical entries are not altered']},
   {version:'3.8',date:'07 Jun 2026',changes:['Weekly status bar gains a 3rd state: Pending (slate-blue badge) for weeks viewed ahead of the live cycle','Joins Current (amber) and Credited (green); the live week boundary is derived from your 2-pin clock cycle','Status recalculates instantly when navigating weeks forward/back, with no UI lag']},
   {version:'3.7',date:'07 Jun 2026',changes:['Share End of Shift now opens a dual-action bottom sheet: Add to Weekly & Share (primary) or Just Share (neutral)','Add to Weekly logs the shift to the database first then opens WhatsApp in one flow; Just Share skips logging and shares instantly','Native share is held until you choose; tapping outside or swiping down cancels without clearing receipt or shift details','Both paths are guarded \u2013 if the weekly save fails it alerts and still shares rather than breaking the sequence']},
   {version:'3.6',date:'07 Jun 2026',changes:['Stability release: hardened all state loading so a corrupted or legacy storage row (e.g. entries saved as a non-array) can no longer freeze the UI','Inbound sync values are now type-coerced before use, preventing a bad remote payload from breaking buttons or tabs','Removed dead CSS remnants from earlier Reports layouts; full nav, validation, clock and share flows re-verified end-to-end']},
@@ -468,7 +497,7 @@ const CHANGELOG=[
   {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
   {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']}
 ];
-const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',levy:'d2e_levy_rate',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1',weekStartDay:'d2e_week_start_day',creditDay:'d2e_credit_day'};
+const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',defaultRego:'d2e_default_rego',levy:'d2e_levy_rate',driverShare:'d2e_driver_share_pct',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1',weekStartDay:'d2e_week_start_day',creditDay:'d2e_credit_day'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=v=>'$'+(Number(v)||0).toFixed(2);
 const n=v=>{const x=Number(v); return isFinite(x)?x:0};
@@ -509,7 +538,7 @@ let userId;
 // =====================================================================
 
 const SYNC_DATA_KEYS=[KEYS.entries,KEYS.weekly,KEYS.fuel,KEYS.trip,KEYS.cash,KEYS.expenses,KEYS.messages,KEYS.snapshots,KEYS.regos,KEYS.quickShare,KEYS.profile];
-const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.fuelDefault,KEYS.lastRego,KEYS.tz,KEYS.weekStartDay,KEYS.creditDay];
+const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.driverShare,KEYS.fuelDefault,KEYS.lastRego,KEYS.defaultRego,KEYS.tz,KEYS.weekStartDay,KEYS.creditDay];
 const SYNC_KEYS=[...SYNC_DATA_KEYS,...SYNC_SETTING_KEYS];
 const KEY_TO_STATE={[KEYS.entries]:'entries',[KEYS.weekly]:'weekly',[KEYS.fuel]:'fuel',[KEYS.trip]:'trip',[KEYS.cash]:'cash',[KEYS.expenses]:'expenses',[KEYS.messages]:'messages',[KEYS.snapshots]:'snapshots',[KEYS.regos]:'regos',[KEYS.quickShare]:'quickShare',[KEYS.profile]:'profile'};
 
@@ -879,8 +908,8 @@ function renderRows(){
   $('#runCount').value=calc.runs||''; $('#fuelAmount').value=calc.fuelAmount||''; $('#fuelType').value=calc.fuelType; $('#hailTrips').value=calc.hailTrips; $('#shiftDate').value=calc.date;
 }
 function totals(){
-  const eos=calc.eos.reduce((a,b)=>a+nn(b),0), cash=calc.cash.reduce((a,b)=>a+nn(b.amount),0), runs=nn(calc.runs)*5, accounts=calc.accounts.reduce((a,b)=>a+nn(b.amount),0), fuel=nn(calc.fuelAmount), gross=eos+cash+runs+accounts, take=gross*.55-cash+fuel, levy=nn(calc.hailTrips)*n(localStorage.getItem(KEYS.levy)||'1.20');
-  return {eos,cash,runs,accounts,fuel,gross,take,levy};
+  const eos=calc.eos.reduce((a,b)=>a+nn(b),0), cash=calc.cash.reduce((a,b)=>a+nn(b.amount),0), runs=nn(calc.runs)*5, accounts=calc.accounts.reduce((a,b)=>a+nn(b.amount),0), fuel=nn(calc.fuelAmount), gross=eos+cash+runs+accounts, pct=driverSharePct(), take=gross*(pct/100)-cash+fuel, levy=nn(calc.hailTrips)*n(localStorage.getItem(KEYS.levy)||'1.20');
+  return {eos,cash,runs,accounts,fuel,gross,take,levy,pct};
 }
 function message(){
   const t=totals();
@@ -979,7 +1008,7 @@ async function prepMedia(file){const isImg=file.type&&file.type.startsWith('imag
 
 function renderCalc(){
   const t=totals(), runsAcc=t.runs+t.accounts, max=Math.max(t.eos+t.cash+runsAcc+t.fuel,1);
-  $('#takeHome').textContent=money(t.take); $('#formula').textContent=`(${t.gross.toFixed(2)} x 0.55) - ${t.cash.toFixed(2)} + ${t.fuel.toFixed(2)} = ${t.take.toFixed(2)}`;
+  $('#takeHome').textContent=money(t.take); $('#formula').textContent=`(${t.gross.toFixed(2)} x ${(t.pct/100).toFixed(2)}) - ${t.cash.toFixed(2)} + ${t.fuel.toFixed(2)} = ${t.take.toFixed(2)}`;
   $('#bar').innerHTML=`<span style="width:${t.eos/max*100}%;background:var(--gold)"></span><span style="width:${t.cash/max*100}%;background:var(--text)"></span><span style="width:${runsAcc/max*100}%;background:var(--gold3)"></span><span style="width:${t.fuel/max*100}%;background:var(--red)"></span>`;
   $('#eosLegend').textContent=money(t.eos); $('#cashLegend').textContent=money(t.cash); $('#runsLegend').textContent=money(runsAcc); $('#fuelLegend').textContent=money(t.fuel);
   $('#eosChip').textContent=money(t.eos); $('#cashChip').textContent=money(t.cash); $('#runsChip').textContent=money(runsAcc); $('#fuelChip').textContent=money(t.fuel); $('#hailChip').textContent=money(t.levy); $('#levyDisplay').value=`Levy ${money(t.levy)}`;
@@ -1031,6 +1060,79 @@ function loadShiftIntoCalc(entry){
   show('shift'); setActiveDate(entry.date===localDateStr(new Date())?'todayBtn':'pickBtn'); renderRows(); renderCalc();
   toast('Loaded into calculator - EOS/runs need re-entry');
 }
+/* ── REGO GATEKEEPER ─────────────────────────────────────────────────
+   Intercepts every path that commits shift data (share→add-to-weekly
+   AND standalone save). Opens a bottom sheet showing the driver's saved
+   regos as a tappable button grid. Rego must be explicitly confirmed
+   before the held action fires. No calc data is touched on cancel.
+   pendingRegoAction holds the callback until the driver confirms.      */
+let pendingRegoAction=null;
+function openRegoGate(onConfirmed){
+  try{
+    pendingRegoAction=onConfirmed;
+    const defaultRego=localStorage.getItem(KEYS.defaultRego)||'';
+    const list=state.regos.length?state.regos:calc.rego?[calc.rego]:[];
+    /* Scenario A: default set → pre-confirm and enable button immediately (one-tap).
+       Scenario B: no default → start blank, button locked until driver taps a plate. */
+    const hasDefault=!!(defaultRego && list.includes(defaultRego));
+    const confirmed={v: hasDefault ? defaultRego : ''};
+    const box=$('#regoGateAltRow'), confirmBtn=$('#regoGateConfirm');
+    const subLine=$('#regoGateSub'), changeLink=$('#regoGateChange'), altRow=$('#regoGateAltRow');
+    if(!box) return onConfirmed();
+    // Sub-text: scenario-aware
+    if(subLine) subLine.textContent = hasDefault
+      ? `Default vehicle set to ${defaultRego}. Tap confirm or switch for this shift.`
+      : 'Select the vehicle driven for this shift to ensure accurate records.';
+    // Rego button grid
+    box.innerHTML = list.length
+      ? list.map(r=>`<button class="rg-btn${r===confirmed.v?' sel':''}" data-rg="${esc(r)}">${esc(r)}</button>`).join('')
+      : `<p class="muted" style="font-size:13px;text-align:center">No regos saved — add one in Settings first.</p>`;
+    // Scenario A: grid row hidden; Scenario B: always shown
+    if(altRow) altRow.style.display = hasDefault ? 'none' : 'flex';    if(changeLink){
+      changeLink.style.display = hasDefault ? 'block' : 'none';
+      changeLink.onclick=()=>{
+        if(altRow) altRow.style.display='flex';
+        changeLink.style.display='none';
+        confirmed.v='';
+        $$('#regoGateAltRow [data-rg]').forEach(x=>x.classList.remove('sel'));
+        if(confirmBtn){ confirmBtn.disabled=true; confirmBtn.textContent='Confirm Vehicle'; }
+      };
+    }
+    // Confirm button initial state
+    if(confirmBtn){
+      confirmBtn.disabled = !hasDefault;
+      confirmBtn.textContent = hasDefault ? `Confirm — ${defaultRego}` : 'Confirm Vehicle';
+    }
+    // Rego tap
+    box.onclick=e=>{
+      const b=e.target.closest('[data-rg]'); if(!b)return;
+      $$('#regoGateAltRow [data-rg]').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); confirmed.v=b.dataset.rg;
+      if(confirmBtn){ confirmBtn.disabled=false; confirmBtn.textContent=`Confirm — ${confirmed.v}`; }
+    };
+    // Confirm action
+    if(confirmBtn) confirmBtn.onclick=()=>{
+      if(!confirmed.v){toast('Select a vehicle first');return;}
+      calc.rego=confirmed.v; setLS(KEYS.lastRego,calc.rego); renderCalc();
+      closeRegoGate();
+      try{ pendingRegoAction && pendingRegoAction(); }catch(e){ toast('Action failed — try again'); }
+      pendingRegoAction=null;
+    };
+    $('#regoGate').classList.add('show');
+  }catch(err){ onConfirmed && onConfirmed(); }  // fail-open: never block the driver
+}
+function closeRegoGate(){ $('#regoGate')?.classList.remove('show'); pendingRegoAction=null; }
+(function bindRegoGate(){
+  const ov=$('#regoGate'), card=$('#regoGateCard'); if(!ov||!card)return;
+  ov.addEventListener('click',e=>{ if(e.target===ov)closeRegoGate(); });
+  if($('#regoGateCancel'))$('#regoGateCancel').onclick=closeRegoGate;
+  let startY=null,dy=0,drag=false;
+  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.rg-btn,.rg-action'))return; startY=e.clientY;dy=0;drag=true;card.style.transition='none';try{card.setPointerCapture(e.pointerId);}catch(_){} });
+  card.addEventListener('pointermove',e=>{ if(!drag)return;dy=Math.max(0,e.clientY-startY);card.style.transform=`translate(-50%,${dy}px)`; });
+  const end=e=>{ if(!drag)return;drag=false;card.style.transition='';card.style.transform='';if(dy>90)closeRegoGate();try{card.releasePointerCapture(e.pointerId);}catch(_){}};
+  card.addEventListener('pointerup',end); card.addEventListener('pointercancel',end);
+})();
+
 async function saveShift(){
   try{
     const t=totals();
@@ -1093,14 +1195,13 @@ function showShareValidation(v){
   const firstFail=!v.hasReceipt?rc:hc;
   if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
 }
-/* On valid share, present the dual-action sheet. The native share intent is held
-   until the user explicitly picks Add-to-Weekly or Just-Share. Dismissing (overlay
-   tap / swipe down) cancels safely and never clears the entered shift details. */
+/* On valid share, present the rego gate first. Once rego is confirmed,
+   the dual-action share sheet opens. Both cancels are safe — no data cleared. */
 function shareShift(){
   clearShareValidationUI();
   const v=shareValidation();
   if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
-  openShareSheet();
+  openRegoGate(()=>openShareSheet());
 }
 function openShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.add('show'); }
 function closeShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.remove('show'); }
@@ -1126,6 +1227,9 @@ const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Sa
 function weekStartDay(){const v=parseInt(localStorage.getItem(KEYS.weekStartDay),10);return (v>=0&&v<=6)?v:4;}
 function creditDay(){const v=parseInt(localStorage.getItem(KEYS.creditDay),10);return (v>=0&&v<=6)?v:5;}
 function weekEndDay(){return (weekStartDay()+6)%7;}
+/* Reads the saved driver share percentage (schema: DECIMAL(5,2), default 55.00).
+   Always returns a finite number in [0,100]; falls back to 55 if unset or corrupt. */
+function driverSharePct(){const v=parseFloat(localStorage.getItem(KEYS.driverShare));return (isFinite(v)&&v>=0&&v<=100)?v:55;}
 function weekCycleLabel(){return `${DAY_NAMES[weekStartDay()]} \u2192 ${DAY_NAMES[weekEndDay()]}`;}
 function weekStart(d=new Date()){const x=new Date(d); const S=weekStartDay(); const diff=((x.getDay()-S)+7)%7; x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
 function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
@@ -1480,11 +1584,29 @@ function bindExpenseReport(){
   };
   $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){const rl=exp.recurring?' (recurring \u2013 removes all future occurrences)':''; confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?${rl}`,()=>{try{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports();}catch(_){toast('Delete failed');}}); return} const text=`${exp.category}${exp.recurring?' (recurring '+(exp.frequency||'monthly')+')':''}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST input credit: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
 }
-function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
+function renderDefaultRegoSelect(){
+  const sel=$('#defaultRegoSelect'); if(!sel)return;
+  const saved=localStorage.getItem(KEYS.defaultRego)||'';
+  sel.innerHTML=`<option value="">— None —</option>`+state.regos.map(r=>`<option value="${esc(r)}"${r===saved?' selected':''}>${esc(r)}</option>`).join('');
+}
+function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#driverShareInput').value=driverSharePct(); $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); renderDefaultRegoSelect(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
   try{renderWeekClock();}catch(_){}
   const cs=$('#creditDaySelect'); if(cs){cs.innerHTML=DAY_NAMES.map((d,i)=>`<option value="${i}">${d}</option>`).join('');cs.value=String(creditDay());}
 }
-$('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
+$('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()};
+if($('#defaultRegoSelect'))$('#defaultRegoSelect').onchange=e=>{
+  const v=e.target.value;
+  if(v) setLS(KEYS.defaultRego,v); else localStorage.removeItem(KEYS.defaultRego);
+  toast(v?`Default vehicle set to ${v}`:'Default vehicle cleared');
+};
+$('#driverShareInput').oninput=e=>{
+  const v=parseFloat(e.target.value);
+  if(!isFinite(v)||v<0||v>100){e.target.setCustomValidity('Enter a value between 0 and 100');return;}
+  e.target.setCustomValidity('');
+  setLS(KEYS.driverShare,String(v));
+  renderCalc();  // shift calculator updates instantly
+  toast(`Driver share set to ${v}%`);
+}; $('#defaultFuel').onchange=e=>setLS(KEYS.fuelDefault,e.target.value);
 /* Flexible week cycle: changing it re-snaps the Weekly view to the new cycle's current week
    and refreshes all weekly summaries + the status badge globally. */
 function applyWeekCycleChange(){
