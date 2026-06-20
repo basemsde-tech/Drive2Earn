@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.12 | build 2026-06-15 | single-file PWA -->
+<!-- Drive2Earn v3.14 | build 2026-06-21 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.12</title>
+  <title>Drive2Earn v3.14</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -191,6 +191,110 @@
     .export-cluster button:active{transform:scale(.98)}
     .export-cluster .exp-copy{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
     .export-cluster .exp-dl{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    /* ═══ Smart Analytics — Functional Segmentation ═══ */
+    .qfbar{position:sticky;top:0;z-index:20;background:rgba(8,8,8,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin:-4px -2px 12px;padding:8px 2px;border-bottom:1px solid var(--border)}
+    .qfbar-row{display:flex;gap:8px;align-items:center}
+    .qfbar-periods{display:flex;gap:5px;flex:1;overflow-x:auto;scrollbar-width:none}
+    .qfbar-periods::-webkit-scrollbar{display:none}
+    .qfb-btn{flex:1 0 auto;min-height:44px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12px;white-space:nowrap;padding:0 13px;cursor:pointer;transition:.12s}
+    .qfb-btn.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .qfb-veh{min-height:44px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12px;padding:0 9px;max-width:120px;flex:0 0 auto}
+    /* Zone shell */
+    .ana-zones{display:flex;flex-direction:column;gap:14px;margin-bottom:14px}
+    .ana-zones.ana-fade .zone{animation:zoneFade .34s cubic-bezier(.22,.61,.36,1)}
+    @keyframes zoneFade{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
+    .zone{border-radius:16px;padding:14px}
+    .zone-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:11px}
+    .zone-tag.light{color:var(--gold3)}
+    .zone-tag.inline{margin:0}
+    /* ZONE 1 — Financial Pulse (charcoal slab) */
+    .zone-pulse{background:#0d0d0f;border:1px solid #2a2a2e}
+    .pulse-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .pulse-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:13px;padding:12px 11px;min-width:0}
+    .pulse-card.hero{grid-column:1/-1;background:linear-gradient(135deg,rgba(50,213,131,.12),rgba(13,13,15,.4));border-color:rgba(50,213,131,.4)}
+    .pulse-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
+    .pulse-val{font-family:"Bricolage Grotesque",sans-serif;font-size:23px;font-weight:800;color:var(--text);margin-top:5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pulse-card.hero .pulse-val{font-size:32px}
+    .pulse-val.red{color:var(--red)}.pulse-val.green{color:var(--green)}
+    /* ZONE 2 — Insight (lighter surface) */
+    .zone-insight{background:rgba(20,20,22,.6);border:1px solid var(--border)}
+    .insight-donut-head{font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px}
+    .insight-divider{height:1px;background:var(--border);margin:14px 0}
+    .insight-trend{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .it-label{font-size:12px;font-weight:800;color:var(--text)}
+    .it-sub{font-size:10px;color:var(--muted);margin-top:2px}
+    .it-proj{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;color:var(--gold3);font-variant-numeric:tabular-nums}
+    /* ZONE 3 — Fleet & Management */
+    .zone-fleet{background:#0d0d0f;border:1px solid #2a2a2e}
+    .fleet-veh-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .fleet-veh-label{font-size:12px;font-weight:700;color:var(--text)}
+    .fleet-veh{min-height:44px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:13px;padding:0 11px;min-width:140px}
+    .fleet-btn{width:100%;display:flex;align-items:center;gap:12px;background:var(--bg2);border:1px solid var(--border);border-radius:13px;padding:12px 14px;color:var(--text);cursor:pointer;min-height:56px;margin-bottom:8px;text-align:left}
+    .fleet-btn:last-child{margin-bottom:0}
+    .fleet-btn:active{transform:scale(.99)}
+    .fleet-btn-ic{font-size:20px;flex:0 0 auto}
+    .fleet-btn-tx{flex:1;min-width:0}
+    .fleet-btn-tx b{display:block;font-size:13px;font-weight:800}
+    .fleet-btn-tx small{display:block;font-size:10px;color:var(--muted);margin-top:1px}
+    .fleet-arrow{color:var(--gold3);font-size:16px;flex:0 0 auto}
+    /* Deep-dive — Transaction Ledger */
+    .zone-ledger{background:rgba(20,20,22,.6);border:1px solid var(--border);padding:0;overflow:hidden}
+    .led-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;background:transparent;border:0;padding:14px;cursor:pointer;color:var(--text);min-height:52px}
+    .led-toggle-r{display:flex;align-items:center;gap:9px}
+    .led-count{font-size:11px;color:var(--muted);font-weight:700}
+    .led-chev{width:17px;height:17px;color:var(--muted);transition:transform .25s}
+    .led-chev.open{transform:rotate(180deg)}
+    .led-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+    .led-body.open{max-height:1400px}
+    .led-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;border-top:1px solid var(--border)}
+    .led-l{min-width:0}
+    .led-l b{font-size:13px;font-weight:700;color:var(--text)}
+    .led-l small{display:block;font-size:10px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .led-amt{font-family:"Bricolage Grotesque",sans-serif;font-size:16px;font-weight:800;color:var(--gold3);font-variant-numeric:tabular-nums;flex:0 0 auto}
+    .led-empty{padding:14px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);text-align:center}
+    /* shared donut/legend/trend (reused across zones) */
+    .ana-trend{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:800;border-radius:999px;padding:2px 7px}
+    .ana-trend.up{color:var(--green);background:rgba(50,213,131,.13)}
+    .ana-trend.down{color:var(--red);background:rgba(224,82,82,.13)}
+    .ana-trend.flat{color:var(--muted);background:var(--bg3)}
+    .ana-donut-row{display:flex;align-items:center;gap:14px}
+    .ana-donut{position:relative;flex:0 0 auto;width:128px;height:128px}
+    .ana-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+    .ana-donut-center small{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+    .ana-donut-center b{font-family:"Bricolage Grotesque",sans-serif;font-size:24px;color:var(--green)}
+    .ana-legend{flex:1;min-width:0}
+    .ana-leg{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:12px;color:var(--text)}
+    .ana-leg-dot{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
+    .ana-leg-l{flex:1;color:var(--muted);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .ana-leg b{font-variant-numeric:tabular-nums;font-weight:800}
+    .ana-leg-sub{font-size:9.5px;color:var(--muted);margin-top:6px;line-height:1.4}
+    /* Tax-ready modal */
+    .tr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;display:flex;align-items:center;justify-content:center;padding:18px}
+    .tr-modal{width:min(100%,420px);max-height:88vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px}
+    .tr-sheet{background:#0c0c0c;border:1px solid var(--border);border-radius:13px;padding:16px}
+    .tr-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:11px;margin-bottom:4px}
+    .tr-brand{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;font-weight:800;color:var(--gold3)}
+    .tr-fy{font-size:11px;color:var(--muted);font-weight:700}
+    .tr-sub{font-size:10px;color:var(--muted);margin:8px 0 14px;line-height:1.4}
+    .tr-block{border-top:1px solid var(--border);padding-top:6px;margin-bottom:12px}
+    .tr-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;font-size:13px;color:var(--text);border-bottom:1px solid rgba(36,36,36,.5)}
+    .tr-row span{color:var(--muted)}
+    .tr-row b{font-variant-numeric:tabular-nums;font-weight:700}
+    .tr-row.tr-strong span{color:var(--text);font-weight:700}
+    .tr-row.tr-strong b{color:var(--gold3);font-size:15px;font-family:"Bricolage Grotesque",sans-serif}
+    .tr-foot{font-size:9.5px;color:var(--muted);line-height:1.5;margin-top:4px}
+    .tr-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+    .tr-actions button{border-radius:12px;padding:13px;font-weight:800;font-size:13px;cursor:pointer;font-family:Outfit,sans-serif}
+    .tr-actions .secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
+    .tr-actions .primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    @media (max-width:340px){.pulse-val{font-size:20px}.pulse-card.hero .pulse-val{font-size:27px}}
+    /* Contract type segmented control */
+    .ctype-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+    .ctype-opt{text-align:left;background:var(--bg3);border:1.5px solid var(--border);border-radius:12px;padding:11px;cursor:pointer;color:var(--text);min-height:60px;display:flex;flex-direction:column;gap:3px;transition:.15s}
+    .ctype-opt b{font-size:13px;font-weight:800}
+    .ctype-opt small{font-size:9.5px;color:var(--muted);line-height:1.3}
+    .ctype-opt.active{border-color:var(--gold3);background:linear-gradient(135deg,rgba(212,160,23,.14),var(--bg3))}
+    .ctype-opt.active b{color:var(--gold3)}
     /* ── Tax Expenses smart card ── */
     .exp-card{padding:0;overflow:hidden;margin-bottom:9px}
     .exp-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;padding:14px;color:var(--text)}
@@ -376,7 +480,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.12</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.14</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -390,10 +494,21 @@
     </div>
 
     <div class="set-group">
+      <p class="set-group-title">Contract Type</p>
+      <div class="set-card">
+        <div class="set-item stack"><span class="si-label"><b>Driving Arrangement</b><p>Adjusts your analytics & net earnings engine</p></span>
+          <div class="ctype-seg" id="ctypeSeg">
+            <button class="ctype-opt" data-ctype="commission"><b>Commission</b><small>You split gross with an operator</small></button>
+            <button class="ctype-opt" data-ctype="rental"><b>Rental</b><small>Fixed weekly rent + levy, fuel at pump</small></button>
+          </div>
+        </div>
+        <div class="set-item" id="rentRow" style="display:none"><span class="si-label"><b>Weekly Rent</b><p>Fixed vehicle rental ($/week)</p></span><span class="si-control"><input id="weeklyRentInput" type="number" min="0" step="0.01" style="width:90px" placeholder="0.00"></span></div>
+        <div class="set-item" id="rentLevyRow" style="display:none"><span class="si-label"><b>Weekly Levy</b><p>Government levy ($/week)</p></span><span class="si-control"><input id="weeklyLevyInput" type="number" min="0" step="0.01" style="width:90px" placeholder="0.00"></span></div>
+      </div>
       <p class="set-group-title">Shift Defaults</p>
       <div class="set-card">
         <div class="set-item"><span class="si-label"><b>Hail Trip Levy</b><p>Per trip ($)</p></span><span class="si-control"><input id="levyRate" type="number" min="0" step="0.01"></span></div>
-        <div class="set-item"><span class="si-label"><b>Driver Share</b><p>% of gross earnings (default 55)</p></span><span class="si-control"><input id="driverShareInput" type="number" min="0" max="100" step="0.01" style="width:80px"></span></div>
+        <div class="set-item" id="driverShareRow"><span class="si-label"><b>Driver Share</b><p>% of gross earnings (default 55)</p></span><span class="si-control"><input id="driverShareInput" type="number" min="0" max="100" step="0.01" style="width:80px"></span></div>
         <div class="set-item"><span class="si-label"><b>Default Fuel</b><p>New shift forms</p></span><span class="si-control"><select id="defaultFuel"><option>Diesel</option><option>Petrol</option><option>LPG</option></select></span></div>
         <div class="set-item stack"><span class="si-label"><b>Vehicle Regos</b><p>Shown in the shift rego dropdown</p></span>
           <div style="display:grid;grid-template-columns:1fr auto;gap:8px;width:100%"><input id="newRego" placeholder="e.g. 5088M" autocapitalize="characters" autocomplete="off"><button class="secondary" id="addRego" style="white-space:nowrap">Add</button></div>
@@ -419,7 +534,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.12 · build 2026-06-15</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.14 · build 2026-06-21</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -503,8 +618,10 @@
 </div>
 
 <script type="module">
-const APP_VERSION='3.12', APP_BUILD='2026-06-15';
+const APP_VERSION='3.14', APP_BUILD='2026-06-21';
 const CHANGELOG=[
+  {version:'3.14',date:'21 Jun 2026',changes:['Reports redesigned with Functional Segmentation: three distinct zones — Financial Pulse, Insight & Analytics, Fleet & Management','Sticky zone-wide Quick Filter (time horizon + vehicle) updates all zones at once with a smooth fade animation','Contract-aware labels: commission shows Operator Commission %, rental shows Weekly Rent + Gov Levy (fuel excluded)','New collapsible Transaction Ledger deep-dive lists each shift with its per-shift math','Thumb-friendly 44px controls, generous zone spacing, charcoal/light surface separation']},
+  {version:'3.13',date:'21 Jun 2026',changes:['Smart Analytics dashboard added to Reports: contract-aware Gross / Deductions / Net summary cards','Where-your-money-goes donut adapts slices to contract (Operator split for commission; Rent + Levy for rental, fuel excluded)','Time-horizon filter (Today / Last 7 / Current Month / Year to Date) and Filter-by-Vehicle dropdown re-slice the whole dashboard instantly','Performance trend vs prior period, projected payout run-rate estimate, and a Tax-Ready accountant summary modal','Settings: Contract Type toggle (Commission / Rental) with weekly rent + levy fields; finalized historical shifts are read-only and unchanged']},
   {version:'3.12',date:'15 Jun 2026',changes:['End-of-Shift sheet now contains the rego verification inline — one unified popup instead of two sequential sheets','Scenario A (default vehicle set): one-tap gold confirm button pre-confirmed; actions unlock immediately; Change Vehicle link expands dropdown','Scenario B (no default): dropdown starts blank with error border; action buttons stay locked until a plate is selected','Rego is stamped to the shift before weekly save and share execute; no calc data cleared on cancel or dismiss']},
   {version:'3.11',date:'15 Jun 2026',changes:['Settings: new Default Shift Vehicle dropdown under Vehicle Regos — single-van drivers set it once and skip manual selection each shift','Rego gate Scenario A (default set): gate opens pre-confirmed with one-tap primary button; Change vehicle link expands the full grid for loaner or backup van shifts','Rego gate Scenario B (no default): grid shown immediately, confirm locked until driver explicitly taps a plate','Default rego syncs across devices via the settings sync pipeline']},
   {version:'3.10',date:'15 Jun 2026',changes:['Rego Gatekeeper: all save and share paths now intercept at a bottom sheet requiring explicit vehicle confirmation before any shift data is committed','Rego button grid pre-highlights the current vehicle but the Confirm button stays disabled until the driver physically taps a plate','Changing rego at the gate instantly rebinds the entire shift dataset to the new plate before saving','Cancel or swipe-down dismisses cleanly without altering any entered trip data, cash totals or receipts']},
@@ -526,7 +643,7 @@ const CHANGELOG=[
   {version:'2.4',date:'31 May 2026',changes:['Restored full report modules: BAS Gross, Cash Income, Hail Trips, Fuel Tracker, Tax Expenses','Modules now driven by the date pickers + quick filters','Added All Time quick filter for cumulative lifetime totals']},
   {version:'2.0',date:'28 May 2025',changes:['Gold / black / white redesign','Mobile-first single HTML PWA','Firebase-ready sync layer','Receipts archive and reports']}
 ];
-const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',defaultRego:'d2e_default_rego',levy:'d2e_levy_rate',driverShare:'d2e_driver_share_pct',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1',weekStartDay:'d2e_week_start_day',creditDay:'d2e_credit_day'};
+const KEYS={entries:'taxi_income_data_v2',weekly:'taxi_weekly_status',fuel:'d2e_fuel_log_v1',trip:'d2e_trip_data_v1',cash:'d2e_cash_log_v1',receipts:'d2e_receipt_archive_v1',expenses:'d2e_expenses_v1',messages:'d2e_shift_messages_v1',quickShare:'d2e_quick_share_contact_v1',regos:'d2e_regos',lastRego:'d2e_last_rego',defaultRego:'d2e_default_rego',levy:'d2e_levy_rate',driverShare:'d2e_driver_share_pct',contractType:'d2e_contract_type',weeklyRent:'d2e_weekly_rent',weeklyLevy:'d2e_weekly_levy',fb:'d2e_firebase_config',device:'d2e_device_id',tz:'d2e_timezone',fuelDefault:'d2e_default_fuel',theme:'d2e_theme',profile:'d2e_profile_v1',shift:'shiftCalcState',snapshots:'d2e_shift_snapshots_v1',weekStartDay:'d2e_week_start_day',creditDay:'d2e_credit_day'};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const money=v=>'$'+(Number(v)||0).toFixed(2);
 const n=v=>{const x=Number(v); return isFinite(x)?x:0};
@@ -567,7 +684,7 @@ let userId;
 // =====================================================================
 
 const SYNC_DATA_KEYS=[KEYS.entries,KEYS.weekly,KEYS.fuel,KEYS.trip,KEYS.cash,KEYS.expenses,KEYS.messages,KEYS.snapshots,KEYS.regos,KEYS.quickShare,KEYS.profile];
-const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.driverShare,KEYS.fuelDefault,KEYS.lastRego,KEYS.defaultRego,KEYS.tz,KEYS.weekStartDay,KEYS.creditDay];
+const SYNC_SETTING_KEYS=[KEYS.levy,KEYS.driverShare,KEYS.contractType,KEYS.weeklyRent,KEYS.weeklyLevy,KEYS.fuelDefault,KEYS.lastRego,KEYS.defaultRego,KEYS.tz,KEYS.weekStartDay,KEYS.creditDay];
 const SYNC_KEYS=[...SYNC_DATA_KEYS,...SYNC_SETTING_KEYS];
 const KEY_TO_STATE={[KEYS.entries]:'entries',[KEYS.weekly]:'weekly',[KEYS.fuel]:'fuel',[KEYS.trip]:'trip',[KEYS.cash]:'cash',[KEYS.expenses]:'expenses',[KEYS.messages]:'messages',[KEYS.snapshots]:'snapshots',[KEYS.regos]:'regos',[KEYS.quickShare]:'quickShare',[KEYS.profile]:'profile'};
 
@@ -1317,6 +1434,10 @@ function weekEndDay(){return (weekStartDay()+6)%7;}
 /* Reads the saved driver share percentage (schema: DECIMAL(5,2), default 55.00).
    Always returns a finite number in [0,100]; falls back to 55 if unset or corrupt. */
 function driverSharePct(){const v=parseFloat(localStorage.getItem(KEYS.driverShare));return (isFinite(v)&&v>=0&&v<=100)?v:55;}
+/* ── Contract-aware config (isolated readers; safe defaults; never mutate data) ── */
+function contractType(){const v=localStorage.getItem(KEYS.contractType);return v==='rental'?'rental':'commission';}
+function weeklyRent(){const v=parseFloat(localStorage.getItem(KEYS.weeklyRent));return isFinite(v)&&v>=0?v:0;}
+function weeklyLevyAmt(){const v=parseFloat(localStorage.getItem(KEYS.weeklyLevy));return isFinite(v)&&v>=0?v:0;}
 function weekCycleLabel(){return `${DAY_NAMES[weekStartDay()]} \u2192 ${DAY_NAMES[weekEndDay()]}`;}
 function weekStart(d=new Date()){const x=new Date(d); const S=weekStartDay(); const diff=((x.getDay()-S)+7)%7; x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
 function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
@@ -1514,6 +1635,215 @@ function activeQuickFilter(){
   if(s===localDateStr(ws)&&e===localDateStr(we))return 'lastweek';
   return '';
 }
+/* ═══════════════ SMART ANALYTICS ENGINE (view layer — reads, never writes) ═══════════════
+   Contract-aware. All math is derived live from finalized entries; finalized shift
+   amounts are never recomputed or altered. */
+let anaVehicle='';            // '' = all vehicles
+function anaPeriodRange(kind){
+  const t=new Date(); t.setHours(0,0,0,0);
+  const ld=localDateStr;
+  if(kind==='today') return [ld(t),ld(t)];
+  if(kind==='last7'){const s=new Date(t);s.setDate(t.getDate()-6);return [ld(s),ld(t)];}
+  if(kind==='month'){const s=new Date(t.getFullYear(),t.getMonth(),1);return [ld(s),ld(t)];}
+  if(kind==='ytd'){const fy=currentFyStart();const s=new Date(fy,6,1);return [ld(s),ld(t)];} // financial YTD (Jul 1)
+  return [ld(t),ld(t)];
+}
+function anaActivePeriod(){ return localStorage.getItem('d2e_ana_period')||'last7'; }
+/* Operational days worked in a window for a given vehicle (distinct entry dates) */
+function anaEntriesIn(lo,hi,rego){
+  return (state.entries||[]).filter(e=>e&&e.date>=lo&&e.date<=hi&&(!rego||(e.rego||'')===rego));
+}
+/* Contract-aware breakdown for a date window. Pure: returns numbers only.
+   Commission: gross is the sum of finalized take-home amounts already net of the operator
+   split (the stored 'amount' IS the driver payout). We reconstruct gross-of-split for display
+   using the saved share %. Rental: deduct pro-rata rent+levy for the days worked. */
+function anaBreakdown(lo,hi,rego){
+  const entries=anaEntriesIn(lo,hi,rego);
+  const days=[...new Set(entries.map(e=>e.date))].length;
+  const netStored=entries.reduce((a,b)=>a+n(b.amount),0); // finalized driver payout total
+  if(contractType()==='rental'){
+    const rent=weeklyRent(), levy=weeklyLevyAmt();
+    const perDayRent=rent/7, perDayLevy=levy/7;
+    const overheads=(perDayRent+perDayLevy)*days;
+    const grossDisplay=netStored;          // rental: stored amount = shift intake (gross)
+    const net=grossDisplay-overheads;
+    return {type:'rental',gross:grossDisplay,deduct:overheads,net,days,entries,
+      slices:[{label:'Rent',v:perDayRent*days,c:'#e0905a'},{label:'Levy',v:perDayLevy*days,c:'#c264d0'}],
+      rent:perDayRent*days,levy:perDayLevy*days};
+  } else {
+    const pct=driverSharePct();
+    // stored amount already = driver share; gross-of-split = net / (pct/100)
+    const grossDisplay=pct>0?netStored/(pct/100):netStored;
+    const operatorSplit=grossDisplay-netStored;
+    return {type:'commission',gross:grossDisplay,deduct:operatorSplit,net:netStored,days,entries,
+      slices:[{label:'Operator '+(100-pct)+'%',v:operatorSplit,c:'#e0905a'}],
+      operatorSplit};
+  }
+}
+/* Trend vs the immediately preceding equal-length window */
+function anaTrend(lo,hi,rego){
+  try{
+    const a=parseLocal(lo),b=parseLocal(hi);
+    const len=Math.round((b-a)/86400000)+1;
+    const pb=new Date(a);pb.setDate(a.getDate()-1);
+    const pa=new Date(pb);pa.setDate(pb.getDate()-(len-1));
+    const cur=anaBreakdown(lo,hi,rego).net;
+    const prev=anaBreakdown(localDateStr(pa),localDateStr(pb),rego).net;
+    if(prev<=0) return null;
+    return Math.round(((cur-prev)/prev)*100);
+  }catch(e){return null;}
+}
+/* Projected net for the current period based on run-rate so far */
+function anaProjection(kind,lo,hi,rego){
+  try{
+    const t=new Date();t.setHours(0,0,0,0);
+    const start=parseLocal(lo), end=parseLocal(hi);
+    const elapsed=Math.max(1,Math.round((Math.min(t,end)-start)/86400000)+1);
+    const total=Math.round((end-start)/86400000)+1;
+    if(t>=end) return null; // period already complete
+    const net=anaBreakdown(lo,localDateStr(t<end?t:end),rego).net;
+    return net/elapsed*total;
+  }catch(e){return null;}
+}
+function donutSvg(gross,slices){
+  const total=Math.max(gross,0.0001);
+  let acc=0; const r=52,cx=70,cy=70,sw=22,C=2*Math.PI*r;
+  const segs=slices.filter(s=>s.v>0).map(s=>{
+    const frac=Math.min(1,Math.max(0,s.v/total));
+    const dash=frac*C, gap=C-dash, off=-acc*C; acc+=frac;
+    return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.c}" stroke-width="${sw}" stroke-dasharray="${dash.toFixed(2)} ${gap.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+  }).join('');
+  const netFrac=Math.max(0,1-acc);
+  const netSeg=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#32d583" stroke-width="${sw}" stroke-dasharray="${(netFrac*C).toFixed(2)} ${((1-netFrac)*C).toFixed(2)}" stroke-dashoffset="${(-acc*C).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+  return `<svg viewBox="0 0 140 140" width="128" height="128" role="img" aria-label="Revenue breakdown donut"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--bg3)" stroke-width="${sw}"/>${segs}${netSeg}</svg>`;
+}
+function renderAnalytics(){
+  const period=anaActivePeriod();
+  const [lo,hi]=anaPeriodRange(period);
+  const rego=anaVehicle;
+  const bd=anaBreakdown(lo,hi,rego);
+  const trend=anaTrend(lo,hi,rego);
+  const proj=anaProjection(period,lo,hi,rego);
+  const ct=bd.type;
+  const periods=[['today','Today'],['last7','Last 7 Days'],['month','This Month'],['ytd','Year to Date']];
+  const trendHTML = trend===null ? `<span class="ana-trend flat">— no prior data</span>`
+    : `<span class="ana-trend ${trend>=0?'up':'down'}">${trend>=0?'▲':'▼'} ${Math.abs(trend)}% vs last period</span>`;
+  // Contract-aware deduction labelling
+  const deductLabel = ct==='rental' ? 'Weekly Rent + Gov Levy' : `Operator Commission ${100-driverSharePct()}%`;
+  const deductCardLabel = ct==='rental' ? 'Rent + Levy' : `Operator ${100-driverSharePct()}%`;
+  const slices=bd.slices;
+  const legend=[{label:'Net Take-Home',v:bd.net,c:'#32d583'},...slices].map(s=>
+    `<div class="ana-leg"><span class="ana-leg-dot" style="background:${s.c}"></span><span class="ana-leg-l">${s.label}</span><b>${money(s.v)}</b></div>`).join('');
+  const regoOpts=`<option value="">All vehicles</option>`+(state.regos||[]).map(r=>`<option value="${esc(r)}"${r===rego?' selected':''}>${esc(r)}</option>`).join('');
+  // Transaction ledger (deep-dive) — newest first
+  const ledger=[...bd.entries].sort((a,b)=>b.date.localeCompare(a.date));
+  const pct=driverSharePct();
+  const ledgerRows=ledger.length?ledger.map(e=>{
+    const amt=n(e.amount);
+    const sub = ct==='rental'
+      ? `Gross intake · rego ${esc(e.rego||'—')}`
+      : `${pct}% of ${money(pct>0?amt/(pct/100):amt)} gross · rego ${esc(e.rego||'—')}`;
+    return `<div class="led-row"><div class="led-l"><b>${fmtDate(e.date)}</b><small>${sub}</small></div><div class="led-amt">${money(amt)}</div></div>`;
+  }).join('') : `<div class="led-empty">No shifts in this period.</div>`;
+  const ledgerOpen=localStorage.getItem('d2e_ledger_open')==='1';
+
+  return `
+  <!-- Floating zone-wide quick filter -->
+  <div class="qfbar" id="qfbar">
+    <div class="qfbar-row">
+      <div class="qfbar-periods">${periods.map(([k,l])=>`<button class="qfb-btn${period===k?' active':''}" data-ana-p="${k}">${l}</button>`).join('')}</div>
+      <select id="anaVehicle" class="qfb-veh" aria-label="Filter by vehicle">${regoOpts}</select>
+    </div>
+  </div>
+
+  <div class="ana-zones" id="anaZones">
+
+    <!-- ZONE 1 · Financial Pulse -->
+    <section class="zone zone-pulse" aria-label="Financial pulse">
+      <div class="zone-tag">Financial Pulse</div>
+      <div class="pulse-cards">
+        <div class="pulse-card"><div class="pulse-label">Gross Revenue</div><div class="pulse-val">${money(bd.gross)}</div></div>
+        <div class="pulse-card"><div class="pulse-label">${deductCardLabel}</div><div class="pulse-val red">−${money(bd.deduct)}</div></div>
+        <div class="pulse-card hero"><div class="pulse-label">Net Take-Home</div><div class="pulse-val green">${money(bd.net)}</div>${trendHTML}</div>
+      </div>
+    </section>
+
+    <!-- ZONE 2 · Insight & Analytics -->
+    <section class="zone zone-insight" aria-label="Insight and analytics">
+      <div class="zone-tag light">Insight &amp; Analytics</div>
+      <div class="insight-donut-head">Where your money goes</div>
+      <div class="ana-donut-row">
+        <div class="ana-donut">${donutSvg(bd.gross,slices)}<div class="ana-donut-center"><small>Net</small><b>${bd.gross>0?Math.round(bd.net/bd.gross*100):0}%</b></div></div>
+        <div class="ana-legend">${legend}<div class="ana-leg-sub">${deductLabel} &middot; ${bd.days} day${bd.days===1?'':'s'} worked${ct==='rental'?' · fuel excluded (paid at pump)':''}</div></div>
+      </div>
+      <div class="insight-divider"></div>
+      <div class="insight-trend">
+        <div class="it-l"><div class="it-label">Performance Trend</div><div class="it-sub">Net vs previous ${periods.find(p=>p[0]===period)[1].toLowerCase()}</div></div>
+        <div class="it-r">${trend===null?'<span class="ana-trend flat">—</span>':`<span class="ana-trend ${trend>=0?'up':'down'}">${trend>=0?'▲':'▼'} ${Math.abs(trend)}%</span>`}</div>
+      </div>
+      ${proj!==null&&proj>0?`<div class="insight-divider"></div><div class="insight-trend"><div class="it-l"><div class="it-label">Projected Net Payout</div><div class="it-sub">Run-rate · ${periods.find(p=>p[0]===period)[1].toLowerCase()}</div></div><div class="it-r"><b class="it-proj">${money(proj)}</b></div></div>`:''}
+    </section>
+
+    <!-- ZONE 3 · Fleet & Management -->
+    <section class="zone zone-fleet" aria-label="Fleet and management">
+      <div class="zone-tag">Fleet &amp; Management</div>
+      <div class="fleet-veh-row">
+        <label class="fleet-veh-label">Vehicle filter</label>
+        <select id="anaVehicleFleet" class="fleet-veh" aria-label="Filter by vehicle">${regoOpts}</select>
+      </div>
+      <button class="fleet-btn" id="anaTaxReady"><span class="fleet-btn-ic">🧾</span><span class="fleet-btn-tx"><b>Tax-Ready Accountant Summary</b><small>Annual totals, screenshot or email</small></span><span class="fleet-arrow">→</span></button>
+      <button class="fleet-btn" id="anaExportPdf"><span class="fleet-btn-ic">📄</span><span class="fleet-btn-tx"><b>Export Report</b><small>Download full CSV for this period</small></span><span class="fleet-arrow">→</span></button>
+    </section>
+
+    <!-- DEEP-DIVE · Transaction Ledger -->
+    <section class="zone zone-ledger">
+      <button class="led-toggle" id="ledToggle" aria-expanded="${ledgerOpen?'true':'false'}">
+        <span class="zone-tag inline">Transaction Ledger</span>
+        <span class="led-toggle-r"><span class="led-count">${ledger.length} shift${ledger.length===1?'':'s'}</span><svg class="led-chev${ledgerOpen?' open':''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+      </button>
+      <div class="led-body${ledgerOpen?' open':''}" id="ledBody">${ledgerRows}</div>
+    </section>
+
+  </div>`;
+}
+function buildTaxReady(){
+  const fy=currentFyStart(); const lo=localDateStr(new Date(fy,6,1)); const hi=localDateStr(new Date());
+  const ct=contractType();
+  const all=anaBreakdown(lo,hi,'');
+  const fyLabel=`FY${fy}-${String(fy+1).slice(2)}`;
+  let rows='';
+  if(ct==='rental'){
+    rows=[
+      ['Total Gross Revenue',money(all.gross)],
+      ['Total Rent Paid',money(all.rent)],
+      ['Total Levies Paid',money(all.levy)],
+      ['Total Overheads',money(all.deduct)],
+      ['Net Take-Home',money(all.net)]
+    ].map(([l,v],i)=>`<div class="tr-row${i>=3?' tr-strong':''}"><span>${l}</span><b>${v}</b></div>`).join('');
+  } else {
+    rows=[
+      ['Total Gross Revenue',money(all.gross)],
+      ['Operator Split ('+(100-driverSharePct())+'%)',money(all.operatorSplit)],
+      ['Driver Share ('+driverSharePct()+'%)',money(all.net)],
+      ['Net Take-Home',money(all.net)]
+    ].map(([l,v],i)=>`<div class="tr-row${i>=2?' tr-strong':''}"><span>${l}</span><b>${v}</b></div>`).join('');
+  }
+  // expense + GST aggregates for the FY
+  const fyExp=(state.expenses||[]).filter(e=>e&&e.date>=lo&&e.date<=hi);
+  const expTotal=fyExp.reduce((a,e)=>a+expenseDeductible(e),0);
+  const gstTotal=fyExp.reduce((a,e)=>a+expenseGst(e),0);
+  const grossDays=all.days;
+  return `<div class="tr-sheet">
+    <div class="tr-head"><div class="tr-brand">Drive2Earn</div><div class="tr-fy">${fyLabel} · Tax Summary</div></div>
+    <div class="tr-sub">${ct==='rental'?'Rental agreement':'Commission '+driverSharePct()+'/'+(100-driverSharePct())+' split'} · ${grossDays} days worked · generated ${fmtDate(hi)}</div>
+    <div class="tr-block">${rows}</div>
+    <div class="tr-block">
+      <div class="tr-row"><span>Deductible Tax Expenses</span><b>${money(expTotal)}</b></div>
+      <div class="tr-row"><span>GST Input Credits</span><b>${money(gstTotal)}</b></div>
+    </div>
+    <div class="tr-foot">Figures aggregated from finalized shift records. Provide to your registered tax agent — not a substitute for professional advice.</div>
+  </div>`;
+}
 function renderReports(){ try{
   if(!state.repAllTime && (!state.repStart||!state.repEnd)){const today=new Date(),sdt=new Date();sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
   const rate=n(localStorage.getItem(KEYS.levy)||'1.20');
@@ -1590,10 +1920,31 @@ function renderReports(){ try{
   // ── Unified export hub ──
   const exportHTML=`<section class="card export-hub"><div class="exp-head"><span class="chip-title"><span class="dot"></span>Export</span><span class="muted" style="font-size:11px">${repLabel()}</span></div><div class="export-cluster"><button class="exp-copy" id="expCopy">Copy CSV</button><button class="exp-dl" id="expDl">Download Report</button></div></section>`;
   $('#reports').innerHTML=
+    renderAnalytics()+
     basPullHTML+
     `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
     `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
     netHTML+metricGrid+expHTML+exportHTML;
+  // ── Analytics handlers (view-only; re-renders dashboard, never touches data) ──
+  const anaRefresh=()=>{ renderReports(); const z=$('#anaZones'); if(z){z.classList.remove('ana-fade');void z.offsetWidth;z.classList.add('ana-fade');} };
+  $$('#reports [data-ana-p]').forEach(b=>b.onclick=()=>{localStorage.setItem('d2e_ana_period',b.dataset.anaP);anaRefresh();});
+  const onVeh=e=>{anaVehicle=e.target.value;anaRefresh();};
+  if($('#anaVehicle'))$('#anaVehicle').onchange=onVeh;
+  if($('#anaVehicleFleet'))$('#anaVehicleFleet').onchange=onVeh;
+  if($('#ledToggle'))$('#ledToggle').onclick=()=>{
+    const body=$('#ledBody'), open=body.classList.toggle('open');
+    localStorage.setItem('d2e_ledger_open',open?'1':'0');
+    $('#ledToggle').setAttribute('aria-expanded',open?'true':'false');
+    const chev=$('#ledToggle .led-chev'); if(chev)chev.classList.toggle('open',open);
+  };
+  if($('#anaExportPdf'))$('#anaExportPdf').onclick=()=>{const dl=$('#expDl');if(dl)dl.click();else toast('Export unavailable');};
+  if($('#anaTaxReady'))$('#anaTaxReady').onclick=()=>{
+    const html=`<div class="tr-overlay" id="trOverlay"><div class="tr-modal">${buildTaxReady()}<div class="tr-actions"><button class="secondary" id="trCopy">Copy Summary</button><button class="primary" id="trClose">Done</button></div></div></div>`;
+    const wrap=document.createElement('div');wrap.innerHTML=html;document.body.appendChild(wrap.firstElementChild);
+    $('#trClose').onclick=()=>{const o=$('#trOverlay');if(o)o.remove();};
+    $('#trOverlay').onclick=e=>{if(e.target.id==='trOverlay')$('#trOverlay').remove();};
+    $('#trCopy').onclick=async()=>{try{const txt=$('#trOverlay .tr-sheet').innerText;if(navigator.clipboard){await navigator.clipboard.writeText(txt);toast('Summary copied');}else toast('Copy unavailable');}catch(_){toast('Copy failed');}};
+  };
   if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
   if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
   $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
@@ -1676,11 +2027,42 @@ function renderDefaultRegoSelect(){
   const saved=localStorage.getItem(KEYS.defaultRego)||'';
   sel.innerHTML=`<option value="">— None —</option>`+state.regos.map(r=>`<option value="${esc(r)}"${r===saved?' selected':''}>${esc(r)}</option>`).join('');
 }
-function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#driverShareInput').value=driverSharePct(); $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); renderDefaultRegoSelect(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
+/* Reflects the saved contract type into the Settings segmented control and
+   shows/hides the dependent fields. Commission → driver share %; Rental →
+   weekly rent + weekly levy. Pure view sync; never mutates calc logic. */
+function renderContractType(){
+  const ct=contractType();
+  const seg=$('#ctypeSeg'); if(seg) $$('#ctypeSeg .ctype-opt').forEach(b=>b.classList.toggle('active',b.dataset.ctype===ct));
+  const rentRow=$('#rentRow'), levyRow=$('#rentLevyRow'), shareRow=$('#driverShareRow');
+  const isRental=ct==='rental';
+  if(rentRow) rentRow.style.display=isRental?'':'none';
+  if(levyRow) levyRow.style.display=isRental?'':'none';
+  if(shareRow) shareRow.style.display=isRental?'none':'';
+  if($('#weeklyRentInput')) $('#weeklyRentInput').value=weeklyRent()||'';
+  if($('#weeklyLevyInput')) $('#weeklyLevyInput').value=weeklyLevyAmt()||'';
+}
+function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#driverShareInput').value=driverSharePct(); $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); renderDefaultRegoSelect(); renderContractType(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
   try{renderWeekClock();}catch(_){}
   const cs=$('#creditDaySelect'); if(cs){cs.innerHTML=DAY_NAMES.map((d,i)=>`<option value="${i}">${d}</option>`).join('');cs.value=String(creditDay());}
 }
 $('#levyRate').oninput=e=>{setLS(KEYS.levy,e.target.value);renderCalc()};
+$$('#ctypeSeg .ctype-opt').forEach(btn=>btn.onclick=()=>{
+  const v=btn.dataset.ctype==='rental'?'rental':'commission';
+  setLS(KEYS.contractType,v);
+  renderContractType();          // reflect toggle + show/hide dependent fields
+  try{renderReports();}catch(_){} // analytics engine re-slices to new contract
+  toast(v==='rental'?'Switched to rental engine':'Switched to commission engine');
+});
+if($('#weeklyRentInput'))$('#weeklyRentInput').oninput=e=>{
+  const v=Math.max(0,parseFloat(e.target.value)||0);
+  setLS(KEYS.weeklyRent,String(v));
+  try{renderReports();}catch(_){}
+};
+if($('#weeklyLevyInput'))$('#weeklyLevyInput').oninput=e=>{
+  const v=Math.max(0,parseFloat(e.target.value)||0);
+  setLS(KEYS.weeklyLevy,String(v));
+  try{renderReports();}catch(_){}
+};
 if($('#defaultRegoSelect'))$('#defaultRegoSelect').onchange=e=>{
   const v=e.target.value;
   if(v) setLS(KEYS.defaultRego,v); else localStorage.removeItem(KEYS.defaultRego);
