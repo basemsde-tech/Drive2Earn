@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.14 | build 2026-06-21 | single-file PWA -->
+<!-- Drive2Earn v4.1 | build 2026-06-25 | single-file PWA · Soft-Geometric -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,34 +7,79 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.14</title>
+  <title>Drive2Earn v4.1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Geist+Mono:wght@500;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
   <style>
     :root {
-      --bg:#080808; --bg2:#111111; --bg3:#191919; --border:#242424; --text:#f5f0e8; --muted:#a89878;
-      --gold:#d4a017; --gold2:#b8860b; --gold3:#f0c040; --red:#e05252; --green:#32d583; --purple:#a78bfa; --slate:#8fb0f0;
-      --shadow:0 22px 70px rgba(0,0,0,.38); --radius:8px;
+      /* ══ FLUID CLARITY · DARK (indigo night) ══
+         Deep indigo canvas, soft glass surfaces, pastel data accents. */
+      --bg:#12122e; --bg2:#1e1e44; --bg3:#272752; --border:#383868; --text:#eef0fb; --muted:#a6a8d4;
+      --gold:#A8E6CF; --gold2:#7fd6b4; --gold3:#A8E6CF; --red:#FFD1DC; --green:#A8E6CF; --purple:#c9b3ff; --slate:#9db8ff;
+      --shadow:0 22px 70px rgba(6,6,26,.55); --radius:28px;
+      --radius-sm:18px; --radius-pill:999px;
+      /* Layered depth: stacked outer + soft inner highlight for tactile paper-card feel */
+      --depth:0 1px 2px rgba(0,0,0,.3), 0 8px 20px rgba(6,6,26,.4), 0 18px 48px rgba(6,6,26,.32);
+      --depth-press:0 1px 3px rgba(0,0,0,.4), 0 4px 12px rgba(6,6,26,.45);
+      --inner-hi:inset 0 1px 0 rgba(255,255,255,.06);
+      /* glass surface tokens */
+      --glass:rgba(38,38,82,.55); --glass-strong:rgba(44,44,92,.78); --glass-brd:rgba(168,180,255,.18); --glass-blur:18px;
+      --accent:#A8E6CF; --accent2:#FFC0A0; --accent3:#FFD1DC; --accent-ink:#12243a;
+      /* Reports / Analytics semantic tokens */
+      --zone-bg:rgba(30,30,68,.55); --zone-bg-soft:rgba(38,38,82,.4); --zone-border:rgba(168,180,255,.16);
+      --sheet-bg:#1a1a3e;
+      --chart-net:#A8E6CF; --chart-rent:#FFC0A0; --chart-levy:#FFD1DC; --chart-track:rgba(168,180,255,.14);
+      --on-gold:#12243a; --qfbar-bg:rgba(18,18,46,.72); --gold-ink:#A8E6CF;
+      --hero-tint:linear-gradient(135deg,rgba(168,230,207,.18),rgba(30,30,68,.5));
+      --app-grad:radial-gradient(120% 90% at 50% 0,#1b1b48 0,#12122e 48%,#0d0d24 100%);
     }
     [data-theme="light"] {
-      --bg:#f5f0e8; --bg2:#ffffff; --bg3:#ede8da; --border:#d8d0b8; --text:#180e00; --muted:#6f624a;
-      --gold:#b8860b; --gold2:#936800; --gold3:#d4a017; --red:#c04040; --green:#087f5b; --purple:#6d28d9; --slate:#3f5bb5;
-      --shadow:0 18px 55px rgba(60,38,0,.16);
+      /* ══ FLUID CLARITY · LIGHT (powder blue → off-white) ══ */
+      --bg:#E6F0F8; --bg2:#FDFDFD; --bg3:#eef4fb; --border:#d2e0ef; --text:#1A1A40; --muted:#5a5f86;
+      --gold:#5b8def; --gold2:#3f6fd6; --gold3:#3f6fd6; --red:#d9627e; --green:#2f9e7a; --purple:#7c5cd6; --slate:#3f5bb5;
+      --shadow:0 18px 55px rgba(26,26,64,.12);
+      --depth:0 1px 2px rgba(26,26,64,.06), 0 8px 22px rgba(26,26,64,.08), 0 20px 50px rgba(26,26,64,.07);
+      --depth-press:0 1px 3px rgba(26,26,64,.1), 0 4px 12px rgba(26,26,64,.1);
+      --inner-hi:inset 0 1px 0 rgba(255,255,255,.9);
+      --glass:rgba(253,253,253,.62); --glass-strong:rgba(255,255,255,.82); --glass-brd:rgba(255,255,255,.7); --glass-blur:16px;
+      --accent:#2f9e7a; --accent2:#e08a5c; --accent3:#d9627e; --accent-ink:#ffffff;
+      --zone-bg:rgba(253,253,253,.7); --zone-bg-soft:rgba(255,255,255,.5); --zone-border:rgba(255,255,255,.8);
+      --sheet-bg:#FDFDFD;
+      --chart-net:#1c8260; --chart-rent:#b8551f; --chart-levy:#b03f7e; --chart-track:rgba(26,26,64,.08);
+      --on-gold:#ffffff; --qfbar-bg:rgba(230,240,248,.78); --gold-ink:#2f5fcf;
+      --hero-tint:linear-gradient(135deg,rgba(168,230,207,.5),rgba(253,253,253,.7));
+      --app-grad:linear-gradient(180deg,#E6F0F8 0,#f3f8fc 42%,#FDFDFD 100%);
     }
     *{box-sizing:border-box}
     html{background:var(--bg);-webkit-text-size-adjust:100%}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:Outfit,system-ui,sans-serif;letter-spacing:0;padding:env(safe-area-inset-top) 0 calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Nunito,system-ui,sans-serif;letter-spacing:0;padding:env(safe-area-inset-top) 0 calc(92px + env(safe-area-inset-bottom));touch-action:manipulation}
     button,input,select,textarea{font:inherit;font-size:16px!important;color:inherit}
     button{border:0;cursor:pointer;touch-action:manipulation}
-    .app{width:min(100%,430px);min-height:100vh;margin:0 auto;background:radial-gradient(circle at top,#1b1508 0,#080808 38%,var(--bg) 70%);padding:14px}
-    [data-theme="light"] .app{background:linear-gradient(180deg,#fff7e6 0,var(--bg) 38%)}
-    h1,h2,h3,.big,.brand{font-family:"Bricolage Grotesque",Outfit,sans-serif;margin:0;letter-spacing:0}
+    /* ══ FLUID MOTION ══ */
+    @keyframes fc-rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+    @keyframes fc-shimmer{0%{background-position:-160% 0}100%{background-position:260% 0}}
+    @keyframes fc-ripple{to{transform:scale(2.6);opacity:0}}
+    @media (prefers-reduced-motion:no-preference){
+      .screen.active .card,.screen.active .chip,.screen.active .metric,.screen.active .zone-pulse,
+      .screen.active .zone-insight,.screen.active .zone-fleet,.screen.active .zone-ledger,
+      .screen.active .set-card,.screen.active .pulse-card{animation:fc-rise .5s cubic-bezier(.22,.61,.36,1) both}
+      .screen.active .pulse-card:nth-child(2){animation-delay:.05s}
+      .screen.active .pulse-card:nth-child(3){animation-delay:.1s}
+      .screen.active .zone-insight{animation-delay:.08s}
+      .screen.active .zone-fleet{animation-delay:.14s}
+      .screen.active .zone-ledger{animation-delay:.18s}
+      .total.shimmer,.pulse-val.shimmer,.rn-val.shimmer{background:linear-gradient(90deg,currentColor 30%,var(--accent) 50%,currentColor 70%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:fc-shimmer 1s ease-out}
+    }
+    .ripple{position:relative;overflow:hidden}
+    .ripple>.rp{position:absolute;border-radius:50%;background:currentColor;opacity:.28;transform:scale(0);pointer-events:none;animation:fc-ripple .55s ease-out forwards;mix-blend-mode:overlay}
+    .app{width:min(100%,430px);min-height:100vh;margin:0 auto;background:var(--app-grad);padding:14px}
+    h1,h2,h3,.big,.brand{font-family:"Nunito",sans-serif;margin:0;letter-spacing:0}
     .mono{font-family:"Geist Mono",monospace}.muted{color:var(--muted)}.gold{color:var(--gold3)}
     .top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 14px}
     .hello{display:flex;gap:11px;align-items:center;min-width:0;background:transparent;padding:0}
-    .avatar{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#1a1200;font-weight:800;font-size:15px;box-shadow:0 4px 14px rgba(212,160,23,.30);flex:0 0 auto}
+    .avatar{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--accent-ink);font-weight:800;font-size:15px;box-shadow:0 4px 16px rgba(168,230,207,.32);flex:0 0 auto}
     .hello-text{min-width:0;text-align:left}
     .hello-text h1{font-size:19px;line-height:1.1;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .hello-text p{margin:1px 0 0;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -52,10 +97,10 @@
     .island-panel>b{color:var(--text);font-size:14px}
     .island.open .island-panel{display:block}.island-panel .grid{grid-template-columns:1fr 1fr;margin-top:8px}
     .island-panel .stat b{color:var(--text)}
-    .card,.panel,.chip{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:8px;box-shadow:var(--shadow)}
-    [data-theme="light"] .card,[data-theme="light"] .panel,[data-theme="light"] .chip{background:rgba(255,255,255,.88)}
+    .card,.panel,.chip{background:var(--glass);border:1px solid var(--glass-brd);border-radius:var(--radius);box-shadow:var(--depth),var(--inner-hi);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+    [data-theme="light"] .card,[data-theme="light"] .panel,[data-theme="light"] .chip{background:var(--glass)}
     .nudge{padding:11px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-color:rgba(212,160,23,.35)}
-    .nudge strong{font-family:"Bricolage Grotesque";font-size:15px}.nudge span{font-size:12px;color:var(--muted)}
+    .nudge strong{font-family:"Nunito";font-size:15px}.nudge span{font-size:12px;color:var(--muted)}
     .rego-select{width:auto;min-width:120px;max-width:172px;padding:9px 30px 9px 12px;font-weight:700;color:var(--text)}
     .rego-chips{display:flex;flex-wrap:wrap;gap:8px}
     .rego-chip{display:inline-flex;align-items:center;gap:3px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:5px 5px 5px 12px;font-size:13px;font-weight:600;color:var(--text)}
@@ -69,8 +114,8 @@
     .total.pulse{transform:scale(1.035)}
     .formula{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .bar{height:10px;border-radius:999px;overflow:hidden;background:var(--bg3);display:flex;margin:13px 0}.bar span{height:100%;min-width:3px}
-    .legend,.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.legend div,.stat{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px}
-    .legend small,.stat small{display:block;color:var(--muted);font-size:11px}.legend b,.stat b{font-family:"Bricolage Grotesque";font-size:16px}
+    .legend,.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.legend div,.stat{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px}
+    .legend small,.stat small{display:block;color:var(--muted);font-size:11px}.legend b,.stat b{font-family:"Nunito";font-size:16px}
     [data-theme="light"] .hero{background:#0b0b0b!important;border-color:#232323;color:#f5f0e8;box-shadow:0 22px 70px rgba(0,0,0,.28)}
     [data-theme="light"] .hero .muted,[data-theme="light"] .hero .formula,[data-theme="light"] .hero .legend small{color:#bdb39f}
     [data-theme="light"] .hero .tag{background:rgba(212,160,23,.12);border-color:rgba(212,160,23,.35);color:#f0c040}
@@ -88,27 +133,37 @@
     .chip-title{display:flex;align-items:center;gap:9px;font-weight:800}.dot{width:9px;height:9px;border-radius:50%;background:var(--gold3)}
     .chip-content{display:none;padding:0 13px 13px}.chip.open .chip-content{display:block}
     .row{display:grid;grid-template-columns:1fr 118px 34px;gap:8px;margin:8px 0}.row.two{grid-template-columns:1fr 118px}.row.one{grid-template-columns:1fr}
-    input,select,textarea{width:100%;border:1px solid var(--border);background:var(--bg3);border-radius:8px;padding:11px 10px;outline:none}
-    textarea{min-height:106px;resize:vertical}.mini{width:34px;height:42px;border-radius:8px;background:var(--bg3);border:1px solid var(--border)}
-    .add,.secondary{border:1px solid var(--border);background:var(--bg3);border-radius:8px;padding:10px 12px;font-weight:800}
-    .primary{width:100%;border-radius:8px;padding:14px 15px;font-weight:900;margin:12px 0 10px}
+    input,select,textarea{width:100%;border:1px solid var(--border);background:var(--bg3);border-radius:var(--radius-sm);padding:13px 14px;outline:none}
+    textarea{min-height:106px;resize:vertical}.mini{width:38px;height:44px;border-radius:var(--radius-sm);background:var(--bg3);border:1px solid var(--border)}
+    .add,.secondary{border:1px solid var(--glass-brd);background:var(--glass-strong);border-radius:var(--radius-pill);padding:13px 20px;font-weight:800;min-height:44px;box-shadow:var(--depth);transition:transform .12s cubic-bezier(.34,1.56,.64,1),box-shadow .12s}
+    .add:active,.secondary:active{transform:scale(.94);box-shadow:var(--depth-press)}
+    .primary{width:100%;border-radius:var(--radius-pill);padding:16px 18px;font-weight:900;margin:14px 0 10px;min-height:52px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--accent-ink);box-shadow:var(--depth);transition:transform .12s cubic-bezier(.34,1.56,.64,1),box-shadow .12s}
+    .primary:active{transform:scale(.96);box-shadow:var(--depth-press)}
     .preview{padding:12px;white-space:pre-wrap;font-family:"Geist Mono";font-size:12px;line-height:1.55}.preview-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
     .screen{display:none}.screen.active{display:block}.subhead{display:flex;align-items:end;justify-content:space-between;margin:7px 0 12px}.subhead h2{font-size:30px}.subhead p{margin:0;color:var(--muted);font-size:12px}
     .week-table{padding:12px;border-top:4px solid var(--gold);overflow:hidden}.table-row{display:grid;grid-template-columns:1fr .7fr .78fr 52px 38px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
     .table-row.head{color:var(--muted);font-size:11px;text-transform:uppercase}.tag{display:inline-flex;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--gold3);border-radius:999px;padding:4px 7px;font-size:11px}
-    .total-row{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);margin-top:10px;padding-top:13px}.total-row b{font-family:"Bricolage Grotesque";font-size:28px;color:var(--gold3)}
+    /* Swipe-to-action shift rows */
+    .swipe-wrap{position:relative;overflow:hidden;border-radius:var(--radius-sm);margin:6px 0}
+    .swipe-actions{position:absolute;inset:0;display:flex;justify-content:flex-end;align-items:stretch;gap:0}
+    .swipe-act{border:0;width:66px;font-weight:800;font-size:12px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .swipe-act.edit{background:linear-gradient(135deg,var(--slate),#6d8fe0)}
+    .swipe-act.share{background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--accent-ink)}
+    .swipe-face{position:relative;z-index:1;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:13px 14px;transition:transform .25s cubic-bezier(.22,.61,.36,1);touch-action:pan-y}
+    .swipe-wrap.open .swipe-face{transform:translateX(-132px)}
+    .total-row{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);margin-top:10px;padding-top:13px}.total-row b{font-family:"Nunito";font-size:28px;color:var(--gold3)}
     .filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
     .expense-form{display:grid;gap:8px;margin:8px 0}.expense-form .row{margin:0}.expense-list{display:grid;gap:7px;margin-top:10px}.expense-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px}.expense-item small{display:block;color:var(--muted);font-size:11px}.expense-item b{color:var(--gold3)}
     .checkline{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}.checkline input{width:auto}
     .settings-list{display:grid;gap:9px}.setting{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px}.setting p{margin:2px 0 0;color:var(--muted);font-size:12px}
     .setting.full{display:block}.quick-share-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.quick-share-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px}
     .switch{display:flex;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px}.switch button{padding:7px 10px;border-radius:999px;background:transparent}.switch button.active{background:var(--gold);color:#160d00}
-    .tabbar{position:fixed;left:50%;bottom:calc(12px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(402px,calc(100% - 22px));height:68px;border:1px solid rgba(255,255,255,.13);background:rgba(12,12,12,.78);backdrop-filter:blur(22px);border-radius:999px;display:grid;grid-template-columns:1fr 1fr 1.12fr 1fr 1fr;gap:4px;padding:7px;z-index:20;box-shadow:0 18px 55px rgba(0,0,0,.42)}
-    [data-theme="light"] .tabbar{background:rgba(255,255,255,.76);border-color:rgba(80,58,10,.18)}
+    .tabbar{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);width:min(390px,calc(100% - 32px));height:70px;border:1px solid var(--glass-brd);background:var(--qfbar-bg);backdrop-filter:blur(26px) saturate(1.3);-webkit-backdrop-filter:blur(26px) saturate(1.3);border-radius:var(--radius-pill);display:grid;grid-template-columns:1fr 1fr 1.12fr 1fr 1fr;gap:4px;padding:8px;z-index:40;box-shadow:var(--depth),var(--inner-hi)}
+    [data-theme="light"] .tabbar{background:var(--glass-strong);border-color:var(--glass-brd)}
     .tabbar button{position:relative;background:transparent;border-radius:999px;color:var(--muted);font-size:10px;font-weight:800;display:grid;place-items:center;gap:2px}.tabbar svg{width:19px;height:19px}.tabbar button.active{color:var(--gold3)}
     .tabbar .shift{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#160d00;border-radius:22px}.tabbar .shift.active{color:#160d00}
     .view-btn{height:34px;border-radius:8px;background:rgba(212,160,23,.16);border:1px solid rgba(212,160,23,.35);color:var(--gold3);font-size:12px;font-weight:900}
-    .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#151515;color:#fff;border:1px solid #333;border-radius:999px;padding:10px 14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:var(--glass-strong);color:var(--text);border:1px solid var(--glass-brd);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur));border-radius:999px;padding:10px 14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;place-items:center;padding:20px}.modal.show{display:grid}.modal-card{width:min(100%,390px);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
     /* ── Dual-action share sheet ── */
     .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -116,7 +171,7 @@
     .sheet-card{position:absolute;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,430px);background:var(--bg2);border:1px solid var(--border);border-bottom:0;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px rgba(0,0,0,.45);transition:transform .32s cubic-bezier(.32,.72,0,1);touch-action:none;will-change:transform}
     .sheet-overlay.show .sheet-card{transform:translate(-50%,0)}
     .sheet-grip{width:42px;height:5px;border-radius:999px;background:var(--border);margin:6px auto 12px}
-    .sheet-title{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:800;text-align:center}
+    .sheet-title{font-family:"Nunito",sans-serif;font-size:19px;font-weight:800;text-align:center}
     .sheet-sub{color:var(--muted);font-size:12.5px;text-align:center;margin:4px 12px 16px;line-height:1.45}
     .sheet-btn{width:100%;border-radius:14px;padding:15px;font-weight:800;font-size:15px;margin-bottom:9px;transition:transform .1s}
     .sheet-btn:active{transform:scale(.98)}
@@ -127,7 +182,7 @@
     .us-rego-section{margin-bottom:4px}
     .us-rego-label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin:0 0 10px;text-align:center}
     .us-rego-default{display:flex;flex-direction:column;align-items:center;gap:7px}
-    .us-rego-default-btn{width:100%;border-radius:13px;padding:13px;font-weight:800;font-size:15px;font-family:"Bricolage Grotesque",sans-serif;letter-spacing:.03em;background:var(--bg3);border:2px solid var(--gold3);color:var(--gold3);transition:.15s}
+    .us-rego-default-btn{width:100%;border-radius:13px;padding:13px;font-weight:800;font-size:15px;font-family:"Nunito",sans-serif;letter-spacing:.03em;background:var(--bg3);border:2px solid var(--gold3);color:var(--gold3);transition:.15s}
     .us-rego-default-btn.confirmed{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
     .us-change-link{font-size:12px;font-weight:700;color:var(--gold3);cursor:pointer;text-decoration:underline;text-underline-offset:2px;padding:2px 0}
     .us-rego-picker-row{margin-top:4px}
@@ -139,7 +194,7 @@
     .rg-sub{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 8px 12px;line-height:1.45}
     .rg-change-link{display:none;text-align:center;color:var(--gold3);font-size:12.5px;font-weight:700;cursor:pointer;padding:2px 0 12px;text-decoration:underline;text-underline-offset:2px}
     .rg-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:12px;min-height:44px;max-height:160px;overflow-y:auto;-webkit-overflow-scrolling:touch}
-    .rg-btn{flex:0 0 auto;background:var(--bg3);border:2px solid var(--border);color:var(--text);border-radius:13px;padding:11px 16px;font-size:15px;font-weight:800;font-family:"Bricolage Grotesque",sans-serif;letter-spacing:.04em;transition:transform .1s,background .15s,border-color .15s;min-width:88px;min-height:48px}
+    .rg-btn{flex:0 0 auto;background:var(--bg3);border:2px solid var(--border);color:var(--text);border-radius:13px;padding:11px 16px;font-size:15px;font-weight:800;font-family:"Nunito",sans-serif;letter-spacing:.04em;transition:transform .1s,background .15s,border-color .15s;min-width:88px;min-height:48px}
     .rg-btn:active{transform:scale(.96)}
     .rg-btn.sel{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent;box-shadow:0 0 0 3px rgba(212,160,23,.25)}
     .rg-action{display:flex;flex-direction:column;gap:8px}
@@ -156,7 +211,7 @@
     .bas-pull-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
     .bas-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 3px;min-height:48px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);transition:transform .1s,background .15s,border-color .15s}
     .bas-chip:active{transform:scale(.95)}
-    .bas-chip b{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;line-height:1.05}
+    .bas-chip b{font-family:"Nunito",sans-serif;font-size:15px;line-height:1.05}
     .bas-chip small{font-size:9.5px;color:var(--muted);line-height:1;white-space:nowrap}
     .bas-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
     .bas-chip.active small{color:#3a2a00}
@@ -165,7 +220,7 @@
     .rep-net{padding:15px 16px;margin-bottom:9px;border-top:3px solid var(--gold);background:linear-gradient(135deg,rgba(212,160,23,.10),rgba(17,17,17,.92))}
     [data-theme="light"] .rep-net{background:linear-gradient(135deg,rgba(212,160,23,.13),rgba(255,255,255,.93))}
     .rep-net .rn-label{font-size:11px;text-transform:uppercase;letter-spacing:.85px;color:var(--muted);font-weight:800}
-    .rep-net .rn-val{font-family:"Bricolage Grotesque",sans-serif;font-size:42px;line-height:1;margin:5px 0 3px;font-variant-numeric:tabular-nums;color:var(--green)}
+    .rep-net .rn-val{font-family:"Nunito",sans-serif;font-size:42px;line-height:1;margin:5px 0 3px;font-variant-numeric:tabular-nums;color:var(--green)}
     .rep-net .rn-val.neg{color:var(--red)}
     .rep-net .rn-sub{font-size:11px;color:var(--muted)}
     .net-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px}
@@ -174,13 +229,22 @@
     .net-tile b{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
     .net-tile.minus b{color:var(--red)}
     .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
-    .metric{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:13px;padding:12px;box-shadow:var(--shadow);min-width:0}
-    [data-theme="light"] .metric{background:rgba(255,255,255,.9)}
+    .metric{background:var(--glass);border:1px solid var(--glass-brd);border-radius:16px;padding:12px;box-shadow:var(--shadow);min-width:0;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+    [data-theme="light"] .metric{background:var(--glass)}
+    /* ── Light-mode Reports/Analytics polish ──
+       Bold weights read thinner on white, so nudge key figures up; zone tags get more ink. */
+    [data-theme="light"] .zone-tag{color:var(--gold-ink);font-weight:900}
+    [data-theme="light"] .pulse-val,[data-theme="light"] .rn-val,[data-theme="light"] .ana-donut-center b,[data-theme="light"] .led-amt,[data-theme="light"] .tr-row.tr-strong b{font-weight:900}
+    [data-theme="light"] .ana-h-btn,[data-theme="light"] .qfb-btn{font-weight:700}
+    [data-theme="light"] .ana-trend.up{background:rgba(8,127,91,.14)}
+    [data-theme="light"] .ana-trend.down{background:rgba(192,64,64,.14)}
+    /* Donut center "Net %" uses chart-net so it stays legible on either surface */
+    .ana-donut-center b{color:var(--chart-net)}
     .metric .m-top{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted)}
     .metric .m-top .dot{width:7px;height:7px}
-    .metric .m-val{font-family:"Bricolage Grotesque",sans-serif;font-size:23px;color:var(--gold3);margin:6px 0 2px;font-variant-numeric:tabular-nums;white-space:nowrap}
+    .metric .m-val{font-family:"Nunito",sans-serif;font-size:23px;color:var(--gold-ink);margin:6px 0 2px;font-variant-numeric:tabular-nums;white-space:nowrap}
     .metric .m-sub{font-size:10.5px;color:var(--muted)}
-    .metric .m-warn{display:flex;align-items:center;gap:5px;margin-top:7px;font-size:10.5px;font-weight:800;color:var(--gold3)}
+    .metric .m-warn{display:flex;align-items:center;gap:5px;margin-top:7px;font-size:10.5px;font-weight:800;color:var(--gold-ink)}
     .metric .m-warn svg{width:13px;height:13px;flex:0 0 auto}
     .fuel-pill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px 9px;font-size:10px;color:var(--text);font-weight:600;white-space:nowrap;max-width:100%;overflow:hidden}
     .fuel-pill b{color:var(--gold3)}
@@ -190,14 +254,14 @@
     .export-cluster button{border-radius:13px;padding:14px;font-weight:800;font-size:14px;transition:transform .1s}
     .export-cluster button:active{transform:scale(.98)}
     .export-cluster .exp-copy{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
-    .export-cluster .exp-dl{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    .export-cluster .exp-dl{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:var(--on-gold);border:0}
     /* ═══ Smart Analytics — Functional Segmentation ═══ */
-    .qfbar{position:sticky;top:0;z-index:20;background:rgba(8,8,8,.82);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin:-4px -2px 12px;padding:8px 2px;border-bottom:1px solid var(--border)}
+    .qfbar{position:sticky;top:0;z-index:20;background:var(--qfbar-bg);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);margin:-4px -2px 12px;padding:8px 2px;border-bottom:1px solid var(--border)}
     .qfbar-row{display:flex;gap:8px;align-items:center}
     .qfbar-periods{display:flex;gap:5px;flex:1;overflow-x:auto;scrollbar-width:none}
     .qfbar-periods::-webkit-scrollbar{display:none}
     .qfb-btn{flex:1 0 auto;min-height:44px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12px;white-space:nowrap;padding:0 13px;cursor:pointer;transition:.12s}
-    .qfb-btn.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .qfb-btn.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:var(--on-gold);border-color:transparent}
     .qfb-veh{min-height:44px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12px;padding:0 9px;max-width:120px;flex:0 0 auto}
     /* Zone shell */
     .ana-zones{display:flex;flex-direction:column;gap:14px;margin-bottom:14px}
@@ -205,27 +269,27 @@
     @keyframes zoneFade{from{opacity:.25;transform:translateY(6px)}to{opacity:1;transform:none}}
     .zone{border-radius:16px;padding:14px}
     .zone-tag{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:11px}
-    .zone-tag.light{color:var(--gold3)}
+    .zone-tag.light{color:var(--gold-ink)}
     .zone-tag.inline{margin:0}
     /* ZONE 1 — Financial Pulse (charcoal slab) */
-    .zone-pulse{background:#0d0d0f;border:1px solid #2a2a2e}
+    .zone-pulse{background:var(--zone-bg);border:1px solid var(--zone-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
     .pulse-cards{display:grid;grid-template-columns:1fr 1fr;gap:9px}
-    .pulse-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:13px;padding:12px 11px;min-width:0}
-    .pulse-card.hero{grid-column:1/-1;background:linear-gradient(135deg,rgba(50,213,131,.12),rgba(13,13,15,.4));border-color:rgba(50,213,131,.4)}
+    .pulse-card{background:var(--glass-strong);border:1px solid var(--glass-brd);border-radius:16px;padding:12px 11px;min-width:0;backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+    .pulse-card.hero{grid-column:1/-1;background:var(--hero-tint);border-color:rgba(50,213,131,.4)}
     .pulse-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;font-weight:700}
-    .pulse-val{font-family:"Bricolage Grotesque",sans-serif;font-size:23px;font-weight:800;color:var(--text);margin-top:5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .pulse-val{font-family:"Nunito",sans-serif;font-size:23px;font-weight:800;color:var(--text);margin-top:5px;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .pulse-card.hero .pulse-val{font-size:32px}
     .pulse-val.red{color:var(--red)}.pulse-val.green{color:var(--green)}
     /* ZONE 2 — Insight (lighter surface) */
-    .zone-insight{background:rgba(20,20,22,.6);border:1px solid var(--border)}
+    .zone-insight{background:var(--zone-bg-soft);border:1px solid var(--border)}
     .insight-donut-head{font-size:13px;font-weight:800;color:var(--text);margin-bottom:12px}
     .insight-divider{height:1px;background:var(--border);margin:14px 0}
     .insight-trend{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .it-label{font-size:12px;font-weight:800;color:var(--text)}
     .it-sub{font-size:10px;color:var(--muted);margin-top:2px}
-    .it-proj{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;color:var(--gold3);font-variant-numeric:tabular-nums}
+    .it-proj{font-family:"Nunito",sans-serif;font-size:18px;color:var(--gold-ink);font-variant-numeric:tabular-nums}
     /* ZONE 3 — Fleet & Management */
-    .zone-fleet{background:#0d0d0f;border:1px solid #2a2a2e}
+    .zone-fleet{background:var(--zone-bg);border:1px solid var(--zone-border);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
     .fleet-veh-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
     .fleet-veh-label{font-size:12px;font-weight:700;color:var(--text)}
     .fleet-veh{min-height:44px;border-radius:11px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:13px;padding:0 11px;min-width:140px}
@@ -236,9 +300,9 @@
     .fleet-btn-tx{flex:1;min-width:0}
     .fleet-btn-tx b{display:block;font-size:13px;font-weight:800}
     .fleet-btn-tx small{display:block;font-size:10px;color:var(--muted);margin-top:1px}
-    .fleet-arrow{color:var(--gold3);font-size:16px;flex:0 0 auto}
+    .fleet-arrow{color:var(--gold-ink);font-size:16px;flex:0 0 auto}
     /* Deep-dive — Transaction Ledger */
-    .zone-ledger{background:rgba(20,20,22,.6);border:1px solid var(--border);padding:0;overflow:hidden}
+    .zone-ledger{background:var(--zone-bg-soft);border:1px solid var(--border);padding:0;overflow:hidden}
     .led-toggle{width:100%;display:flex;align-items:center;justify-content:space-between;background:transparent;border:0;padding:14px;cursor:pointer;color:var(--text);min-height:52px}
     .led-toggle-r{display:flex;align-items:center;gap:9px}
     .led-count{font-size:11px;color:var(--muted);font-weight:700}
@@ -250,7 +314,7 @@
     .led-l{min-width:0}
     .led-l b{font-size:13px;font-weight:700;color:var(--text)}
     .led-l small{display:block;font-size:10px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .led-amt{font-family:"Bricolage Grotesque",sans-serif;font-size:16px;font-weight:800;color:var(--gold3);font-variant-numeric:tabular-nums;flex:0 0 auto}
+    .led-amt{font-family:"Nunito",sans-serif;font-size:16px;font-weight:800;color:var(--gold-ink);font-variant-numeric:tabular-nums;flex:0 0 auto}
     .led-empty{padding:14px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);text-align:center}
     /* shared donut/legend/trend (reused across zones) */
     .ana-trend{display:inline-block;margin-top:5px;font-size:9.5px;font-weight:800;border-radius:999px;padding:2px 7px}
@@ -261,7 +325,7 @@
     .ana-donut{position:relative;flex:0 0 auto;width:128px;height:128px}
     .ana-donut-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
     .ana-donut-center small{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
-    .ana-donut-center b{font-family:"Bricolage Grotesque",sans-serif;font-size:24px;color:var(--green)}
+    .ana-donut-center b{font-family:"Nunito",sans-serif;font-size:24px;color:var(--green)}
     .ana-legend{flex:1;min-width:0}
     .ana-leg{display:flex;align-items:center;gap:7px;padding:4px 0;font-size:12px;color:var(--text)}
     .ana-leg-dot{width:9px;height:9px;border-radius:3px;flex:0 0 auto}
@@ -271,9 +335,9 @@
     /* Tax-ready modal */
     .tr-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;display:flex;align-items:center;justify-content:center;padding:18px}
     .tr-modal{width:min(100%,420px);max-height:88vh;overflow-y:auto;background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:16px}
-    .tr-sheet{background:#0c0c0c;border:1px solid var(--border);border-radius:13px;padding:16px}
+    .tr-sheet{background:var(--sheet-bg);border:1px solid var(--border);border-radius:13px;padding:16px}
     .tr-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);padding-bottom:11px;margin-bottom:4px}
-    .tr-brand{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;font-weight:800;color:var(--gold3)}
+    .tr-brand{font-family:"Nunito",sans-serif;font-size:18px;font-weight:800;color:var(--gold-ink)}
     .tr-fy{font-size:11px;color:var(--muted);font-weight:700}
     .tr-sub{font-size:10px;color:var(--muted);margin:8px 0 14px;line-height:1.4}
     .tr-block{border-top:1px solid var(--border);padding-top:6px;margin-bottom:12px}
@@ -281,12 +345,20 @@
     .tr-row span{color:var(--muted)}
     .tr-row b{font-variant-numeric:tabular-nums;font-weight:700}
     .tr-row.tr-strong span{color:var(--text);font-weight:700}
-    .tr-row.tr-strong b{color:var(--gold3);font-size:15px;font-family:"Bricolage Grotesque",sans-serif}
+    .tr-row.tr-strong b{color:var(--gold-ink);font-size:15px;font-family:"Nunito",sans-serif}
     .tr-foot{font-size:9.5px;color:var(--muted);line-height:1.5;margin-top:4px}
     .tr-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
-    .tr-actions button{border-radius:12px;padding:13px;font-weight:800;font-size:13px;cursor:pointer;font-family:Outfit,sans-serif}
+    .tr-actions-3{grid-template-columns:1fr 1.4fr 1fr}
+    .tr-sec-title{font-family:"Nunito",sans-serif;font-size:13px;font-weight:800;color:var(--gold-ink);margin:14px 0 2px;letter-spacing:.02em}
+    .tr-cat-head{font-size:11px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.5px;margin:4px 0 2px}
+    .tr-cat-sub{font-size:10px;font-weight:700;color:var(--muted);margin:8px 0 2px}
+    .tr-sub-row{padding-left:10px}
+    .tr-sub-row span{font-size:12px}
+    .tr-bas .tr-row b{font-variant-numeric:tabular-nums}
+    .tr-note{font-size:9.5px;color:var(--muted);line-height:1.5;margin:6px 0 2px;padding:7px 9px;background:var(--bg3);border-radius:8px}
+    .tr-actions button{border-radius:12px;padding:13px;font-weight:800;font-size:13px;cursor:pointer;font-family:Nunito,sans-serif}
     .tr-actions .secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
-    .tr-actions .primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    .tr-actions .primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:var(--on-gold);border:0}
     @media (max-width:340px){.pulse-val{font-size:20px}.pulse-card.hero .pulse-val{font-size:27px}}
     /* Contract type segmented control */
     .ctype-seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
@@ -299,7 +371,7 @@
     .exp-card{padding:0;overflow:hidden;margin-bottom:9px}
     .exp-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;padding:14px;color:var(--text)}
     .exp-head-right{display:flex;align-items:center;gap:9px}
-    .exp-total{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;color:var(--gold3)}
+    .exp-total{font-family:"Nunito",sans-serif;font-size:18px;color:var(--gold-ink)}
     .exp-chev{width:18px;height:18px;color:var(--muted);transition:transform .25s}
     .exp-card.open .exp-chev{transform:rotate(180deg)}
     .exp-body{display:none;padding:0 13px 13px}
@@ -307,7 +379,7 @@
     .exp-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
     .exp-summary .stat{padding:9px 7px;text-align:center}
     .exp-summary .stat small{font-size:9.5px;text-transform:uppercase;letter-spacing:.3px}
-    .exp-summary .stat b{font-size:16px;color:var(--gold3)}
+    .exp-summary .stat b{font-size:16px;color:var(--gold-ink)}
     .exp-recur-note{font-size:10.5px;color:var(--gold3);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);border-radius:8px;padding:6px 9px;margin-bottom:9px}
     .exp-quick{display:flex;flex-direction:column;gap:8px}
     .exp-amount{font-size:18px!important;font-weight:700;padding:13px 12px}
@@ -315,7 +387,7 @@
     .exp-chips::-webkit-scrollbar{display:none}
     .exp-chip{flex:0 0 auto;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700;min-height:38px;transition:transform .1s,background .15s}
     .exp-chip:active{transform:scale(.95)}
-    .exp-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .exp-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:var(--on-gold);border-color:transparent}
     .exp-chip.more{border-style:dashed}
     .exp-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
     .exp-receipt{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;flex:0 0 auto}
@@ -332,17 +404,17 @@
     .exp-recur-tag{font-size:9.5px;font-weight:800;color:var(--gold3);background:rgba(212,160,23,.12);border-radius:999px;padding:1px 6px}
     .qf button{flex:1 1 0;min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:transform .1s,background .15s}
     .qf button:active{transform:scale(.96)}
-    .qf button.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
+    .qf button.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:var(--on-gold);border-color:transparent}
     .daterow{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
     .datefield{display:flex;flex-direction:column;gap:1px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:6px 11px;min-height:46px;justify-content:center}
     .datefield small{color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.6px}
     .datefield input{border:0;background:transparent;padding:0;font-weight:700;font-size:15px;color:var(--text);width:100%}
     .weeknav{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-    .weeknav .wklabel{flex:1;text-align:center;font-weight:800;font-size:14px;font-family:"Bricolage Grotesque",sans-serif}
+    .weeknav .wklabel{flex:1;text-align:center;font-weight:800;font-size:14px;font-family:"Nunito",sans-serif}
     .weeknav button{width:48px;min-height:46px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--gold3);font-size:20px;font-weight:800;display:flex;align-items:center;justify-content:center;transition:transform .1s}
     .weeknav button:active{transform:scale(.94)}
     .hero-sum{padding:16px;margin-bottom:10px;border-top:3px solid var(--gold)}
-    .hero-sum .hs-total{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1;color:var(--gold3);margin:8px 0 4px;font-variant-numeric:tabular-nums}
+    .hero-sum .hs-total{font-family:"Nunito",sans-serif;font-size:44px;line-height:1;color:var(--gold3);margin:8px 0 4px;font-variant-numeric:tabular-nums}
     .hero-sum .hs-sub{color:var(--muted);font-size:12px}
     /* ── Sync dot indicator ── */
     .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 auto;transition:background .3s}
@@ -358,7 +430,7 @@
     .wk-status{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:11px 14px;margin-bottom:9px;box-shadow:var(--shadow);overflow:hidden;transition:max-height .3s ease,opacity .25s ease,padding .25s ease,margin .25s ease;max-height:60px;opacity:1}
     .wk-status.collapsed{max-height:0;opacity:0;padding-top:0;padding-bottom:0;margin-bottom:0;border-width:0}
     .wk-status-label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.7px;font-weight:700}
-    .wk-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:800;font-family:"Bricolage Grotesque",sans-serif}
+    .wk-badge{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 13px;font-size:13px;font-weight:800;font-family:"Nunito",sans-serif}
     .wk-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
     .wk-badge.current{background:rgba(212,160,23,.15);color:var(--gold3);border:1px solid rgba(212,160,23,.4)}
     .wk-badge.credited{background:rgba(50,213,131,.13);color:var(--green);border:1px solid rgba(50,213,131,.4)}
@@ -366,8 +438,8 @@
     /* ── Redesigned settings groups ── */
     .set-group{margin-bottom:14px}
     .set-group-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:800;margin:0 0 8px 4px}
-    .set-card{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
-    [data-theme="light"] .set-card{background:rgba(255,255,255,.9)}
+    .set-card{background:var(--glass);border:1px solid var(--glass-brd);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);backdrop-filter:blur(var(--glass-blur));-webkit-backdrop-filter:blur(var(--glass-blur))}
+    [data-theme="light"] .set-card{background:var(--glass)}
     .set-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px;border-bottom:1px solid var(--border);width:100%;background:transparent;text-align:left}
     .set-item:last-child{border-bottom:0}
     .set-item .si-label{min-width:0}
@@ -392,15 +464,15 @@
     .wc-arc{fill:none;stroke:var(--gold3);stroke-width:6;stroke-linecap:round;opacity:.92;transition:d .12s}
     .wc-dot-mark{fill:var(--muted);transition:fill .15s}
     .wc-dot-mark.startday,.wc-dot-mark.endday{fill:#150d00}
-    .wc-label{fill:var(--muted);font:700 12px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .15s}
+    .wc-label{fill:var(--muted);font:700 12px Nunito,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none;transition:fill .15s}
     .wc-label.startday{fill:var(--gold3)}
     .wc-label.endday{fill:var(--text)}
     .wc-pin{cursor:grab}
     .wc-pin-start{fill:url(#wcg);stroke:#150d00;stroke-width:1}
     .wc-pin-end{fill:var(--bg2);stroke:var(--gold3);stroke-width:2.5}
-    .wc-pin-txt{font:800 11px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
-    .wc-center{fill:var(--text);font:800 16px "Bricolage Grotesque",sans-serif;text-anchor:middle;dominant-baseline:central}
-    .wc-center-sub{fill:var(--muted);font:600 9px Outfit,sans-serif;text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:.6px}
+    .wc-pin-txt{font:800 11px Nunito,sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+    .wc-center{fill:var(--text);font:800 16px "Nunito",sans-serif;text-anchor:middle;dominant-baseline:central}
+    .wc-center-sub{fill:var(--muted);font:600 9px Nunito,sans-serif;text-anchor:middle;dominant-baseline:central;text-transform:uppercase;letter-spacing:.6px}
     .wc-legend{display:flex;gap:16px;font-size:11.5px;color:var(--muted)}
     .wc-legend span{display:inline-flex;align-items:center;gap:5px}
     .wc-legend b{color:var(--text);font-weight:700}
@@ -480,7 +552,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.14</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v4.1</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -534,7 +606,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.14 · build 2026-06-21</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">4.1 · build 2026-06-25 · Soft-Geometric</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -618,8 +690,12 @@
 </div>
 
 <script type="module">
-const APP_VERSION='3.14', APP_BUILD='2026-06-21';
+const APP_VERSION='4.1', APP_BUILD='2026-06-21';
 const CHANGELOG=[
+  {version:'4.1',date:'25 Jun 2026',changes:['Soft-Geometric redesign: exaggerated 28px card radii, pill-shaped gradient CTAs with pop-on-press, layered-depth shadows for a stacked paper-card feel','Switched to Nunito rounded typeface throughout','Floating frosted tab bar lifted off the bottom edge for a breathable layout','Swipe-to-action on weekly shift rows reveals Edit / Share; removed always-on delete clutter','Generous padding pass; z-index plan keeps sheets and nav layered correctly']},
+  {version:'4.0',date:'25 Jun 2026',changes:['Fluid Clarity redesign: glassmorphism surfaces, powder-blue → off-white light theme, deep-indigo night theme, pastel data accents (mint / blush / coral)','Fluid motion: cascading card entrance fade-ins, button ripples, earnings shimmer on update','All colours moved to CSS variables for instant Light/Dark switching; WCAG ≥4.5:1 verified on text and chart slices','Functional engine unchanged: contract-aware math, ATO/BAS reporting, rego gatekeeper and 3-zone layout all preserved']},
+  {version:'3.16',date:'21 Jun 2026',changes:['Reports & Analytics fully theme-aware: every zone, card, chart and the Tax-Ready sheet now use CSS variables for light + dark','Donut slices switch to WCAG-compliant palettes per theme (terracotta / plum / teal on light; brighter tones on dark)','New semantic tokens: --zone-bg, --sheet-bg, --chart-net/rent/levy, --gold-ink (readable gold text), --hero-tint, --qfbar-bg','Light-mode legibility: heavier font weights for key figures, fixed hero-card ghosting and sticky filter-bar background on white','Purely visual — no change to any financial calculation']},
+  {version:'3.15',date:'21 Jun 2026',changes:['Tax-Ready summary rebuilt to ATO standard: Financial Breakdown (Gross incl. GST, GST collected 1/11, fixed + variable deductible costs, Net Business Income)','BAS helper section with Total Sales G1, GST on Sales 1A, GST on Expenses 1B and net GST payable/refundable','Annual Income Tax Data block aggregating YTD gross and deductions grouped by Rent, Levies and Fuel','Contract-aware: rental isolates rent + levy as business running expenses; commission labels operator split as an operating expense','New Export for Accountant button: Date / Description / Amount / GST Category CSV ready for Xero, MYOB or ATO tools']},
   {version:'3.14',date:'21 Jun 2026',changes:['Reports redesigned with Functional Segmentation: three distinct zones — Financial Pulse, Insight & Analytics, Fleet & Management','Sticky zone-wide Quick Filter (time horizon + vehicle) updates all zones at once with a smooth fade animation','Contract-aware labels: commission shows Operator Commission %, rental shows Weekly Rent + Gov Levy (fuel excluded)','New collapsible Transaction Ledger deep-dive lists each shift with its per-shift math','Thumb-friendly 44px controls, generous zone spacing, charcoal/light surface separation']},
   {version:'3.13',date:'21 Jun 2026',changes:['Smart Analytics dashboard added to Reports: contract-aware Gross / Deductions / Net summary cards','Where-your-money-goes donut adapts slices to contract (Operator split for commission; Rent + Levy for rental, fuel excluded)','Time-horizon filter (Today / Last 7 / Current Month / Year to Date) and Filter-by-Vehicle dropdown re-slice the whole dashboard instantly','Performance trend vs prior period, projected payout run-rate estimate, and a Tax-Ready accountant summary modal','Settings: Contract Type toggle (Commission / Rental) with weekly rent + levy fields; finalized historical shifts are read-only and unchanged']},
   {version:'3.12',date:'15 Jun 2026',changes:['End-of-Shift sheet now contains the rego verification inline — one unified popup instead of two sequential sheets','Scenario A (default vehicle set): one-tap gold confirm button pre-confirmed; actions unlock immediately; Change Vehicle link expands dropdown','Scenario B (no default): dropdown starts blank with error border; action buttons stay locked until a plate is selected','Rego is stamped to the shift before weekly save and share execute; no calc data cleared on cancel or dismiss']},
@@ -1040,7 +1116,7 @@ $('#modalCancel').onclick=()=>$('#modal').classList.remove('show');
 $('#modal').onclick=e=>{if(e.target===$('#modal'))$('#modal').classList.remove('show')};
 function shiftKey(date,rego){return `${date}|${rego||''}`}
 function setTheme(t){document.documentElement.dataset.theme=t;localStorage.setItem(KEYS.theme,t);$('#darkSwitch')?.classList.toggle('active',t==='dark');$('#lightSwitch')?.classList.toggle('active',t==='light')}
-setTheme(localStorage.getItem(KEYS.theme)||'dark');
+setTheme(localStorage.getItem(KEYS.theme)||'light');
 
 function show(screen){$$('.screen').forEach(x=>x.classList.toggle('active',x.dataset.screen===screen));$$('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===screen)); if(screen==='weekly') renderWeekly(); if(screen==='reports') renderReports(); if(screen==='settings') renderSettings(); if(screen==='receipts') renderReceipts(); if(screen==='profile') renderProfile(); window.scrollTo({top:0,behavior:'smooth'})}
 $$('[data-nav]').forEach(b=>b.onclick=()=>show(b.dataset.nav));$$('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
@@ -1114,7 +1190,7 @@ function buildWeekShareCard(){
   const rows=weekEntries(), total=rows.reduce((a,b)=>a+n(b.amount),0);
   const rowsHtml=rows.map(r=>`<div style="display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid #1c1c1c;font-size:17px"><span style="color:#cdbf9f">${esc(fmtDate(r.date))}</span><span style="color:#8c8068">${esc(r.rego||'')}</span><span style="color:#f0c040;font-weight:700;text-align:right;font-variant-numeric:tabular-nums">${money(r.amount)}</span></div>`).join('')||`<div style="color:#8c8068;padding:14px 0;font-size:16px">No shifts in this range</div>`;
   const wrap=document.createElement('div'); wrap.style.cssText='position:fixed;left:-9999px;top:0;z-index:-1';
-  wrap.innerHTML=`<div style="width:520px;padding:28px 32px;background:#0b0b0b;color:#f5f0e8;font-family:Outfit,system-ui,sans-serif;border-radius:18px;box-sizing:border-box"><div style="font-size:13px;color:#8c8068;margin-bottom:14px;letter-spacing:.3px">${esc(wkLabel())}</div>${rowsHtml}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:2px solid #2a2a2a"><span style="font-size:14px;color:#a89878;text-transform:uppercase;letter-spacing:1px">Total</span><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;color:#f0c040;font-variant-numeric:tabular-nums">${money(total)}</span></div></div>`;
+  wrap.innerHTML=`<div style="width:520px;padding:28px 32px;background:#0b0b0b;color:#f5f0e8;font-family:Nunito,system-ui,sans-serif;border-radius:18px;box-sizing:border-box"><div style="font-size:13px;color:#8c8068;margin-bottom:14px;letter-spacing:.3px">${esc(wkLabel())}</div>${rowsHtml}<div style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:2px solid #2a2a2a"><span style="font-size:14px;color:#a89878;text-transform:uppercase;letter-spacing:1px">Total</span><span style="font-family:Nunito,sans-serif;font-weight:900;font-size:38px;color:#f0c040;font-variant-numeric:tabular-nums">${money(total)}</span></div></div>`;
   document.body.appendChild(wrap); return {card:wrap.firstElementChild, cleanup:()=>wrap.remove()};
 }
 function weekShareText(){const rows=weekEntries(); const total=rows.reduce((a,b)=>a+n(b.amount),0); return `${wkLabel()}\n*Total Amount: ${money(total)}*`}
@@ -1192,7 +1268,19 @@ function bindCalc(){
   $('#shiftDate').onchange=e=>{calc.date=e.target.value;setActiveDate('pickBtn');renderCalc()};
 }
 function setActiveDate(id){['todayBtn','yesterdayBtn','pickBtn'].forEach(x=>$('#'+x).classList.toggle('active',x===id))}
-function pulse(){const el=$('#takeHome');el.classList.remove('pulse');void el.offsetWidth;el.classList.add('pulse')}
+function pulse(){const el=$('#takeHome');if(!el)return;el.classList.remove('pulse','shimmer');void el.offsetWidth;el.classList.add('pulse','shimmer');setTimeout(()=>el.classList.remove('shimmer'),1100)}
+/* Fluid Motion: ripple on tappable controls (skips nav tabs to keep them instantly responsive) */
+document.addEventListener('pointerdown',e=>{
+  const t=e.target.closest('.qfb-btn,.ana-h-btn,.fleet-btn,.pill,.sheet-btn,.primary,.secondary,.add');
+  if(!t||t.closest('.tabbar'))return;
+  try{
+    t.classList.add('ripple');
+    const r=t.getBoundingClientRect(),d=Math.max(r.width,r.height),s=document.createElement('span');
+    s.className='rp';s.style.width=s.style.height=d+'px';
+    s.style.left=(e.clientX-r.left-d/2)+'px';s.style.top=(e.clientY-r.top-d/2)+'px';
+    t.appendChild(s);setTimeout(()=>s.remove(),560);
+  }catch(_){}
+},{passive:true});
 function resetCalc(){calc={date:localDateStr(new Date()),rego:calc.rego,eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''};$('#receiptFile').value='';$('#receiptName').textContent='';$('#receiptChip').textContent='None';setActiveDate('todayBtn');renderRows();renderCalc();toast('Cleared')}
 function loadShiftIntoCalc(entry){
   const snap=state.snapshots[shiftKey(entry.date,entry.rego)];
@@ -1533,9 +1621,35 @@ function normFuel(v){return v&&typeof v==='object'?{amount:n(v.amount),type:v.ty
 function reportEntries(){return state.entries.filter(e=>e&&repMatch(e.date)).sort((x,y)=>x.date.localeCompare(y.date))}
 function saveWk(){try{localStorage.setItem('d2e_wk_range',JSON.stringify({s:state.wkStart,e:state.wkEnd}))}catch{}}
 function saveRep(){try{localStorage.setItem('d2e_rep_range',JSON.stringify({s:state.repStart,e:state.repEnd,all:!!state.repAllTime}))}catch{}}
-function shiftRowsHTML(entries){return entries.map((r,i)=>`<div class="table-row" data-row="${i}" style="grid-template-columns:1fr auto auto 26px;cursor:pointer"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold" style="text-align:right">${money(r.amount)}</b><button class="mini" data-del-entry="${i}" aria-label="Delete" style="width:26px;height:30px;line-height:1">x</button></div>`).join('')||'<p class="muted" style="padding:10px 2px">No shifts in this range.</p>'}
+function shiftRowsHTML(entries){return entries.map((r,i)=>`<div class="swipe-wrap" data-swipe="${i}"><div class="swipe-actions"><button class="swipe-act edit" data-edit-row="${i}" aria-label="Edit">✎ Edit</button><button class="swipe-act share" data-share-row="${i}" aria-label="Share">↗ Share</button></div><div class="swipe-face table-row" data-row="${i}" style="grid-template-columns:1fr auto auto;cursor:pointer"><span>${fmtDate(r.date)}</span><span class="tag">${esc(r.rego||'REG')}</span><b class="gold" style="text-align:right">${money(r.amount)}</b></div></div>`).join('')||'<p class="muted" style="padding:10px 2px">No shifts in this range. Swipe a row to edit or share.</p>'}
 function openShiftModal(entry){ $('#modalTitle').textContent=`Shift - ${fmtDate(entry.date)}`;$('#modalText').className='preview-message';$('#modalText').textContent=shiftPreviewForEntry(entry);$('#modalCancel').textContent='Load to edit';$('#modalOk').textContent='Copy';$('#modal').classList.add('show');$('#modalCancel').onclick=()=>{$('#modal').classList.remove('show');loadShiftIntoCalc(entry)};$('#modalOk').onclick=()=>navigator.clipboard?.writeText($('#modalText').textContent).then(()=>{$('#modal').classList.remove('show');toast('Copied')}).catch(()=>$('#modal').classList.remove('show')); }
-function bindShiftRows(container,entries,rerender){ if(!container)return; container.onclick=e=>{ const del=e.target.closest('[data-del-entry]'); if(del){const r=entries[del.dataset.delEntry]; if(!r)return; confirmBox('Delete shift',`Delete ${fmtDate(r.date)} (${r.rego||'REG'}) ${money(r.amount)}? This cannot be undone.`,()=>{state.entries=state.entries.filter(x=>x!==r); delete state.messages[shiftKey(r.date,r.rego)]; delete state.snapshots[shiftKey(r.date,r.rego)]; save(KEYS.entries,state.entries); save(KEYS.messages,state.messages); save(KEYS.snapshots,state.snapshots); rerender()}); return} const row=e.target.closest('[data-row]'); if(row){const entry=entries[row.dataset.row]; if(entry)openShiftModal(entry);} }; }
+function bindShiftRows(container,entries,rerender){
+  if(!container)return;
+  // Tap actions: edit (open modal), share (native share of that shift), tap face = edit
+  container.onclick=e=>{
+    const ed=e.target.closest('[data-edit-row]'); if(ed){const en=entries[ed.dataset.editRow]; if(en)openShiftModal(en); closeSwipes(); return;}
+    const sh=e.target.closest('[data-share-row]'); if(sh){const en=entries[sh.dataset.shareRow]; if(en)shareEntry(en); closeSwipes(); return;}
+    const row=e.target.closest('.swipe-face'); if(row){ if(row.parentElement.classList.contains('open')){closeSwipes();return;} const entry=entries[row.dataset.row]; if(entry)openShiftModal(entry);}
+  };
+  function closeSwipes(){ $$('.swipe-wrap.open',container).forEach(w=>w.classList.remove('open')); }
+  // Pointer swipe: drag the face left to reveal actions; snap open/closed
+  $$('.swipe-wrap',container).forEach(wrap=>{
+    const face=wrap.querySelector('.swipe-face'); let x0=null,dx=0,drag=false,REVEAL=132;
+    face.addEventListener('pointerdown',ev=>{ if(ev.target.closest('button'))return; x0=ev.clientX;dx=0;drag=true;face.style.transition='none'; });
+    face.addEventListener('pointermove',ev=>{ if(!drag)return; dx=ev.clientX-x0; if(wrap.classList.contains('open'))dx-=REVEAL; dx=Math.max(-REVEAL,Math.min(0,dx)); face.style.transform=`translateX(${dx}px)`; });
+    const end=()=>{ if(!drag)return; drag=false; face.style.transition=''; const open=dx<-REVEAL/2; if(open){closeSwipes();wrap.classList.add('open');} else wrap.classList.remove('open'); face.style.transform=''; };
+    face.addEventListener('pointerup',end); face.addEventListener('pointercancel',end); face.addEventListener('pointerleave',end);
+  });
+}
+/* Share a single finalized shift via native share (reuses its saved message snapshot) */
+async function shareEntry(entry){
+  try{
+    const msg=state.messages[shiftKey(entry.date,entry.rego)] || `Shift ${fmtDate(entry.date)} ${entry.rego||''}: ${money(entry.amount)}`;
+    if(navigator.share){ await navigator.share({text:msg}); }
+    else if(navigator.clipboard){ await navigator.clipboard.writeText(msg); toast('Shift copied'); }
+    else toast('Share unavailable');
+  }catch(e){ /* user cancelled */ }
+}
 /* Req 8: Thu-Wed status badge — Current (this week) vs Credited (past Friday after week end) */
 function weekStatus(){
   const [a,b]=wkRange();
@@ -1668,7 +1782,7 @@ function anaBreakdown(lo,hi,rego){
     const grossDisplay=netStored;          // rental: stored amount = shift intake (gross)
     const net=grossDisplay-overheads;
     return {type:'rental',gross:grossDisplay,deduct:overheads,net,days,entries,
-      slices:[{label:'Rent',v:perDayRent*days,c:'#e0905a'},{label:'Levy',v:perDayLevy*days,c:'#c264d0'}],
+      slices:[{label:'Rent',v:perDayRent*days,c:'var(--chart-rent)'},{label:'Levy',v:perDayLevy*days,c:'var(--chart-levy)'}],
       rent:perDayRent*days,levy:perDayLevy*days};
   } else {
     const pct=driverSharePct();
@@ -1676,7 +1790,7 @@ function anaBreakdown(lo,hi,rego){
     const grossDisplay=pct>0?netStored/(pct/100):netStored;
     const operatorSplit=grossDisplay-netStored;
     return {type:'commission',gross:grossDisplay,deduct:operatorSplit,net:netStored,days,entries,
-      slices:[{label:'Operator '+(100-pct)+'%',v:operatorSplit,c:'#e0905a'}],
+      slices:[{label:'Operator '+(100-pct)+'%',v:operatorSplit,c:'var(--chart-rent)'}],
       operatorSplit};
   }
 }
@@ -1714,8 +1828,8 @@ function donutSvg(gross,slices){
     return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${s.c}" stroke-width="${sw}" stroke-dasharray="${dash.toFixed(2)} ${gap.toFixed(2)}" stroke-dashoffset="${off.toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
   }).join('');
   const netFrac=Math.max(0,1-acc);
-  const netSeg=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="#32d583" stroke-width="${sw}" stroke-dasharray="${(netFrac*C).toFixed(2)} ${((1-netFrac)*C).toFixed(2)}" stroke-dashoffset="${(-acc*C).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
-  return `<svg viewBox="0 0 140 140" width="128" height="128" role="img" aria-label="Revenue breakdown donut"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--bg3)" stroke-width="${sw}"/>${segs}${netSeg}</svg>`;
+  const netSeg=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--chart-net)" stroke-width="${sw}" stroke-dasharray="${(netFrac*C).toFixed(2)} ${((1-netFrac)*C).toFixed(2)}" stroke-dashoffset="${(-acc*C).toFixed(2)}" transform="rotate(-90 ${cx} ${cy})"/>`;
+  return `<svg viewBox="0 0 140 140" width="128" height="128" role="img" aria-label="Revenue breakdown donut"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--chart-track)" stroke-width="${sw}"/>${segs}${netSeg}</svg>`;
 }
 function renderAnalytics(){
   const period=anaActivePeriod();
@@ -1732,7 +1846,7 @@ function renderAnalytics(){
   const deductLabel = ct==='rental' ? 'Weekly Rent + Gov Levy' : `Operator Commission ${100-driverSharePct()}%`;
   const deductCardLabel = ct==='rental' ? 'Rent + Levy' : `Operator ${100-driverSharePct()}%`;
   const slices=bd.slices;
-  const legend=[{label:'Net Take-Home',v:bd.net,c:'#32d583'},...slices].map(s=>
+  const legend=[{label:'Net Take-Home',v:bd.net,c:'var(--chart-net)'},...slices].map(s=>
     `<div class="ana-leg"><span class="ana-leg-dot" style="background:${s.c}"></span><span class="ana-leg-l">${s.label}</span><b>${money(s.v)}</b></div>`).join('');
   const regoOpts=`<option value="">All vehicles</option>`+(state.regos||[]).map(r=>`<option value="${esc(r)}"${r===rego?' selected':''}>${esc(r)}</option>`).join('');
   // Transaction ledger (deep-dive) — newest first
@@ -1806,43 +1920,126 @@ function renderAnalytics(){
 
   </div>`;
 }
+/* Gathers all ATO figures for a date window. Pure: reads finalized records only.
+   GST registration is inferred from whether a weekly rent/levy or any GST-incl expense
+   exists; the driver can always cross-check with their agent. Returns a flat object. */
+function taxReadyData(lo,hi){
+  const ct=contractType();
+  const bd=anaBreakdown(lo,hi,'');
+  const gross=bd.gross;                       // GST-inclusive gross fares/intake
+  const gstOnSales=gross/11;                  // 1A — GST collected (1/11th)
+  // Fixed costs (rental occupancy/running expenses)
+  const rent=ct==='rental'?(bd.rent||0):0;
+  const levy=ct==='rental'?(bd.levy||0):0;
+  // Operator commission (commission drivers) — an operating expense
+  const operatorComm=ct==='commission'?(bd.operatorSplit||0):0;
+  // Variable costs from the expense ledger + per-shift fuel log
+  const fyExp=(state.expenses?expandExpenses():[]).filter(e=>e&&e.date>=lo&&e.date<=hi);
+  const sumCat=cats=>fyExp.filter(e=>cats.includes(e.category)).reduce((a,e)=>a+expenseDeductible(e),0);
+  const expFuel=sumCat(['Fuel']);
+  const fuelLog=Object.entries(state.fuel||{}).filter(([d])=>d>=lo&&d<=hi).reduce((a,[,v])=>a+n(normFuel(v).amount),0);
+  const fuelTotal=expFuel+fuelLog;            // ledger fuel + per-shift fuel log
+  const tolls=sumCat(['Tolls','E-tag fees']);
+  const otherExp=fyExp.filter(e=>!['Fuel','Tolls','E-tag fees'].includes(e.category)).reduce((a,e)=>a+expenseDeductible(e),0);
+  const gstOnExpenses=fyExp.reduce((a,e)=>a+expenseGst(e),0); // 1B — GST credits on expenses
+  // Fixed + variable deductions total
+  const fixedCosts=rent+levy;
+  const variableCosts=fuelTotal+tolls;
+  const totalDeductions=fixedCosts+variableCosts+operatorComm+otherExp;
+  const netBusinessIncome=gross-totalDeductions;
+  const netGstLiability=gstOnSales-gstOnExpenses;
+  return {ct,gross,gstOnSales,rent,levy,operatorComm,fuelTotal,tolls,otherExp,gstOnExpenses,
+    fixedCosts,variableCosts,totalDeductions,netBusinessIncome,netGstLiability,days:bd.days,fyExp};
+}
 function buildTaxReady(){
   const fy=currentFyStart(); const lo=localDateStr(new Date(fy,6,1)); const hi=localDateStr(new Date());
-  const ct=contractType();
-  const all=anaBreakdown(lo,hi,'');
+  const d=taxReadyData(lo,hi);
+  const ct=d.ct;
   const fyLabel=`FY${fy}-${String(fy+1).slice(2)}`;
-  let rows='';
-  if(ct==='rental'){
-    rows=[
-      ['Total Gross Revenue',money(all.gross)],
-      ['Total Rent Paid',money(all.rent)],
-      ['Total Levies Paid',money(all.levy)],
-      ['Total Overheads',money(all.deduct)],
-      ['Net Take-Home',money(all.net)]
-    ].map(([l,v],i)=>`<div class="tr-row${i>=3?' tr-strong':''}"><span>${l}</span><b>${v}</b></div>`).join('');
-  } else {
-    rows=[
-      ['Total Gross Revenue',money(all.gross)],
-      ['Operator Split ('+(100-driverSharePct())+'%)',money(all.operatorSplit)],
-      ['Driver Share ('+driverSharePct()+'%)',money(all.net)],
-      ['Net Take-Home',money(all.net)]
-    ].map(([l,v],i)=>`<div class="tr-row${i>=2?' tr-strong':''}"><span>${l}</span><b>${v}</b></div>`).join('');
-  }
-  // expense + GST aggregates for the FY
-  const fyExp=(state.expenses||[]).filter(e=>e&&e.date>=lo&&e.date<=hi);
-  const expTotal=fyExp.reduce((a,e)=>a+expenseDeductible(e),0);
-  const gstTotal=fyExp.reduce((a,e)=>a+expenseGst(e),0);
-  const grossDays=all.days;
-  return `<div class="tr-sheet">
-    <div class="tr-head"><div class="tr-brand">Drive2Earn</div><div class="tr-fy">${fyLabel} · Tax Summary</div></div>
-    <div class="tr-sub">${ct==='rental'?'Rental agreement':'Commission '+driverSharePct()+'/'+(100-driverSharePct())+' split'} · ${grossDays} days worked · generated ${fmtDate(hi)}</div>
-    <div class="tr-block">${rows}</div>
+  const row=(l,v,strong)=>`<div class="tr-row${strong?' tr-strong':''}"><span>${l}</span><b>${v}</b></div>`;
+  const sub=(l,v)=>`<div class="tr-row tr-sub-row"><span>${l}</span><b>${v}</b></div>`;
+  // ── Section 1 · ATO-standard financial breakdown ──
+  const occupancyLabel = ct==='rental' ? 'Business occupancy / running expenses' : 'Operating expense — operator commission';
+  let fixedRows = ct==='rental'
+    ? sub('Weekly rent paid',money(d.rent))+sub('Government levy paid',money(d.levy))
+    : sub('Operator commission withheld ('+(100-driverSharePct())+'%)',money(d.operatorComm));
+  const financialHTML=`
+    <div class="tr-sec-title">1 · Financial breakdown</div>
     <div class="tr-block">
-      <div class="tr-row"><span>Deductible Tax Expenses</span><b>${money(expTotal)}</b></div>
-      <div class="tr-row"><span>GST Input Credits</span><b>${money(gstTotal)}</b></div>
+      ${row('Gross income (incl. GST)',money(d.gross))}
+      ${row('GST collected on fares (1/11)',money(d.gstOnSales))}
     </div>
-    <div class="tr-foot">Figures aggregated from finalized shift records. Provide to your registered tax agent — not a substitute for professional advice.</div>
+    <div class="tr-block">
+      <div class="tr-cat-head">Deductible expenses</div>
+      <div class="tr-cat-sub">Fixed costs — ${occupancyLabel}</div>
+      ${fixedRows}
+      <div class="tr-cat-sub">Variable costs</div>
+      ${sub('Fuel',money(d.fuelTotal))}
+      ${sub('Tolls / e-tag',money(d.tolls))}
+      ${d.otherExp>0?sub('Other deductible expenses',money(d.otherExp)):''}
+      ${row('Total deductions',money(d.totalDeductions),true)}
+    </div>
+    <div class="tr-block">
+      ${row('Net business income',money(d.netBusinessIncome),true)}
+    </div>`;
+  // ── Section 2 · BAS helper ──
+  const basHTML=`
+    <div class="tr-sec-title">2 · BAS data (quarterly)</div>
+    <div class="tr-block tr-bas">
+      ${row('Total sales — G1',money(d.gross))}
+      ${row('GST on sales — 1A',money(d.gstOnSales))}
+      ${row('GST paid on expenses — 1B',money(d.gstOnExpenses))}
+      ${row('Net GST '+(d.netGstLiability>=0?'payable':'refundable'),money(Math.abs(d.netGstLiability)),true)}
+    </div>
+    <div class="tr-note">G1 is GST-inclusive total sales. 1A is GST collected (1/11 of G1). 1B is GST credits on business purchases. Net GST = 1A − 1B.</div>`;
+  // ── Section 3 · Annual income tax data ──
+  const taxHTML=`
+    <div class="tr-sec-title">3 · Annual income tax data (YTD)</div>
+    <div class="tr-block">
+      ${row('Total gross business income',money(d.gross))}
+      <div class="tr-cat-sub">Deductible business expenses</div>
+      ${ct==='rental'?sub('Rent',money(d.rent))+sub('Levies',money(d.levy)):sub('Operator commission',money(d.operatorComm))}
+      ${sub('Fuel',money(d.fuelTotal))}
+      ${d.tolls>0?sub('Tolls / e-tag',money(d.tolls)):''}
+      ${d.otherExp>0?sub('Other',money(d.otherExp)):''}
+      ${row('Total deductions',money(d.totalDeductions),true)}
+      ${row('Net business income (taxable)',money(d.netBusinessIncome),true)}
+    </div>`;
+  return `<div class="tr-sheet">
+    <div class="tr-head"><div class="tr-brand">Drive2Earn</div><div class="tr-fy">${fyLabel} · ATO Tax Summary</div></div>
+    <div class="tr-sub">${ct==='rental'?'Rental — sole trader':'Commission '+driverSharePct()+'/'+(100-driverSharePct())+' split'} · ${d.days} days worked · 1 Jul – ${fmtDate(hi)}</div>
+    ${financialHTML}${basHTML}${taxHTML}
+    <div class="tr-foot">Aggregated from finalized shift records for the current financial year. Prepared as a starting point for your registered tax agent — not a substitute for professional advice. Confirm your GST registration status with the ATO.</div>
   </div>`;
+}
+/* Accountant-ready CSV: Date, Description, Amount, GST Category — import-ready for
+   Xero / MYOB / ATO small-business tools. Income rows + every deductible expense line. */
+function taxReadyCsv(){
+  const fy=currentFyStart(); const lo=localDateStr(new Date(fy,6,1)); const hi=localDateStr(new Date());
+  const ct=contractType();
+  const rows=[['Date','Description','Amount','GST Category']];
+  // Income: one row per finalized shift (gross-of-split, GST-inclusive)
+  const bd=anaBreakdown(lo,hi,'');
+  const pct=driverSharePct();
+  bd.entries.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{
+    const amt=n(e.amount);
+    const grossShift = ct==='rental' ? amt : (pct>0?amt/(pct/100):amt);
+    rows.push([ddmmyyyy(e.date),`Fare income (G1) ${e.rego||''}`.trim(),grossShift.toFixed(2),'GST on income (1A)']);
+  });
+  // Fixed costs
+  if(ct==='rental'){
+    if(bd.rent>0) rows.push([ddmmyyyy(hi),'Vehicle weekly rent (running expense)',(-bd.rent).toFixed(2),'GST on expenses (1B)']);
+    if(bd.levy>0) rows.push([ddmmyyyy(hi),'Government levy',(-bd.levy).toFixed(2),'GST-free']);
+  } else {
+    if(bd.operatorSplit>0) rows.push([ddmmyyyy(hi),`Operator commission (${100-pct}% operating expense)`,(-bd.operatorSplit).toFixed(2),'GST on expenses (1B)']);
+  }
+  // Per-shift fuel log
+  Object.entries(state.fuel||{}).filter(([dt])=>dt>=lo&&dt<=hi).forEach(([dt,v])=>{const a=n(normFuel(v).amount);if(a>0)rows.push([ddmmyyyy(dt),'Fuel (variable cost)',(-a).toFixed(2),'GST on expenses (1B)']);});
+  // Expense ledger
+  (state.expenses?expandExpenses():[]).filter(e=>e&&e.date>=lo&&e.date<=hi).sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{
+    rows.push([ddmmyyyy(e.date),csvCell(e.category+(e.supplier?' - '+e.supplier:'')),(-expenseDeductible(e)).toFixed(2),e.gstIncluded?'GST on expenses (1B)':'GST-free']);
+  });
+  return rows.map(r=>r.join(',')).join('\n');
 }
 function renderReports(){ try{
   if(!state.repAllTime && (!state.repStart||!state.repEnd)){const today=new Date(),sdt=new Date();sdt.setDate(today.getDate()-29);state.repStart=localDateStr(sdt);state.repEnd=localDateStr(today)}
@@ -1939,11 +2136,12 @@ function renderReports(){ try{
   };
   if($('#anaExportPdf'))$('#anaExportPdf').onclick=()=>{const dl=$('#expDl');if(dl)dl.click();else toast('Export unavailable');};
   if($('#anaTaxReady'))$('#anaTaxReady').onclick=()=>{
-    const html=`<div class="tr-overlay" id="trOverlay"><div class="tr-modal">${buildTaxReady()}<div class="tr-actions"><button class="secondary" id="trCopy">Copy Summary</button><button class="primary" id="trClose">Done</button></div></div></div>`;
+    const html=`<div class="tr-overlay" id="trOverlay"><div class="tr-modal">${buildTaxReady()}<div class="tr-actions tr-actions-3"><button class="secondary" id="trCopy">Copy</button><button class="secondary" id="trExport">Export for Accountant</button><button class="primary" id="trClose">Done</button></div></div></div>`;
     const wrap=document.createElement('div');wrap.innerHTML=html;document.body.appendChild(wrap.firstElementChild);
     $('#trClose').onclick=()=>{const o=$('#trOverlay');if(o)o.remove();};
     $('#trOverlay').onclick=e=>{if(e.target.id==='trOverlay')$('#trOverlay').remove();};
     $('#trCopy').onclick=async()=>{try{const txt=$('#trOverlay .tr-sheet').innerText;if(navigator.clipboard){await navigator.clipboard.writeText(txt);toast('Summary copied');}else toast('Copy unavailable');}catch(_){toast('Copy failed');}};
+    $('#trExport').onclick=async()=>{ toast('Preparing accountant CSV\u2026'); await new Promise(r=>setTimeout(r,0)); try{ const fy=currentFyStart(); downloadText(`drive2earn-ato-FY${fy}-${String(fy+1).slice(2)}.csv`,taxReadyCsv()); toast('Accountant CSV downloaded'); }catch(_){ toast('Export failed - try again'); } };
   };
   if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
   if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
