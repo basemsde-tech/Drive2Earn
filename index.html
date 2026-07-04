@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.3 | build 2026-06-02 | single-file PWA -->
+<!-- Drive2Earn v3.0 | build 2026-06-02 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.3</title>
+  <title>Drive2Earn v3.0</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -114,83 +114,6 @@
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
     .qf{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-    /* ── BAS Quarter Quick Pull ── */
-    .bas-pull{padding:12px 13px;margin-bottom:9px;border-top:3px solid var(--gold)}
-    .bas-pull-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-    .bas-fy{font-size:11px;font-weight:700;color:var(--muted)}
-    .bas-pull-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-    .bas-chip{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:8px 3px;min-height:48px;border-radius:12px;border:1px solid var(--border);background:var(--bg2);color:var(--text);transition:transform .1s,background .15s,border-color .15s}
-    .bas-chip:active{transform:scale(.95)}
-    .bas-chip b{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;line-height:1.05}
-    .bas-chip small{font-size:9.5px;color:var(--muted);line-height:1;white-space:nowrap}
-    .bas-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
-    .bas-chip.active small{color:#3a2a00}
-    @media (max-width:340px){.bas-chip small{font-size:9px}.bas-chip b{font-size:14px}}
-    /* ── Reports redesign: Net hero, metric grid, audit, export ── */
-    .rep-net{padding:15px 16px;margin-bottom:9px;border-top:3px solid var(--gold);background:linear-gradient(135deg,rgba(212,160,23,.10),rgba(17,17,17,.92))}
-    [data-theme="light"] .rep-net{background:linear-gradient(135deg,rgba(212,160,23,.13),rgba(255,255,255,.93))}
-    .rep-net .rn-label{font-size:11px;text-transform:uppercase;letter-spacing:.85px;color:var(--muted);font-weight:800}
-    .rep-net .rn-val{font-family:"Bricolage Grotesque",sans-serif;font-size:42px;line-height:1;margin:5px 0 3px;font-variant-numeric:tabular-nums;color:var(--green)}
-    .rep-net .rn-val.neg{color:var(--red)}
-    .rep-net .rn-sub{font-size:11px;color:var(--muted)}
-    .net-tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:13px}
-    .net-tile{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:7px 5px;text-align:center;min-width:0}
-    .net-tile small{display:block;font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .net-tile b{font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
-    .net-tile.minus b{color:var(--red)}
-    .metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:9px}
-    .metric{background:rgba(17,17,17,.88);border:1px solid var(--border);border-radius:13px;padding:12px;box-shadow:var(--shadow);min-width:0}
-    [data-theme="light"] .metric{background:rgba(255,255,255,.9)}
-    .metric .m-top{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;color:var(--muted)}
-    .metric .m-top .dot{width:7px;height:7px}
-    .metric .m-val{font-family:"Bricolage Grotesque",sans-serif;font-size:23px;color:var(--gold3);margin:6px 0 2px;font-variant-numeric:tabular-nums;white-space:nowrap}
-    .metric .m-sub{font-size:10.5px;color:var(--muted)}
-    .metric .m-warn{display:flex;align-items:center;gap:5px;margin-top:7px;font-size:10.5px;font-weight:800;color:var(--gold3)}
-    .metric .m-warn svg{width:13px;height:13px;flex:0 0 auto}
-    .fuel-pill{display:inline-flex;align-items:center;gap:5px;margin-top:8px;background:var(--bg3);border:1px solid var(--border);border-radius:999px;padding:3px 9px;font-size:10px;color:var(--text);font-weight:600;white-space:nowrap;max-width:100%;overflow:hidden}
-    .fuel-pill b{color:var(--gold3)}
-    .export-hub{padding:13px 14px}
-    .export-hub .exp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-    .export-cluster{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .export-cluster button{border-radius:13px;padding:14px;font-weight:800;font-size:14px;transition:transform .1s}
-    .export-cluster button:active{transform:scale(.98)}
-    .export-cluster .exp-copy{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
-    .export-cluster .exp-dl{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
-    /* ── Tax Expenses smart card ── */
-    .exp-card{padding:0;overflow:hidden;margin-bottom:9px}
-    .exp-head{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:transparent;padding:14px;color:var(--text)}
-    .exp-head-right{display:flex;align-items:center;gap:9px}
-    .exp-total{font-family:"Bricolage Grotesque",sans-serif;font-size:18px;color:var(--gold3)}
-    .exp-chev{width:18px;height:18px;color:var(--muted);transition:transform .25s}
-    .exp-card.open .exp-chev{transform:rotate(180deg)}
-    .exp-body{display:none;padding:0 13px 13px}
-    .exp-card.open .exp-body{display:block}
-    .exp-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:9px}
-    .exp-summary .stat{padding:9px 7px;text-align:center}
-    .exp-summary .stat small{font-size:9.5px;text-transform:uppercase;letter-spacing:.3px}
-    .exp-summary .stat b{font-size:16px;color:var(--gold3)}
-    .exp-recur-note{font-size:10.5px;color:var(--gold3);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);border-radius:8px;padding:6px 9px;margin-bottom:9px}
-    .exp-quick{display:flex;flex-direction:column;gap:8px}
-    .exp-amount{font-size:18px!important;font-weight:700;padding:13px 12px}
-    .exp-chips{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:3px;scrollbar-width:none}
-    .exp-chips::-webkit-scrollbar{display:none}
-    .exp-chip{flex:0 0 auto;white-space:nowrap;background:var(--bg2);border:1px solid var(--border);color:var(--text);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:700;min-height:38px;transition:transform .1s,background .15s}
-    .exp-chip:active{transform:scale(.95)}
-    .exp-chip.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
-    .exp-chip.more{border-style:dashed}
-    .exp-actions{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-    .exp-receipt{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:9px 12px;font-size:12.5px;font-weight:700;cursor:pointer;flex:0 0 auto}
-    .exp-receipt svg{width:16px;height:16px;color:var(--gold3)}
-    .exp-recur-toggle{display:inline-flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:9px 12px;font-size:12.5px;font-weight:700;flex:0 0 auto}
-    .exp-recur-toggle .ert-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--muted);transition:.15s}
-    .exp-recur-toggle.on{border-color:var(--gold3);color:var(--gold3)}
-    .exp-recur-toggle.on .ert-dot{background:var(--gold3);border-color:var(--gold3);box-shadow:0 0 0 3px rgba(212,160,23,.18)}
-    .exp-freq{width:auto;min-width:104px;flex:0 0 auto}
-    .exp-details-toggle{background:transparent;border:0;color:var(--gold3);font-size:12px;font-weight:700;text-align:left;padding:2px 0}
-    .exp-more-fields{display:flex;flex-direction:column;gap:8px}
-    .exp-more-fields .row{margin:0}
-    .exp-gst{font-size:10px;font-weight:700;color:var(--green)}
-    .exp-recur-tag{font-size:9.5px;font-weight:800;color:var(--gold3);background:rgba(212,160,23,.12);border-radius:999px;padding:1px 6px}
     .qf button{flex:1 1 0;min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-weight:700;font-size:12.5px;display:flex;align-items:center;justify-content:center;padding:0 8px;transition:transform .1s,background .15s}
     .qf button:active{transform:scale(.96)}
     .qf button.active{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border-color:transparent}
@@ -344,7 +267,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.3</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.0</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -385,7 +308,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.3 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.0 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -430,11 +353,8 @@
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
 
 <script type="module">
-const APP_VERSION='3.3', APP_BUILD='2026-06-02';
+const APP_VERSION='3.0', APP_BUILD='2026-06-02';
 const CHANGELOG=[
-  {version:'3.3',date:'02 Jun 2026',changes:['Tax Expenses rebuilt as a distinct collapsible card - state persists across tab switches and reloads','Quick-log preset chips (Tolls, Vehicle Wash, Parking, Phone/Internet, Servicing/Parts, Tools/Supplies and more) autofill category and pop the keypad','Quick Capture: amount + chip + receipt photo in one streamlined flow; details (supplier, %, note) tuck behind a disclosure','Recurring Expense toggle (weekly/monthly) auto-populates fixed overheads into every active reporting period without re-logging','Per-item GST input tax credit shown beside the gross; live Total Tax Deductions summary feeds the global Net Revenue even while the card is collapsed']},
-  {version:'3.2',date:'02 Jun 2026',changes:['Reports tab fully redesigned: compact, high-density dashboard with a modular card grid','New live Net Revenue metric at the top (Gross minus fuel, GST set-aside and tax expenses)','Missing-receipts audit flag: amber warning on the BAS module showing how many shift receipts are still outstanding','Fuel Tracker now shows a spend-per-operational-day efficiency pill','Copy CSV and Download Report unified into one export hub that runs in the background without freezing the UI','Every module shows on-screen totals, offsets and counts; transaction logs stay hidden behind export']},
-  {version:'3.1',date:'02 Jun 2026',changes:['Reports: new BAS Quarter Quick Pull - one-tap Q1/Q2/Q3/Q4 chips for the current financial year','Tapping a quarter instantly filters BAS Gross, Fuel Tracker and Tax Expenses to that quarter\u2019s exact dates','Isolated filter: only overrides the active date range - underlying shifts, fuel, cash and expenses are untouched, and Copy CSV / Download adapt automatically']},
   {version:'3.0',date:'02 Jun 2026',changes:['Visual clock-style week-cycle selector in Settings: two draggable pins (Start + End) on a 7-day dial','Tap a day or drag either pin - the End pin auto-locks to a complete 7-day window so an invalid/broken cycle is impossible','Works with touch on iOS/Android and pointer/mouse on desktop','The clock selection is the global calendar rule: Weekly filtering, totals and the Current/Credited status badge all follow the pinned cycle instantly']},
   {version:'2.9',date:'02 Jun 2026',changes:['Customizable work-week cycle: pick any 7-day start (Thursday-Wednesday, Monday-Sunday, etc) in Settings','Chosen cycle is the global calendar rule - Weekly tab filtering, grouping, totals and the Reports Last-Week filter all adapt automatically','Configurable Credited pay-day: the green Credited badge now fires on your chosen milestone day after each custom week ends','Week cycle and pay-day settings sync across iPhone and Android in real time']},
   {version:'2.8',date:'01 Jun 2026',changes:['Hardened real-time multi-device sync engine with zero-debounce immediate writes for shift saves','Network-aware sync: detects online/offline transitions and flushes queued writes on reconnect','Live sync-dot indicator in Profile (green pulsing = connected, grey = offline, red = error)','Initial join reconciliation: union-merge so neither phone loses data when a second device signs in','Echo prevention upgraded: deviceId tag + serverTimestamp guard prevents double-renders','Smart per-key refresh: only re-renders the affected screen, not the whole app','All 15 data keys covered: shifts, weekly, fuel, trips, cash, expenses, messages, snapshots, regos, quickShare, profile, levy, fuelDefault, lastRego, timezone','Firebase offline persistence enabled (multi-tab safe) — full offline operation guaranteed']},
@@ -809,19 +729,6 @@ window.__sync={
 // =====================================================================
 
 const EXPENSE_CATEGORIES=['Fuel','Car wash/detailing','Taxi lease/bailee fee','Taxi network/base fees','Booking/platform fees','Tolls','Parking','Airport fees','Vehicle registration','CTP/insurance','Repairs and maintenance','Tyres','Servicing','Oil/coolant/AdBlue','Phone plan','Mobile phone accessories','GPS/navigation','Dash cam','Cleaning supplies','Uniform/work clothing','Accounting/bookkeeping','Bank fees','E-tag fees','Safety equipment','First aid kit','Depreciating asset','Other'];
-/* Quick-log preset chips mapped to existing categories (keeps BAS/CSV logic intact). gst=true means the item carries GST. */
-const EXPENSE_PRESETS=[
-  {label:'Tolls',cat:'Tolls',gst:true},
-  {label:'Vehicle Wash',cat:'Car wash/detailing',gst:true},
-  {label:'Parking',cat:'Parking',gst:true},
-  {label:'Phone/Internet',cat:'Phone plan',gst:true},
-  {label:'Servicing/Parts',cat:'Repairs and maintenance',gst:true},
-  {label:'Tools/Supplies',cat:'Cleaning supplies',gst:true},
-  {label:'Insurance',cat:'CTP/insurance',gst:true},
-  {label:'Rego',cat:'Vehicle registration',gst:false}
-];
-/* Transient draft for the quick-capture form (survives re-renders within a session). */
-let expDraft={category:'',gstIncluded:true,recurring:false,frequency:'monthly',moreOpen:false,detailsOpen:false};
 
 function toast(t){const el=$('#toast');if(!el)return;el.textContent=t;el.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(()=>el.classList.remove('show'),2200)}
 function confirmBox(title,text,ok,okLabel,cancelLabel){$('#modalTitle').textContent=title;$('#modalText').className='muted';$('#modalText').textContent=text;$('#modalCancel').textContent=cancelLabel||'Cancel';$('#modalOk').textContent=okLabel||'OK';$('#modalCancel').onclick=()=>$('#modal').classList.remove('show');$('#modal').classList.add('show');$('#modalOk').onclick=()=>{$('#modal').classList.remove('show');ok&&ok();};}
@@ -913,32 +820,6 @@ function basQuarter(dateStr){const d=parseLocal(dateStr), y=d.getFullYear(), m=d
 function expenseGst(e){return e.gstIncluded?n(e.amount)/11*(n(e.businessUse||100)/100):0}
 function expenseDeductible(e){return n(e.amount)*(n(e.businessUse||100)/100)}
 function expenseAttachmentLabel(e){return e.attachment?.fileName||'No attachment'}
-/* Recurring-aware expansion: returns the expense INSTANCES that fall inside the active
-   report period. Recurring templates are expanded into virtual occurrences (stepping
-   weekly/monthly from their anchor date) WITHOUT ever duplicating rows in state.expenses —
-   so the underlying data stays a single source of truth and cannot be corrupted. */
-function expandExpenses(){
-  try{
-    const allTime=!!state.repAllTime, lo=state.repStart, hi=state.repEnd, today=localDateStr(new Date());
-    const out=[];
-    for(const e of (state.expenses||[])){
-      if(!e||!e.date)continue;
-      if(!e.recurring){
-        if(allTime || (lo&&hi&&e.date>=lo&&e.date<=hi)) out.push(Object.assign({},e,{_baseId:e.id}));
-        continue;
-      }
-      const upper=allTime?today:(hi||today);
-      let d=parseLocal(e.date), guard=0;
-      while(guard++<600){
-        const ds=localDateStr(d);
-        if(ds>upper)break;
-        if(allTime || (lo&&hi&&ds>=lo&&ds<=hi)) out.push(Object.assign({},e,{date:ds,_recurring:true,_baseId:e.id,id:e.id+'@'+ds}));
-        if(e.frequency==='weekly')d.setDate(d.getDate()+7); else d.setMonth(d.getMonth()+1);
-      }
-    }
-    return out;
-  }catch(err){ return (state.expenses||[]).filter(e=>e&&e.date&&repMatch(e.date)); }
-}
 async function fileToData(file){return await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file)})}
 async function compressImage(file){if(!file.type||!file.type.startsWith('image/'))return fileToData(file);try{const dataUrl=await fileToData(file);const img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=dataUrl});const max=1280,scale=Math.min(1,max/Math.max(img.width||max,img.height||max));const w=Math.round((img.width||max)*scale),h=Math.round((img.height||max)*scale);const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);return c.toDataURL('image/jpeg',0.7)}catch{return fileToData(file)}}
 async function prepMedia(file){const isImg=file.type&&file.type.startsWith('image/');if(!isImg&&file.size>2000000){toast('PDF too large (max 2MB)');return null}if(file.size>10000000){toast('File too large (max 10MB)');return null}try{const data=await compressImage(file);if(data&&data.length>2800000){toast('File too large to store');return null}return data}catch{toast('Could not read file');return null}}
@@ -1129,40 +1010,6 @@ function applyQuickFilter(kind){
   else if(kind==='lastmonth'){const first=new Date(today.getFullYear(),today.getMonth()-1,1);const last=new Date(today.getFullYear(),today.getMonth(),0);state.repStart=localDateStr(first);state.repEnd=localDateStr(last)}
   else if(kind==='lastweek'){const s=weekStart();s.setDate(s.getDate()-7);const e=new Date(s);e.setDate(s.getDate()+6);state.repStart=localDateStr(s);state.repEnd=localDateStr(e)}
 }
-/* ── BAS Quarter Quick Pull (isolated, non-destructive) ───────────────
-   These helpers only override the active UI date-range filter (repStart/
-   repEnd). They never touch state.entries/fuel/cash/trip/expenses, so the
-   underlying transactions and the Copy CSV / Download pipelines are safe —
-   those read whatever range repMatch() currently reflects. */
-const BAS_QUARTERS=[
-  {q:1,label:'Q1',months:'Jul\u2013Sep'},
-  {q:2,label:'Q2',months:'Oct\u2013Dec'},
-  {q:3,label:'Q3',months:'Jan\u2013Mar'},
-  {q:4,label:'Q4',months:'Apr\u2013Jun'}
-];
-function currentFyStart(){ const d=new Date(), y=d.getFullYear(), m=d.getMonth()+1; return m>=7?y:y-1; }
-function basQuarterRange(q,fyStart){
-  // Australian financial year quarters for the FY beginning July of fyStart
-  const map={
-    1:[new Date(fyStart,6,1),   new Date(fyStart,8,30)],      // Jul 1  – Sep 30
-    2:[new Date(fyStart,9,1),   new Date(fyStart,11,31)],     // Oct 1  – Dec 31
-    3:[new Date(fyStart+1,0,1), new Date(fyStart+1,2,31)],    // Jan 1  – Mar 31
-    4:[new Date(fyStart+1,3,1), new Date(fyStart+1,5,30)]     // Apr 1  – Jun 30
-  };
-  const [s,e]=map[q]||map[1];
-  return [localDateStr(s),localDateStr(e)];
-}
-function pullBasQuarter(q){
-  const [s,e]=basQuarterRange(q,currentFyStart());
-  state.repAllTime=false; state.repStart=s; state.repEnd=e;
-  saveRep(); renderReports();
-}
-function activeBasQuarter(){
-  if(state.repAllTime)return 0;
-  const fy=currentFyStart();
-  for(const x of BAS_QUARTERS){ const [s,e]=basQuarterRange(x.q,fy); if(state.repStart===s&&state.repEnd===e)return x.q; }
-  return 0;
-}
 function activeQuickFilter(){
   if(state.repAllTime)return 'alltime';
   const today=new Date(), s=state.repStart, e=state.repEnd; if(!s||!e)return '';
@@ -1181,7 +1028,7 @@ function renderReports(){ try{
   const cash=filterMapRep(state.cash); Object.keys(cash).forEach(k=>cash[k]=normCash(cash[k]));
   const fuel=filterMapRep(state.fuel); Object.keys(fuel).forEach(k=>fuel[k]=normFuel(fuel[k]));
   const trip=filterMapRep(state.trip); Object.keys(trip).forEach(k=>trip[k]=n(trip[k]));
-  const exps=expandExpenses();
+  const exps=state.expenses.filter(e=>repMatch(e.date));
   const cashTotal=Object.values(cash).reduce((a,b)=>a+n(b.total),0), trips=Object.values(trip).reduce((a,b)=>a+n(b),0), fuelTotal=Object.values(fuel).reduce((a,b)=>a+n(b.amount),0);
   const expDeduct=exps.reduce((a,e)=>a+expenseDeductible(e),0), expGst=exps.reduce((a,e)=>a+expenseGst(e),0);
   const modules=[
@@ -1191,141 +1038,46 @@ function renderReports(){ try{
     {title:'Fuel Tracker',total:fuelTotal,lines:Object.entries(fuel).map(([d,v])=>`${fmtDate(d)} | ${v.type} | ${money(v.amount)}`),csv:'Date,Type,Amount\n'+Object.entries(fuel).map(([d,v])=>[ddmmyyyy(d),csvCell(v.type),n(v.amount).toFixed(2)].join(',')).join('\n')}
   ];
   const qf=[['lastweek','Last Week'],['last30','Last 30 Days'],['lastmonth','Last Month'],['alltime','All Time']];
-  // ── Smart figures (all derived; underlying data never mutated) ──
-  const gstSetAside=gross/11;                              // GST portion of income to set aside (1/11)
-  const netRev=gross-fuelTotal-gstSetAside-expDeduct;      // live Net Revenue
-  const shiftDates=[...new Set(entries.map(e=>e.date))];
-  const opDays=shiftDates.length;                          // operational days in period
-  const outstanding=shiftDates.filter(d=>!((state.receipts[d]||[]).some(r=>r&&r.shiftReceipt&&r.fileData))).length;
-  const perDay=opDays?fuelTotal/opDays:0;
-  const warnSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
-  const fyS=currentFyStart(), fyLabel=`FY${String(fyS).slice(2)}\u2013${String(fyS+1).slice(2)}`, activeQ=activeBasQuarter();
-  const basPullHTML=`<section class="card bas-pull"><div class="bas-pull-head"><span class="chip-title"><span class="dot"></span>BAS Quarter Quick Pull</span><span class="bas-fy mono">${fyLabel}</span></div><div class="bas-pull-grid">${BAS_QUARTERS.map(x=>`<button class="bas-chip${activeQ===x.q?' active':''}" data-bas-q="${x.q}" aria-label="${x.label} ${x.months}"><b>${x.label}</b><small>${x.months}</small></button>`).join('')}</div></section>`;
-  // ── Net Revenue hero ──
-  const netHTML=`<section class="card rep-net"><div class="rn-label">Net Revenue</div><div class="rn-val${netRev<0?' neg':''}">${money(netRev)}</div><div class="rn-sub">${repLabel()} &middot; after fuel, GST set-aside &amp; tax expenses</div><div class="net-tiles"><div class="net-tile"><small>Gross</small><b>${money(gross)}</b></div><div class="net-tile minus"><small>− Fuel</small><b>${money(fuelTotal)}</b></div><div class="net-tile minus"><small>− GST</small><b>${money(gstSetAside)}</b></div><div class="net-tile minus"><small>− Tax</small><b>${money(expDeduct)}</b></div></div></section>`;
-  // ── Compact metric grid (totals + counts only; logs hidden) ──
-  const metricGrid=`<div class="metric-grid">`+
-    `<div class="metric"><div class="m-top"><span class="dot"></span>BAS Gross</div><div class="m-val">${money(gross)}</div><div class="m-sub">${entries.length} shift${entries.length===1?'':'s'} &middot; ${opDays} day${opDays===1?'':'s'}</div>${outstanding>0?`<div class="m-warn">${warnSvg}${outstanding} receipt${outstanding===1?'':'s'} outstanding</div>`:''}</div>`+
-    `<div class="metric"><div class="m-top"><span class="dot"></span>Cash Income</div><div class="m-val">${money(cashTotal)}</div><div class="m-sub">${Object.keys(cash).length} day${Object.keys(cash).length===1?'':'s'} logged</div></div>`+
-    `<div class="metric"><div class="m-top"><span class="dot"></span>Hail Trips</div><div class="m-val">${money(trips*rate)}</div><div class="m-sub">${trips} trip${trips===1?'':'s'} &middot; levy @ ${money(rate)}</div></div>`+
-    `<div class="metric"><div class="m-top"><span class="dot"></span>Fuel Tracker</div><div class="m-val">${money(fuelTotal)}</div><div class="m-sub">${Object.keys(fuel).length} fill${Object.keys(fuel).length===1?'':'s'}</div><div class="fuel-pill" title="Spend vs operational days">${money(fuelTotal)} / ${opDays}d &middot; <b>${money(perDay)}/day</b></div></div>`+
-    `</div>`;
-  const expCollapsed=localStorage.getItem('d2e_exp_collapsed')!=='0'; // default collapsed
-  const chevSvg='<svg class="exp-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
-  const recurCount=(state.expenses||[]).filter(e=>e&&e.recurring).length;
-  const presetChips=EXPENSE_PRESETS.map(pp=>`<button class="exp-chip${expDraft.category===pp.cat?' active':''}" data-preset-cat="${esc(pp.cat)}" data-preset-gst="${pp.gst?1:0}">${esc(pp.label)}</button>`).join('')+`<button class="exp-chip more${expDraft.moreOpen?' active':''}" id="expMoreChip">More\u2026</button>`;
-  const fullSelect=`<select id="expenseCategory" style="margin-top:7px;display:${expDraft.moreOpen?'block':'none'}">${EXPENSE_CATEGORIES.map(c=>`<option${expDraft.category===c?' selected':''}>${c}</option>`).join('')}</select>`;
-  const expHTML=`<section class="card exp-card${expCollapsed?'':' open'}" id="expenseReport">
-    <button class="exp-head" id="expToggle" aria-expanded="${expCollapsed?'false':'true'}"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><span class="exp-head-right"><b class="exp-total">${money(expDeduct)}</b>${chevSvg}</span></button>
-    <div class="exp-body">
-      <div class="exp-summary"><div class="stat"><small>Tax Deductions</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Items</small><b>${exps.length}</b></div></div>
-      ${recurCount?`<div class="exp-recur-note">${recurCount} recurring overhead${recurCount===1?'':'s'} auto-included in this period</div>`:''}
-      <div class="exp-quick">
-        <input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount $" class="exp-amount">
-        <div class="exp-chips">${presetChips}</div>
-        ${fullSelect}
-        <div class="exp-actions">
-          <label class="exp-receipt" for="expenseAttachment"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg><span id="expReceiptLabel">Receipt</span></label>
-          <input id="expenseAttachment" type="file" accept="image/*,application/pdf" style="display:none">
-          <button class="exp-recur-toggle${expDraft.recurring?' on':''}" id="expRecurToggle" type="button"><span class="ert-dot"></span>Recurring</button>
-          <select id="expFrequency" class="exp-freq" style="display:${expDraft.recurring?'block':'none'}"><option value="monthly"${expDraft.frequency==='monthly'?' selected':''}>Monthly</option><option value="weekly"${expDraft.frequency==='weekly'?' selected':''}>Weekly</option></select>
-        </div>
-        <button class="exp-details-toggle" id="expDetailsToggle" type="button">${expDraft.detailsOpen?'Hide details':'More details (supplier, %, note)'}</button>
-        <div class="exp-more-fields" style="display:${expDraft.detailsOpen?'block':'none'}">
-          <div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div>
-          <div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><label class="checkline" style="margin:0"><input type="checkbox" id="expenseGst" ${expDraft.gstIncluded?'checked':''}> GST incl.</label></div>
-          <div class="row one"><input id="expenseNote" placeholder="Note"></div>
-        </div>
-        <button class="primary exp-save" id="addExpense" style="margin:10px 0 0">Log Expense</button>
-        <p class="mono muted" id="expenseQuarterPreview" style="font-size:11px;margin:7px 0 0"></p>
-        <button class="secondary" id="copyExpensesCsv" style="width:100%;margin-top:8px">Copy Expenses CSV</button>
-      </div>
-      <div class="expense-list" id="expenseList" style="margin-top:10px"></div>
-    </div>
-  </section>`;
-  // ── Unified export hub ──
-  const exportHTML=`<section class="card export-hub"><div class="exp-head"><span class="chip-title"><span class="dot"></span>Export</span><span class="muted" style="font-size:11px">${repLabel()}</span></div><div class="export-cluster"><button class="exp-copy" id="expCopy">Copy CSV</button><button class="exp-dl" id="expDl">Download Report</button></div></section>`;
+  const hero=modules[0];
+  const heroHTML=`<section class="card hero-sum"><span class="chip-title"><span class="dot"></span>${hero.title}</span><div class="hs-total">${money(hero.total)}</div><div class="hs-sub">${repLabel()} &middot; ${hero.lines.length} item${hero.lines.length===1?'':'s'}</div><div class="filter" style="margin-top:10px"><button class="pill" data-copy-report="0">Copy CSV</button><button class="pill" data-dl-report="0">Download</button></div></section>`;
+  const cardHTML=modules.slice(1).map((s,j)=>{const i=j+1;return `<article class="card sum-card"><div class="sc-row"><span class="chip-title"><span class="dot"></span>${s.title}</span><b class="sc-total">${money(s.total)}</b></div><div class="muted sc-sub">${repLabel()} &middot; ${s.lines.length} item${s.lines.length===1?'':'s'}</div><div class="filter"><button class="pill" data-copy-report="${i}">Copy CSV</button><button class="pill" data-dl-report="${i}">Download</button></div></article>`}).join('');
+  const expHTML=`<article class="card report-chip" id="expenseReport"><button class="chip"><span class="chip-title"><span class="dot"></span>Tax Expenses</span><b>${money(expDeduct)}</b></button><div class="report-body"><div class="grid" style="grid-template-columns:repeat(3,1fr);margin:8px 0"><div class="stat"><small>Deductible</small><b>${money(expDeduct)}</b></div><div class="stat"><small>GST Credits</small><b>${money(expGst)}</b></div><div class="stat"><small>Receipts</small><b>${exps.filter(e=>e.attachment).length}/${exps.length}</b></div></div><div class="expense-form"><div class="row two"><input type="date" id="expenseDate" value="${localDateStr(new Date())}"><input id="expenseAmount" type="number" min="0" step="0.01" inputmode="decimal" placeholder="Amount"></div><div class="row two"><select id="expenseCategory">${EXPENSE_CATEGORIES.map(c=>`<option>${c}</option>`).join('')}<option value="__manual">Add manually...</option></select><input id="expenseManual" placeholder="Manual category" style="display:none"></div><div class="row two"><input id="expenseSupplier" placeholder="Supplier / merchant"><input id="expenseBusinessUse" type="number" min="0" max="100" value="100" placeholder="Business %"></div><div class="row one"><input id="expenseNote" placeholder="Note"></div><label class="checkline"><input type="checkbox" id="expenseFrequent"> Frequent expense</label><label class="checkline"><input type="checkbox" id="expenseGst" checked> GST included</label><input id="expenseAttachment" type="file" accept="image/*,application/pdf"><div class="preview-actions"><button class="secondary" id="addExpense">Save Expense</button><button class="secondary" id="copyExpensesCsv">Copy CSV</button></div><p class="mono muted" id="expenseQuarterPreview" style="font-size:12px"></p></div><div class="expense-list" id="expenseList" style="margin-top:10px"></div></div></article>`;
   $('#reports').innerHTML=
-    basPullHTML+
     `<div class="qf">${qf.map(([k,l])=>`<button data-qf="${k}" class="${active===k?'active':''}">${l}</button>`).join('')}</div>`+
     `<div class="daterow"><div class="datefield"><small>From</small><input type="date" id="repStart" ${state.repAllTime?'disabled':''}></div><div class="datefield"><small>To</small><input type="date" id="repEnd" ${state.repAllTime?'disabled':''}></div></div>`+
-    netHTML+metricGrid+expHTML+exportHTML;
+    heroHTML+cardHTML+expHTML+
+    `<button class="secondary" id="downloadAllCsv" style="width:100%;margin-top:8px">Download all CSV</button>`;
   if($('#repStart')){$('#repStart').value=state.repAllTime?'':(state.repStart||''); $('#repStart').onchange=e=>{state.repAllTime=false;state.repStart=e.target.value;saveRep();renderReports()};}
   if($('#repEnd')){$('#repEnd').value=state.repAllTime?'':(state.repEnd||''); $('#repEnd').onchange=e=>{state.repAllTime=false;state.repEnd=e.target.value;saveRep();renderReports()};}
   $$('#reports [data-qf]').forEach(b=>b.onclick=()=>{applyQuickFilter(b.dataset.qf);saveRep();renderReports()});
-  $$('#reports [data-bas-q]').forEach(b=>b.onclick=()=>pullBasQuarter(+b.dataset.basQ));
-  // Unified export — runs in the background (yields a frame) so the UI never freezes
-  const combinedCsv=()=>modules.map(s=>`# ${s.title} (${repLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${repLabel()})\n${expensesCsv()}`;
-  const doExport=async dl=>{ toast('Preparing export\u2026'); await new Promise(r=>setTimeout(r,0)); try{ const all=combinedCsv(); if(dl){downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all);toast('Report downloaded');} else { if(navigator.clipboard){await navigator.clipboard.writeText(all);toast('CSV copied');} else {downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all);toast('Copy unavailable - downloaded instead');} } }catch(e){ toast('Export failed - try again'); } };
-  if($('#expCopy'))$('#expCopy').onclick=()=>doExport(false);
-  if($('#expDl'))$('#expDl').onclick=()=>doExport(true);
+  $$('#reports .report-chip>button.chip').forEach(b=>b.onclick=()=>{$$('.report-chip').forEach(x=>x!==b.parentElement&&x.classList.remove('open'));b.parentElement.classList.toggle('open')});
+  $$('[data-copy-report]').forEach(b=>b.onclick=()=>navigator.clipboard?.writeText(modules[b.dataset.copyReport].csv||'').then(()=>toast('CSV copied')).catch(()=>toast('Copy unavailable')));
+  $$('[data-dl-report]').forEach(b=>b.onclick=()=>{const s=modules[b.dataset.dlReport];downloadText(`${s.title.toLowerCase().replace(/\s+/g,'-')}.csv`,s.csv||'No data');toast('Downloaded')});
+  $('#downloadAllCsv').onclick=()=>{const all=modules.map(s=>`# ${s.title} (${repLabel()})\n${s.csv||'No data'}`).join('\n\n')+`\n\n# Tax Expenses (${repLabel()})\n${expensesCsv()}`; downloadText(`drive2earn-report-${localDateStr(new Date())}.csv`,all); toast('CSV downloaded')};
   bindExpenseReport();
  }catch(err){ const box=$('#reports'); if(box){ box.innerHTML='<div class="card" style="padding:14px"><b>Could not build reports</b><p class="muted" style="font-size:12px;margin-top:6px">'+esc(err&&err.message||String(err))+'</p><div class="preview-actions" style="margin-top:10px"><button class="secondary" id="reportsRetry">Retry</button><button class="secondary" id="reportsReset">Reset report cache</button></div></div>'; const rt=$('#reportsRetry'); if(rt)rt.onclick=()=>renderReports(); const rs=$('#reportsReset'); if(rs)rs.onclick=()=>confirmBox('Reset report cache','Clear cached cash, levy and fuel data? Saved shift totals are kept.',()=>{state.cash={};state.fuel={};state.trip={};save(KEYS.cash,state.cash);save(KEYS.fuel,state.fuel);save(KEYS.trip,state.trip);renderReports()}); } } }
-function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Recurring,Attachment,Note',...expandExpenses().sort((a,b)=>a.date.localeCompare(b.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),(e.recurring?('Yes ('+(e.frequency||'monthly')+')'):'No'),csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
+function expensesCsv(){return ['Date,Quarter,Category,Supplier,Amount,Business %,Deductible,GST credit,Frequent,Attachment,Note',...state.expenses.filter(e=>repMatch(e.date)).map(e=>[ddmmyyyy(e.date),csvCell(basQuarter(e.date)),csvCell(e.category),csvCell(e.supplier||''),n(e.amount).toFixed(2),n(e.businessUse||100),expenseDeductible(e).toFixed(2),expenseGst(e).toFixed(2),e.frequent?'Yes':'No',csvCell(e.attachment?.fileName||''),csvCell(e.note||'')].join(','))].join('\n')}
 function renderExpenseList(){
   const box=$('#expenseList'); if(!box)return;
-  const list=expandExpenses().sort((a,b)=>b.date.localeCompare(a.date));
-  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> ${expenseGst(e)>0?`<span class="exp-gst">+GST ${money(expenseGst(e))}</span>`:''} <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''}</small><small>${e._recurring?`<span class="exp-recur-tag">Recurring \u00b7 ${esc(e.frequency||'monthly')}</span> `:''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e._baseId}">View</button><button class="mini" data-del-expense="${e._baseId}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses in this range.</p>';
+  const list=state.expenses.filter(e=>repMatch(e.date)).sort((a,b)=>b.date.localeCompare(a.date));
+  box.innerHTML=list.map(e=>`<div class="expense-item"><span><b>${money(expenseDeductible(e))}</b> <small>${fmtDate(e.date)} | ${basQuarter(e.date)}</small><small>${esc(e.category)}${e.supplier?' | '+esc(e.supplier):''} | GST ${money(expenseGst(e))}</small><small>${e.frequent?'Frequent | ':''}${esc(expenseAttachmentLabel(e))}</small></span><span><button class="view-btn" data-view-expense="${e.id}">View</button><button class="mini" data-del-expense="${e.id}" aria-label="Delete">x</button></span></div>`).join('')||'<p class="muted">No expenses in this range.</p>';
 }
 function bindExpenseReport(){
   renderExpenseList();
-  // ── Collapse toggle (persists across tab switches & reloads) ──
-  const card=$('#expenseReport'), toggle=$('#expToggle');
-  if(toggle)toggle.onclick=()=>{const open=card.classList.toggle('open');localStorage.setItem('d2e_exp_collapsed',open?'0':'1');toggle.setAttribute('aria-expanded',open?'true':'false')};
-  const date=$('#expenseDate'), category=$('#expenseCategory'), amount=$('#expenseAmount'), q=$('#expenseQuarterPreview');
-  if(!amount)return;
-  const updateQuarter=()=>{ if(q)q.textContent=`BAS quarter: ${basQuarter((date&&date.value)||localDateStr(new Date()))}`; };
-  updateQuarter(); if(date)date.onchange=updateQuarter;
-  // ── Preset quick-log chips: autofill category + GST, then pop the numeric keypad ──
-  $$('#reports [data-preset-cat]').forEach(b=>b.onclick=()=>{
-    const cat=b.dataset.presetCat;
-    expDraft.category=cat; expDraft.gstIncluded=b.dataset.presetGst==='1'; expDraft.moreOpen=false;
-    $$('#reports .exp-chip').forEach(c=>c.classList.remove('active')); b.classList.add('active');
-    if(category){category.value=cat; category.style.display='none';}
-    const gc=$('#expenseGst'); if(gc)gc.checked=expDraft.gstIncluded;
-    try{amount.focus({preventScroll:false});}catch(_){amount.focus();} // opens decimal keypad on mobile
-  });
-  const moreChip=$('#expMoreChip');
-  if(moreChip)moreChip.onclick=()=>{ expDraft.moreOpen=!expDraft.moreOpen; if(category)category.style.display=expDraft.moreOpen?'block':'none'; moreChip.classList.toggle('active',expDraft.moreOpen); };
-  if(category)category.onchange=()=>{ expDraft.category=category.value; $$('#reports .exp-chip:not(.more)').forEach(c=>c.classList.toggle('active',c.dataset.presetCat===category.value)); };
-  // ── Recurring toggle + frequency ──
-  const recBtn=$('#expRecurToggle'), freq=$('#expFrequency');
-  if(recBtn)recBtn.onclick=()=>{ expDraft.recurring=!expDraft.recurring; recBtn.classList.toggle('on',expDraft.recurring); if(freq)freq.style.display=expDraft.recurring?'block':'none'; };
-  if(freq)freq.onchange=()=>{expDraft.frequency=freq.value;};
-  // ── Details disclosure ──
-  const detToggle=$('#expDetailsToggle'), detBox=$('#reports .exp-more-fields');
-  if(detToggle)detToggle.onclick=()=>{ expDraft.detailsOpen=!expDraft.detailsOpen; if(detBox)detBox.style.display=expDraft.detailsOpen?'block':'none'; detToggle.textContent=expDraft.detailsOpen?'Hide details':'More details (supplier, %, note)'; };
-  // ── Receipt label reflects attachment ──
-  const att=$('#expenseAttachment'), attLabel=$('#expReceiptLabel');
-  if(att)att.onchange=()=>{ if(attLabel)attLabel.textContent=att.files[0]?'Attached':'Receipt'; };
-  // ── Copy expenses CSV (background) ──
-  const copyBtn=$('#copyExpensesCsv');
-  if(copyBtn)copyBtn.onclick=async()=>{ await new Promise(r=>setTimeout(r,0)); try{ const csv=expensesCsv(); if(navigator.clipboard){await navigator.clipboard.writeText(csv);toast('Expenses CSV copied');} else {downloadText('drive2earn-expenses.csv',csv);toast('Copy unavailable - downloaded');} }catch(e){ toast('Copy failed'); } };
-  // ── Save (Quick Capture) — strict validation + try-catch ──
-  const addBtn=$('#addExpense');
-  if(addBtn)addBtn.onclick=async()=>{
-    try{
-      const cat=expDraft.category || (category&&category.value) || '';
-      const amt=nn(amount.value);
-      if(!amt){ toast('Enter an amount'); try{amount.focus();}catch(_){} return; }
-      if(!cat){ toast('Tap a category chip'); return; }
-      const dval=(date&&date.value)||localDateStr(new Date());
-      const bu=$('#expenseBusinessUse'); const businessUse=bu?(nn(bu.value)||100):100;
-      const gc=$('#expenseGst'); const gstIncluded=gc?gc.checked:expDraft.gstIncluded;
-      const sup=$('#expenseSupplier'); const note=$('#expenseNote');
-      const file=att&&att.files[0];
-      let attachment=null;
-      try{ if(file){ const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null; } }
-      catch(_){ toast('Could not read receipt'); }
-      state.expenses.push({id:uid(),date:dval,amount:amt,category:cat,supplier:sup?sup.value.trim():'',businessUse,gstIncluded,recurring:expDraft.recurring,frequency:expDraft.recurring?expDraft.frequency:null,note:note?note.value.trim():'',attachment,quarter:basQuarter(dval),savedAt:new Date().toISOString()});
-      save(KEYS.expenses,state.expenses);
-      toast(expDraft.recurring?'Recurring expense saved':'Expense logged');
-      // reset transient draft amount/recurring but keep details-open preference
-      expDraft.recurring=false;
-      renderReports();
-    }catch(err){ toast('Could not save expense - try again'); }
+  const date=$('#expenseDate'), category=$('#expenseCategory'), manual=$('#expenseManual'), q=$('#expenseQuarterPreview');
+  if(!date)return;
+  const updateQuarter=()=>{q.textContent=`BAS quarter: ${basQuarter(date.value||localDateStr(new Date()))}`};
+  updateQuarter(); date.onchange=updateQuarter;
+  category.onchange=()=>{manual.style.display=category.value==='__manual'?'block':'none'};
+  $('#copyExpensesCsv').onclick=()=>navigator.clipboard?.writeText(expensesCsv()).then(()=>toast('Expenses CSV copied')).catch(()=>toast('Copy unavailable'));
+  $('#addExpense').onclick=async()=>{
+    const file=$('#expenseAttachment').files[0], categoryValue=category.value==='__manual'?manual.value.trim():category.value;
+    if(!date.value||!nn($('#expenseAmount').value)||!categoryValue){toast('Add date, amount and category');return}
+    let attachment=null; try{if(file){const _d=await prepMedia(file); attachment=_d?{fileName:file.name,fileType:file.type,fileData:_d,savedAt:new Date().toISOString()}:null}}catch{toast('Could not read attachment')}
+    state.expenses.push({id:uid(),date:date.value,amount:nn($('#expenseAmount').value),category:categoryValue,supplier:$('#expenseSupplier').value.trim(),businessUse:nn($('#expenseBusinessUse').value)||100,gstIncluded:$('#expenseGst').checked,frequent:$('#expenseFrequent').checked,note:$('#expenseNote').value.trim(),attachment,quarter:basQuarter(date.value),savedAt:new Date().toISOString()});
+    save(KEYS.expenses,state.expenses); toast('Expense saved'); renderReports();
   };
-  $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){const rl=exp.recurring?' (recurring \u2013 removes all future occurrences)':''; confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?${rl}`,()=>{try{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports();}catch(_){toast('Delete failed');}}); return} const text=`${exp.category}${exp.recurring?' (recurring '+(exp.frequency||'monthly')+')':''}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST input credit: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
+  $('#expenseList').onclick=e=>{const id=e.target.dataset.viewExpense||e.target.dataset.delExpense; if(!id)return; const exp=state.expenses.find(x=>x.id===id); if(!exp)return; if(e.target.dataset.delExpense){confirmBox('Delete expense',`Delete ${exp.category} ${money(exp.amount)} from ${fmtDate(exp.date)}?`,()=>{state.expenses=state.expenses.filter(x=>x.id!==id); save(KEYS.expenses,state.expenses); renderReports()}); return} const text=`${exp.category}\n${fmtDate(exp.date)} | ${basQuarter(exp.date)}\nAmount: ${money(exp.amount)}\nBusiness use: ${n(exp.businessUse||100)}%\nDeductible: ${money(expenseDeductible(exp))}\nGST credit estimate: ${money(expenseGst(exp))}\nSupplier: ${exp.supplier||'-'}\nAttachment: ${expenseAttachmentLabel(exp)}\n${exp.note||''}`; confirmBox('Expense Detail',text,()=>{if(exp.attachment?.fileData){const a=document.createElement('a');a.href=exp.attachment.fileData;a.download=exp.attachment.fileName||'expense-attachment';a.click()}}); $('#modalOk').textContent=exp.attachment?'Download':'OK'};
 }
 function renderSettings(){ $('#levyRate').value=localStorage.getItem(KEYS.levy)||'1.20'; $('#defaultFuel').value=localStorage.getItem(KEYS.fuelDefault)||'Diesel'; renderRegoChips(); $('#receiptCount').textContent=`${Object.values(state.receipts).flat().length} receipts`; $('#syncSummary').textContent=userId?'Firebase \u2022 Real-time':'Local only'; $('#quickShareName').value=state.quickShare.name||''; $('#quickShareNumber').value=state.quickShare.number||''; const c=quickContact(); $('#quickShareSummary').textContent=c?`${state.quickShare.name||'Quick contact'} - +${c.number}`:'No quick contact set';
   try{renderWeekClock();}catch(_){}
