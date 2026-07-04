@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Drive2Earn v3.3 | build 2026-06-02 | single-file PWA -->
+<!-- Drive2Earn v3.8 | build 2026-06-07 | single-file PWA -->
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#080808">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Drive2Earn v3.3</title>
+  <title>Drive2Earn v3.8</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Geist+Mono:wght@500;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,12 +15,12 @@
   <style>
     :root {
       --bg:#080808; --bg2:#111111; --bg3:#191919; --border:#242424; --text:#f5f0e8; --muted:#a89878;
-      --gold:#d4a017; --gold2:#b8860b; --gold3:#f0c040; --red:#e05252; --green:#32d583; --purple:#a78bfa;
+      --gold:#d4a017; --gold2:#b8860b; --gold3:#f0c040; --red:#e05252; --green:#32d583; --purple:#a78bfa; --slate:#8fb0f0;
       --shadow:0 22px 70px rgba(0,0,0,.38); --radius:8px;
     }
     [data-theme="light"] {
       --bg:#f5f0e8; --bg2:#ffffff; --bg3:#ede8da; --border:#d8d0b8; --text:#180e00; --muted:#6f624a;
-      --gold:#b8860b; --gold2:#936800; --gold3:#d4a017; --red:#c04040; --green:#087f5b; --purple:#6d28d9;
+      --gold:#b8860b; --gold2:#936800; --gold3:#d4a017; --red:#c04040; --green:#087f5b; --purple:#6d28d9; --slate:#3f5bb5;
       --shadow:0 18px 55px rgba(60,38,0,.16);
     }
     *{box-sizing:border-box}
@@ -97,7 +97,7 @@
     .week-table{padding:12px;border-top:4px solid var(--gold);overflow:hidden}.table-row{display:grid;grid-template-columns:1fr .7fr .78fr 52px 38px;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);font-size:13px}
     .table-row.head{color:var(--muted);font-size:11px;text-transform:uppercase}.tag{display:inline-flex;border:1px solid rgba(212,160,23,.35);background:rgba(212,160,23,.1);color:var(--gold3);border-radius:999px;padding:4px 7px;font-size:11px}
     .total-row{display:flex;align-items:center;justify-content:space-between;border-top:1px dashed var(--border);margin-top:10px;padding-top:13px}.total-row b{font-family:"Bricolage Grotesque";font-size:28px;color:var(--gold3)}
-    .report-chip{margin-bottom:9px}.report-body{display:none;padding:0 12px 12px}.report-chip.open .report-body{display:block}.filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
+    .filter{display:flex;gap:6px;overflow:auto;padding-bottom:8px}.filter button{white-space:nowrap}
     .expense-form{display:grid;gap:8px;margin:8px 0}.expense-form .row{margin:0}.expense-list{display:grid;gap:7px;margin-top:10px}.expense-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:9px}.expense-item small{display:block;color:var(--muted);font-size:11px}.expense-item b{color:var(--gold3)}
     .checkline{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px}.checkline input{width:auto}
     .settings-list{display:grid;gap:9px}.setting{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px}.setting p{margin:2px 0 0;color:var(--muted);font-size:12px}
@@ -110,6 +110,18 @@
     .view-btn{height:34px;border-radius:8px;background:rgba(212,160,23,.16);border:1px solid rgba(212,160,23,.35);color:var(--gold3);font-size:12px;font-weight:900}
     .toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#151515;color:#fff;border:1px solid #333;border-radius:999px;padding:10px 14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
     .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:60;place-items:center;padding:20px}.modal.show{display:grid}.modal-card{width:min(100%,390px);background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;box-shadow:var(--shadow)}
+    /* ── Dual-action share sheet ── */
+    .sheet-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:70;opacity:0;pointer-events:none;transition:opacity .25s}
+    .sheet-overlay.show{opacity:1;pointer-events:auto}
+    .sheet-card{position:absolute;left:50%;bottom:0;transform:translate(-50%,100%);width:min(100%,430px);background:var(--bg2);border:1px solid var(--border);border-bottom:0;border-radius:22px 22px 0 0;padding:8px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:0 -18px 55px rgba(0,0,0,.45);transition:transform .32s cubic-bezier(.32,.72,0,1);touch-action:none;will-change:transform}
+    .sheet-overlay.show .sheet-card{transform:translate(-50%,0)}
+    .sheet-grip{width:42px;height:5px;border-radius:999px;background:var(--border);margin:6px auto 12px}
+    .sheet-title{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;font-weight:800;text-align:center}
+    .sheet-sub{color:var(--muted);font-size:12.5px;text-align:center;margin:4px 12px 16px;line-height:1.45}
+    .sheet-btn{width:100%;border-radius:14px;padding:15px;font-weight:800;font-size:15px;margin-bottom:9px;transition:transform .1s}
+    .sheet-btn:active{transform:scale(.98)}
+    .sheet-btn.primary{background:linear-gradient(135deg,var(--gold3),var(--gold2));color:#150d00;border:0}
+    .sheet-btn.secondary{background:var(--bg3);border:1px solid var(--border);color:var(--text)}
     .modal-card .preview-message{white-space:pre-wrap;font-family:"Geist Mono",monospace;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;color:var(--text);line-height:1.55}
     .receipt-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.receipt{aspect-ratio:1;background:var(--bg3);border:1px solid var(--border);border-radius:8px;display:grid;place-items:center;text-align:center;padding:8px;font-size:12px;overflow:hidden}.receipt img{width:100%;height:100%;object-fit:cover;border-radius:6px}
     @media (max-height:500px){.tabbar{height:56px}.tabbar button{font-size:9px}.total{font-size:44px}body{padding-bottom:74px}}
@@ -205,10 +217,6 @@
     .hero-sum{padding:16px;margin-bottom:10px;border-top:3px solid var(--gold)}
     .hero-sum .hs-total{font-family:"Bricolage Grotesque",sans-serif;font-size:44px;line-height:1;color:var(--gold3);margin:8px 0 4px;font-variant-numeric:tabular-nums}
     .hero-sum .hs-sub{color:var(--muted);font-size:12px}
-    .sum-card{padding:12px 14px;margin-bottom:8px}
-    .sum-card .sc-row{display:flex;align-items:center;justify-content:space-between}
-    .sum-card .sc-total{font-family:"Bricolage Grotesque",sans-serif;font-size:20px;color:var(--gold3)}
-    .sum-card .sc-sub{font-size:11px;margin:4px 0 8px}
     /* ── Sync dot indicator ── */
     .sync-dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:0 0 auto;transition:background .3s}
     .sync-dot.live{background:var(--green);box-shadow:0 0 0 3px rgba(50,213,131,.2);animation:syncPulse 2.5s ease-in-out infinite}
@@ -227,6 +235,7 @@
     .wk-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
     .wk-badge.current{background:rgba(212,160,23,.15);color:var(--gold3);border:1px solid rgba(212,160,23,.4)}
     .wk-badge.credited{background:rgba(50,213,131,.13);color:var(--green);border:1px solid rgba(50,213,131,.4)}
+    .wk-badge.pending{background:rgba(125,162,255,.12);color:var(--slate);border:1px solid rgba(125,162,255,.42)}
     /* ── Redesigned settings groups ── */
     .set-group{margin-bottom:14px}
     .set-group-title{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;font-weight:800;margin:0 0 8px 4px}
@@ -344,7 +353,7 @@
   </section>
 
   <section class="screen" data-screen="settings">
-    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.3</span></div>
+    <div class="subhead"><div><p>Defaults &amp; data</p><h2>Settings</h2></div><span class="tag">v3.8</span></div>
 
     <div class="set-group">
       <p class="set-group-title">Account</p>
@@ -385,7 +394,7 @@
         <div class="set-item"><span class="si-label"><b>Appearance</b><p>Dark or light</p></span><span class="si-control"><span class="switch"><button id="darkSwitch">Dark</button><button id="lightSwitch">Light</button></span></span></div>
         <button class="set-item" id="openReceipts"><span class="si-label"><b>Receipt Archive</b><p id="receiptCount">0 receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
         <button class="set-item" id="refreshApp"><span class="si-label"><b>Clear Cache &amp; Refresh</b><p>Keeps saved shifts &amp; receipts</p></span><span class="si-control"><span class="set-chev">›</span></span></button>
-        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.3 · build 2026-06-02</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
+        <div class="set-item"><span class="si-label"><b>Version</b><p class="mono">3.8 · build 2026-06-07</p></span><span class="si-control"><span class="tag">Gold</span></span></div>
       </div>
     </div>
   </section>
@@ -406,6 +415,7 @@
       <div class="preview-actions"><button class="secondary" id="signInBtn">Sign in</button><button class="secondary" id="createAccountBtn">Create account</button><button class="secondary" id="signOutBtn" style="display:none">Sign out</button></div>
       <div class="preview-actions" style="margin-top:4px"><button class="secondary" id="disconnectFirebase">Disconnect this device</button></div>
     </section>
+    <section class="card" style="padding:13px;margin-bottom:10px"><h3>Import Historical Totals</h3><p class="muted" style="font-size:12px">Backdate your earlier weekly sheets into the app. This safely upserts daily totals (Thu&ndash;Wed weeks recalculate automatically) &mdash; existing shifts are never wiped, only missing days are added and changed amounts amended.</p><button class="secondary" id="importHistoryBtn" style="width:100%">Preview &amp; Import</button></section>
     <section class="card" style="padding:13px;margin-bottom:10px"><h3>Backup &amp; Restore</h3><p class="muted" style="font-size:12px">Export all local data to a JSON file, or import a previous backup. Import replaces current data.</p><div class="preview-actions"><button class="secondary" id="exportData">Export</button><button class="secondary" id="importData">Import</button></div><input type="file" id="importFile" accept="application/json,.json" style="display:none"></section>
     <section class="card" style="padding:13px"><h3>Changelog</h3><div id="changelog" class="mono muted" style="font-size:12px;line-height:1.7"></div></section>
   </section>
@@ -428,10 +438,24 @@
 
 <div class="toast" id="toast"></div>
 <div class="modal" id="modal"><div class="modal-card"><h3 id="modalTitle">Confirm</h3><p id="modalText" class="muted"></p><div class="preview-actions"><button class="secondary" id="modalCancel">Cancel</button><button class="primary" id="modalOk" style="margin:0">OK</button></div></div></div>
+<div class="sheet-overlay" id="shareSheet">
+  <div class="sheet-card" id="shareSheetCard" role="dialog" aria-modal="true" aria-label="Share shift">
+    <div class="sheet-grip" aria-hidden="true"></div>
+    <div class="sheet-title">Share shift</div>
+    <div class="sheet-sub">Log this shift to your weekly report first, or just share it now.</div>
+    <button class="sheet-btn primary" id="sheetAdd">Add to Weekly &amp; Share</button>
+    <button class="sheet-btn secondary" id="sheetSkip">Just Share</button>
+  </div>
+</div>
 
 <script type="module">
-const APP_VERSION='3.3', APP_BUILD='2026-06-02';
+const APP_VERSION='3.8', APP_BUILD='2026-06-07';
 const CHANGELOG=[
+  {version:'3.8',date:'07 Jun 2026',changes:['Weekly status bar gains a 3rd state: Pending (slate-blue badge) for weeks viewed ahead of the live cycle','Joins Current (amber) and Credited (green); the live week boundary is derived from your 2-pin clock cycle','Status recalculates instantly when navigating weeks forward/back, with no UI lag']},
+  {version:'3.7',date:'07 Jun 2026',changes:['Share End of Shift now opens a dual-action bottom sheet: Add to Weekly & Share (primary) or Just Share (neutral)','Add to Weekly logs the shift to the database first then opens WhatsApp in one flow; Just Share skips logging and shares instantly','Native share is held until you choose; tapping outside or swiping down cancels without clearing receipt or shift details','Both paths are guarded \u2013 if the weekly save fails it alerts and still shares rather than breaking the sequence']},
+  {version:'3.6',date:'07 Jun 2026',changes:['Stability release: hardened all state loading so a corrupted or legacy storage row (e.g. entries saved as a non-array) can no longer freeze the UI','Inbound sync values are now type-coerced before use, preventing a bad remote payload from breaking buttons or tabs','Removed dead CSS remnants from earlier Reports layouts; full nav, validation, clock and share flows re-verified end-to-end']},
+  {version:'3.5',date:'02 Jun 2026',changes:['Receipts audit now only applies to shifts logged in-app (which can carry a receipt) - imported, backdated and override entries are exempt','Old historical receipts are no longer required, so the import no longer reads as receipts outstanding']},
+  {version:'3.4',date:'02 Jun 2026',changes:['Historical import / backdating: one-tap upsert of your earlier weekly sheets (Sep 2025 \u2013 Apr 2026)','Non-destructive: only missing days are inserted and changed amounts amended; nothing is ever wiped or reset','Every row passes an isolated sanitation filter \u2013 corrupted dates/amounts are rejected individually, the rest still import','Weekly totals recalculate through a pure, isolated utility with no effect on the active week view or core state']},
   {version:'3.3',date:'02 Jun 2026',changes:['Tax Expenses rebuilt as a distinct collapsible card - state persists across tab switches and reloads','Quick-log preset chips (Tolls, Vehicle Wash, Parking, Phone/Internet, Servicing/Parts, Tools/Supplies and more) autofill category and pop the keypad','Quick Capture: amount + chip + receipt photo in one streamlined flow; details (supplier, %, note) tuck behind a disclosure','Recurring Expense toggle (weekly/monthly) auto-populates fixed overheads into every active reporting period without re-logging','Per-item GST input tax credit shown beside the gross; live Total Tax Deductions summary feeds the global Net Revenue even while the card is collapsed']},
   {version:'3.2',date:'02 Jun 2026',changes:['Reports tab fully redesigned: compact, high-density dashboard with a modular card grid','New live Net Revenue metric at the top (Gross minus fuel, GST set-aside and tax expenses)','Missing-receipts audit flag: amber warning on the BAS module showing how many shift receipts are still outstanding','Fuel Tracker now shows a spend-per-operational-day efficiency pill','Copy CSV and Download Report unified into one export hub that runs in the background without freezing the UI','Every module shows on-screen totals, offsets and counts; transaction logs stay hidden behind export']},
   {version:'3.1',date:'02 Jun 2026',changes:['Reports: new BAS Quarter Quick Pull - one-tap Q1/Q2/Q3/Q4 chips for the current financial year','Tapping a quarter instantly filters BAS Gross, Fuel Tracker and Tax Expenses to that quarter\u2019s exact dates','Isolated filter: only overrides the active date range - underlying shifts, fuel, cash and expenses are untouched, and Copy CSV / Download adapt automatically']},
@@ -459,7 +483,11 @@ const ddmmyyyy=s=>parseLocal(s).toLocaleDateString('en-AU',{day:'2-digit',month:
 const csvCell=v=>{let s=String(v??''); if(/^[=+\-@\t\r]/.test(s))s="'"+s; return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-let state={entries:load(KEYS.entries,[]),weekly:load(KEYS.weekly,{}),fuel:load(KEYS.fuel,{}),trip:load(KEYS.trip,{}),cash:load(KEYS.cash,{}),receipts:load(KEYS.receipts,{}),expenses:load(KEYS.expenses,[]),messages:load(KEYS.messages,{}),quickShare:load(KEYS.quickShare,{name:'',number:''}),regos:load(KEYS.regos,['ABC 123']),profile:load(KEYS.profile,{name:'Driver',email:''}),snapshots:load(KEYS.snapshots,{}),weekOffset:0,receiptFilter:'all',firebase:null};
+/* Defensive loaders — guarantee the correct type/shape no matter what is in storage,
+   so a corrupted or legacy row can never crash a render (.filter/.map/.push etc). */
+const loadArr=(k)=>{const v=load(k,[]);return Array.isArray(v)?v.filter(x=>x!=null):[]};
+const loadObj=(k)=>{const v=load(k,{});return (v&&typeof v==='object'&&!Array.isArray(v))?v:{}};
+let state={entries:loadArr(KEYS.entries),weekly:loadObj(KEYS.weekly),fuel:loadObj(KEYS.fuel),trip:loadObj(KEYS.trip),cash:loadObj(KEYS.cash),receipts:loadObj(KEYS.receipts),expenses:loadArr(KEYS.expenses),messages:loadObj(KEYS.messages),quickShare:(()=>{const q=load(KEYS.quickShare,{name:'',number:''});return (q&&typeof q==='object'&&!Array.isArray(q))?{name:q.name||'',number:q.number||''}:{name:'',number:''}})(),regos:(()=>{const r=loadArr(KEYS.regos).filter(x=>typeof x==='string'&&x.trim());return r.length?r:['ABC 123']})(),profile:(()=>{const p=load(KEYS.profile,{name:'Driver',email:''});return (p&&typeof p==='object'&&!Array.isArray(p))?{name:p.name||'Driver',email:p.email||''}:{name:'Driver',email:''}})(),snapshots:loadObj(KEYS.snapshots),weekOffset:0,receiptFilter:'all',firebase:null};
 let calc=load(KEYS.shift,{date:localDateStr(new Date()),rego:localStorage.getItem(KEYS.lastRego)||state.regos[0]||'',eos:[0],cash:[{name:'',amount:0}],runs:0,accounts:[],fuelAmount:0,fuelType:localStorage.getItem(KEYS.fuelDefault)||'Diesel',hailTrips:''});
 if(!Array.isArray(calc.eos)||!calc.eos.length)calc.eos=[0];
 if(!Array.isArray(calc.cash)||!calc.cash.length)calc.cash=[{name:'',amount:0}];
@@ -521,7 +549,13 @@ function localValueFor(key){
 function rawPersist(key,value){
   const p=KEY_TO_STATE[key];
   try{
-    if(p!==undefined){state[p]=value;localStorage.setItem(key,JSON.stringify(value));}
+    if(p!==undefined){
+      // Coerce to the shape this state field must have so a corrupt remote payload can't crash the UI
+      const arrayKeys=[KEYS.entries,KEYS.expenses,KEYS.regos];
+      if(arrayKeys.indexOf(key)>=0) value=Array.isArray(value)?value.filter(x=>x!=null):[];
+      else if(value==null||typeof value!=='object'||Array.isArray(value)) value={};
+      state[p]=value; localStorage.setItem(key,JSON.stringify(value));
+    }
     else{if(value==null)localStorage.removeItem(key);else localStorage.setItem(key,typeof value==='string'?value:String(value));}
   }catch(e){}
 }
@@ -1017,7 +1051,21 @@ async function saveShift(){
   }catch(e){ toast('Could not save shift - try again'); return false; }
 }
 async function performShare(){ const caption=message(); const file=await shiftReceiptFile(); await shareFileAndText(file,caption); }
-async function doShareShift(addToWeekly){ try{ if(addToWeekly){ if(!await saveShift())return; } await performShare(); }catch(e){ toast('Share failed - try again'); } }
+/* Dual-action share. addToWeekly=true logs the shift first (DB save) then shares;
+   false skips logging and shares directly. Both paths are guarded so a save failure
+   alerts the user without breaking the subsequent share. */
+async function doShareShift(addToWeekly){
+  closeShareSheet();
+  try{
+    if(addToWeekly){
+      let ok=false;
+      try{ ok=await saveShift(); }
+      catch(e){ ok=false; }
+      if(!ok) toast('Could not log to weekly \u2013 sharing anyway');
+    }
+    await performShare();
+  }catch(e){ toast('Share failed - try again'); }
+}
 /* Req 5: receipt photo + hail trips are strictly mandatory before sharing */
 function shareValidation(){
   const errors=[];
@@ -1045,15 +1093,31 @@ function showShareValidation(v){
   const firstFail=!v.hasReceipt?rc:hc;
   if(firstFail){$('#shiftChips').querySelectorAll('.chip').forEach(c=>{if(c!==rc&&c!==hc)c.classList.remove('open')});firstFail.scrollIntoView({behavior:'smooth',block:'center'});}
 }
-/* Req 7: Yes = already logged, share immediately. No = pause so they can log it first. */
+/* On valid share, present the dual-action sheet. The native share intent is held
+   until the user explicitly picks Add-to-Weekly or Just-Share. Dismissing (overlay
+   tap / swipe down) cancels safely and never clears the entered shift details. */
 function shareShift(){
   clearShareValidationUI();
   const v=shareValidation();
   if(!v.ok){ showShareValidation(v); toast('Receipt and hail trips are required'); return; }
-  confirmBox('Weekly report','Have you added this shift to your weekly report?',()=>doShareShift(false),'Yes, share now','No, log it first');
-  // "No, log it first" pauses: jump to the weekly tab to log, no share happens
-  $('#modalCancel').onclick=()=>{ $('#modal').classList.remove('show'); toast('Log it in Weekly, then share'); };
+  openShareSheet();
 }
+function openShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.add('show'); }
+function closeShareSheet(){ const ov=$('#shareSheet'); if(ov)ov.classList.remove('show'); }
+(function bindShareSheet(){
+  const ov=$('#shareSheet'), card=$('#shareSheetCard'); if(!ov||!card)return;
+  // Outside / backdrop tap cancels — no share fired, no data cleared
+  ov.addEventListener('click',e=>{ if(e.target===ov)closeShareSheet(); });
+  const addBtn=$('#sheetAdd'), skipBtn=$('#sheetSkip');
+  if(addBtn)addBtn.onclick=()=>doShareShift(true);   // log to weekly, then share
+  if(skipBtn)skipBtn.onclick=()=>doShareShift(false); // skip logging, share now
+  // Swipe-down to dismiss (buttons keep their own taps)
+  let startY=null, dy=0, drag=false;
+  card.addEventListener('pointerdown',e=>{ if(e.target.closest('.sheet-btn'))return; startY=e.clientY; dy=0; drag=true; card.style.transition='none'; try{card.setPointerCapture(e.pointerId);}catch(_){} });
+  card.addEventListener('pointermove',e=>{ if(!drag)return; dy=Math.max(0,e.clientY-startY); card.style.transform=`translate(-50%,${dy}px)`; });
+  const end=e=>{ if(!drag)return; drag=false; card.style.transition=''; card.style.transform=''; if(dy>90)closeShareSheet(); try{card.releasePointerCapture(e.pointerId);}catch(_){} };
+  card.addEventListener('pointerup',end); card.addEventListener('pointercancel',end);
+})();
 $('#shareShift').onclick=shareShift; $('#copyMsg').onclick=()=>navigator.clipboard?.writeText(message()).then(()=>toast('Message copied')).catch(()=>toast('Copy unavailable')); $('#clearShift').onclick=()=>confirmBox('Clear shift','Clear current calculator fields?',resetCalc);
 $('#receiptFile').onchange=e=>{$('#receiptName').textContent=e.target.files[0]?.name||'';$('#receiptChip').textContent=e.target.files[0]?'Attached':'None';if(e.target.files[0]){$('.chip[data-chip="receipt"]')?.classList.remove('field-error','required');const v=shareValidation();if(v.ok)clearShareValidationUI();}};
 
@@ -1065,6 +1129,87 @@ function weekEndDay(){return (weekStartDay()+6)%7;}
 function weekCycleLabel(){return `${DAY_NAMES[weekStartDay()]} \u2192 ${DAY_NAMES[weekEndDay()]}`;}
 function weekStart(d=new Date()){const x=new Date(d); const S=weekStartDay(); const diff=((x.getDay()-S)+7)%7; x.setDate(x.getDate()-diff); x.setHours(0,0,0,0); return x}
 function shiftDays(dateStr,days){const d=parseLocal(dateStr);d.setDate(d.getDate()+days);return localDateStr(d)}
+
+/* ===================================================================
+   HISTORICAL IMPORT / BACKDATING ENGINE  (isolated, non-destructive)
+   ───────────────────────────────────────────────────────────────────
+   • Upsert only: inserts missing days, amends changed amounts, never
+     deletes or truncates any existing record or other state table.
+   • Every row passes an isolated sanitation filter; bad rows are
+     rejected individually and the rest still import.
+   • recalcWeeklyTotals() is a PURE read-only utility — it derives
+     weekly figures from records without touching global state.
+=================================================================== */
+const HISTORICAL_IMPORT=[{d:'2025-09-18',a:393.87},{d:'2025-09-19',a:481.45},{d:'2025-09-20',a:272.6},{d:'2025-09-21',a:156.4},{d:'2025-09-22',a:348.68},{d:'2025-09-23',a:551},{d:'2025-09-24',a:537},{d:'2025-09-25',a:318.8},{d:'2025-09-27',a:259.5},{d:'2025-09-28',a:270.5},{d:'2025-09-29',a:337.4},{d:'2025-09-30',a:437},{d:'2025-10-01',a:472.65},{d:'2025-10-02',a:375.9},{d:'2025-10-03',a:553},{d:'2025-10-04',a:274.8},{d:'2025-10-05',a:236.3},{d:'2025-10-06',a:307.3},{d:'2025-10-07',a:533},{d:'2025-10-08',a:537.7},{d:'2025-10-10',a:598.6},{d:'2025-10-11',a:213},{d:'2025-10-12',a:188.5},{d:'2025-10-13',a:377.9},{d:'2025-10-14',a:384},{d:'2025-10-15',a:628.8},{d:'2025-10-16',a:420},{d:'2025-10-17',a:411.78},{d:'2025-10-18',a:281.79},{d:'2025-10-20',a:515},{d:'2025-10-21',a:436},{d:'2025-10-22',a:402.6},{d:'2025-10-23',a:587.7},{d:'2025-10-24',a:426.75},{d:'2025-10-27',a:360},{d:'2025-10-28',a:487},{d:'2025-10-29',a:382.9},{d:'2025-10-30',a:289.3},{d:'2025-10-31',a:394.5},{d:'2025-11-01',a:399.6},{d:'2025-11-02',a:119},{d:'2025-11-03',a:451.46},{d:'2025-11-05',a:470},{d:'2025-11-06',a:461.6},{d:'2025-11-07',a:489.7},{d:'2025-11-09',a:213},{d:'2025-11-10',a:412.69},{d:'2025-11-11',a:474},{d:'2025-11-12',a:273.4},{d:'2025-11-13',a:337.4},{d:'2025-11-14',a:476.8},{d:'2025-11-16',a:458},{d:'2025-11-17',a:421.96},{d:'2025-11-18',a:463.3},{d:'2025-11-19',a:412},{d:'2025-11-20',a:137.9},{d:'2025-11-21',a:277.3},{d:'2025-11-23',a:350},{d:'2025-11-24',a:399},{d:'2025-11-25',a:548.3},{d:'2025-11-26',a:468.4},{d:'2025-11-27',a:62},{d:'2025-11-28',a:378},{d:'2025-11-29',a:190},{d:'2025-11-30',a:315.7},{d:'2025-12-01',a:406.6},{d:'2025-12-02',a:336},{d:'2025-12-03',a:497.62},{d:'2025-12-04',a:431.9},{d:'2025-12-05',a:468.9},{d:'2025-12-07',a:284.75},{d:'2025-12-08',a:407},{d:'2025-12-12',a:310.75},{d:'2025-12-13',a:332.67},{d:'2025-12-14',a:122.35},{d:'2025-12-15',a:410.66},{d:'2025-12-16',a:464.3},{d:'2025-12-17',a:530.63},{d:'2025-12-18',a:434},{d:'2025-12-19',a:351.14},{d:'2025-12-21',a:147},{d:'2025-12-22',a:304.5},{d:'2025-12-23',a:257.31},{d:'2025-12-24',a:330.4},{d:'2025-12-25',a:484},{d:'2025-12-27',a:313.83},{d:'2025-12-28',a:175.79},{d:'2025-12-29',a:472.36},{d:'2025-12-30',a:400.72},{d:'2025-12-31',a:421.5},{d:'2026-01-02',a:303.92},{d:'2026-01-03',a:221.21},{d:'2026-01-05',a:530.44},{d:'2026-01-06',a:479.2},{d:'2026-01-07',a:516.61},{d:'2026-01-08',a:509.88},{d:'2026-01-09',a:304.59},{d:'2026-01-10',a:442.36},{d:'2026-01-11',a:32.45},{d:'2026-01-12',a:481.27},{d:'2026-01-13',a:526.23},{d:'2026-01-14',a:412.56},{d:'2026-01-15',a:317.66},{d:'2026-01-16',a:337},{d:'2026-01-17',a:390.77},{d:'2026-01-18',a:182.6},{d:'2026-01-19',a:547.37},{d:'2026-01-20',a:388.25},{d:'2026-01-21',a:261.61},{d:'2026-01-22',a:499},{d:'2026-01-23',a:480},{d:'2026-01-24',a:303},{d:'2026-01-27',a:547.82},{d:'2026-01-28',a:319.3},{d:'2026-01-29',a:369.28},{d:'2026-01-30',a:483.8},{d:'2026-02-01',a:249},{d:'2026-02-02',a:469},{d:'2026-02-03',a:286.5},{d:'2026-02-04',a:378},{d:'2026-02-05',a:486.3},{d:'2026-02-06',a:465.15},{d:'2026-02-07',a:297.8},{d:'2026-02-09',a:348},{d:'2026-02-10',a:542.4},{d:'2026-02-11',a:332.65},{d:'2026-02-12',a:372.9},{d:'2026-02-15',a:111.4},{d:'2026-02-16',a:560},{d:'2026-02-17',a:591.7},{d:'2026-02-18',a:507.6},{d:'2026-02-19',a:420.9},{d:'2026-02-21',a:148.5},{d:'2026-02-22',a:150.7},{d:'2026-02-23',a:577.5},{d:'2026-02-24',a:468.3},{d:'2026-02-25',a:608.5},{d:'2026-02-26',a:413.5},{d:'2026-02-28',a:152},{d:'2026-03-01',a:68.7},{d:'2026-03-02',a:353.4},{d:'2026-03-03',a:397.44},{d:'2026-03-04',a:290},{d:'2026-03-05',a:356},{d:'2026-03-07',a:160},{d:'2026-03-08',a:114},{d:'2026-03-09',a:248},{d:'2026-03-10',a:368.6},{d:'2026-03-11',a:379.5},{d:'2026-03-12',a:361.4},{d:'2026-03-13',a:401},{d:'2026-03-15',a:353.6},{d:'2026-03-16',a:319},{d:'2026-03-17',a:395.59},{d:'2026-03-18',a:337},{d:'2026-03-19',a:370},{d:'2026-03-20',a:359.7},{d:'2026-03-21',a:120},{d:'2026-03-27',a:355.3},{d:'2026-03-28',a:263.5},{d:'2026-03-29',a:149.3},{d:'2026-04-02',a:422},{d:'2026-04-03',a:302.3},{d:'2026-04-05',a:147.3},{d:'2026-04-06',a:254.4},{d:'2026-04-07',a:504.69},{d:'2026-04-11',a:279.5},{d:'2026-04-12',a:450},{d:'2026-04-14',a:365},{d:'2026-04-18',a:406.7},{d:'2026-04-19',a:268.9},{d:'2026-04-20',a:459.5},{d:'2026-04-24',a:515.4},{d:'2026-04-26',a:321},{d:'2026-04-27',a:577.7},{d:'2026-04-28',a:331.9}];
+// Isolated per-row validator — guarantees schema match before commit
+function sanitizeImportRow(row){
+  try{
+    if(!row||typeof row!=='object')return {ok:false,reason:'bad row'};
+    const d=String(row.d!==undefined?row.d:row.date||'').trim();
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(d))return {ok:false,reason:'bad date format'};
+    const dt=parseLocal(d); if(!dt||isNaN(dt.getTime())||localDateStr(dt)!==d)return {ok:false,reason:'invalid calendar date'};
+    let a=row.a!==undefined?row.a:row.amount;
+    if(typeof a==='string')a=Number(a.replace(/[^0-9.\-]/g,''));
+    a=Number(a);
+    if(!isFinite(a)||a<0||a>100000)return {ok:false,reason:'bad amount'};
+    return {ok:true,entry:{date:d,amount:+a.toFixed(2)}};
+  }catch(e){ return {ok:false,reason:'exception'}; }
+}
+// Dry-run: classify rows as insert / amend / unchanged / rejected WITHOUT mutating anything
+function previewHistoricalImport(dataset,rego){
+  const useRego=(rego!==undefined?rego:((state.regos&&state.regos[0])||''));
+  const res={inserted:0,amended:0,unchanged:0,rejected:0,rejects:[],valid:[],rego:useRego};
+  const existing={}; (state.entries||[]).forEach(e=>{ if(e&&e.date!==undefined)existing[e.date+'|'+(e.rego||'')]=+Number(e.amount).toFixed(2); });
+  (dataset||[]).forEach(row=>{
+    const v=sanitizeImportRow(row);
+    if(!v.ok){res.rejected++;res.rejects.push((row&&(row.d||row.date))+': '+v.reason);return;}
+    const key=v.entry.date+'|'+useRego, en={date:v.entry.date,amount:v.entry.amount,rego:useRego};
+    res.valid.push(en);
+    if(existing[key]===undefined)res.inserted++;
+    else if(existing[key]!==v.entry.amount)res.amended++;
+    else res.unchanged++;
+  });
+  return res;
+}
+// Commit: applies ONLY the validated entries via upsert to state.entries (nothing else touched)
+function commitHistoricalImport(valid){
+  let ins=0,amd=0;
+  try{
+    const byKey={}; state.entries.forEach((e,i)=>{ if(e&&e.date!==undefined)byKey[e.date+'|'+(e.rego||'')]=i; });
+    valid.forEach(en=>{
+      const key=en.date+'|'+(en.rego||''), idx=byKey[key];
+      if(idx===undefined){ state.entries.push({date:en.date,amount:en.amount,rego:en.rego}); byKey[key]=state.entries.length-1; ins++; }
+      else if(+Number(state.entries[idx].amount).toFixed(2)!==en.amount){ state.entries[idx].amount=en.amount; amd++; }
+    });
+    save(KEYS.entries,state.entries); immediateSync(KEYS.entries);
+  }catch(e){ /* non-fatal: leave already-applied rows intact */ }
+  return {ins,amd};
+}
+// PURE isolated recalculation utility — derives weekly (cycle-aware) totals, mutates nothing
+function recalcWeeklyTotals(entries){
+  try{
+    const b={};
+    (entries||[]).forEach(e=>{ if(!e||!e.date)return; const amt=Number(e.amount); if(!isFinite(amt))return; const s=localDateStr(weekStart(parseLocal(e.date))); (b[s]||(b[s]={start:s,total:0,count:0})); b[s].total+=amt; b[s].count++; });
+    return Object.values(b).map(w=>({start:w.start,end:shiftDays(w.start,6),total:+w.total.toFixed(2),count:w.count})).sort((x,y)=>x.start.localeCompare(y.start));
+  }catch(e){ return []; }
+}
+// Orchestrator wired to the Profile button
+function importHistoricalData(){
+  let pre;
+  try{ pre=previewHistoricalImport(HISTORICAL_IMPORT); }
+  catch(e){ toast('Import preview failed'); return; }
+  const wk=recalcWeeklyTotals(pre.valid);
+  const grand=pre.valid.reduce((a,b)=>a+b.amount,0);
+  const msg=`Ready to import ${pre.valid.length} day${pre.valid.length===1?'':'s'} (rego ${pre.rego||'none'}).\n\n`+
+            `New: ${pre.inserted}   Amended: ${pre.amended}\nUnchanged: ${pre.unchanged}   Rejected: ${pre.rejected}\n\n`+
+            `${wk.length} weeks \u00b7 total ${money(grand)}.\n\nExisting shifts on other dates stay untouched.`;
+  confirmBox('Import historical totals',msg,()=>{
+    const r=commitHistoricalImport(pre.valid);
+    toast(`Imported \u2014 ${r.ins} new, ${r.amd} amended`);
+    // single, loop-free refresh of whatever screen is active
+    try{const scr=document.querySelector('.screen.active')?.dataset.screen; if(scr==='weekly')renderWeekly(); else if(scr==='reports')renderReports();}catch(_){}
+  },'Import','Cancel');
+}
 function wkRange(){ if(!state.wkStart||!state.wkEnd){const s=weekStart();const e=new Date(s);e.setDate(s.getDate()+6);state.wkStart=localDateStr(s);state.wkEnd=localDateStr(e);} return [state.wkStart,state.wkEnd]; }
 function wkLabel(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return `${fmtDate(lo)} - ${fmtDate(hi)}`}
 function weekEntries(){const [a,b]=wkRange();const lo=a<=b?a:b,hi=a<=b?b:a;return state.entries.filter(e=>e&&e.date>=lo&&e.date<=hi).sort((x,y)=>x.date.localeCompare(y.date))}
@@ -1084,6 +1229,10 @@ function weekStatus(){
   const [a,b]=wkRange();
   const lo=a<=b?a:b, hi=a<=b?b:a;
   const today=new Date(); today.setHours(0,0,0,0);
+  // The live operational week start is derived from the 2-pin clock cycle (weekStart()).
+  // Any viewed week that begins after the live week's start sits entirely in the future.
+  const liveStart=localDateStr(weekStart());
+  if(lo>liveStart) return 'pending';
   // Credited once the calendar reaches the configured pay/milestone day that falls
   // immediately after this week's end. We advance from the week-end date to the first
   // occurrence of the credit weekday strictly after it (e.g. Wed end + next Friday).
@@ -1096,7 +1245,7 @@ function renderWeekStatus(){
   const badge=$('#wkBadge'); if(!badge)return;
   const st=weekStatus();
   badge.className='wk-badge '+st;
-  badge.textContent=st==='credited'?'Credited':'Current';
+  badge.textContent=st==='credited'?'Credited':st==='pending'?'Pending':'Current';
 }
 function applyWkStatusVisibility(){
   const hidden=localStorage.getItem('d2e_wk_status_hidden')==='1';
@@ -1196,7 +1345,11 @@ function renderReports(){ try{
   const netRev=gross-fuelTotal-gstSetAside-expDeduct;      // live Net Revenue
   const shiftDates=[...new Set(entries.map(e=>e.date))];
   const opDays=shiftDates.length;                          // operational days in period
-  const outstanding=shiftDates.filter(d=>!((state.receipts[d]||[]).some(r=>r&&r.shiftReceipt&&r.fileData))).length;
+  // Receipts audit: ONLY count shifts logged through the app's own calculator (those have a
+  // saved snapshot and could carry a receipt). Imported / backdated / override entries are
+  // exempt — old historical receipts aren't required, so they never read as "outstanding".
+  const loggedDates=[...new Set(entries.filter(e=>e&&state.snapshots[shiftKey(e.date,e.rego||'')]).map(e=>e.date))];
+  const outstanding=loggedDates.filter(d=>!((state.receipts[d]||[]).some(r=>r&&r.shiftReceipt&&r.fileData))).length;
   const perDay=opDays?fuelTotal/opDays:0;
   const warnSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>';
   const fyS=currentFyStart(), fyLabel=`FY${String(fyS).slice(2)}\u2013${String(fyS+1).slice(2)}`, activeQ=activeBasQuarter();
@@ -1409,6 +1562,7 @@ $('#pickQuickShare').onclick=async()=>{try{if(!navigator.contacts?.select){toast
 function renderProfile(){ $('#driverName').value=state.profile.name||''; $('#driverEmail').value=state.profile.email||''; $('#firebaseConfig').value=localStorage.getItem(KEYS.fb)||''; $('#changelog').innerHTML=CHANGELOG.map(c=>`v${c.version} | ${c.date}<br>${c.changes.map(x=>' - '+x).join('<br>')}`).join('<br><br>'); $('#greeting').textContent=`Hey, ${state.profile.name||'Driver'}`; $('#avatar').textContent=(state.profile.name||'D2').split(/\s+/).map(x=>x[0]).join('').slice(0,2).toUpperCase(); setSyncStatus(syncOn&&userId?'live':'local');}
 $('#saveProfile').onclick=()=>{state.profile={name:$('#driverName').value.trim()||'Driver',email:$('#driverEmail').value.trim()};save(KEYS.profile,state.profile);renderProfile();toast('Profile saved')};
 $('#exportData').onclick=()=>{const dump={};Object.values(KEYS).forEach(k=>{const v=localStorage.getItem(k);if(v!==null)dump[k]=v});downloadText(`drive2earn-backup-${localDateStr(new Date())}.json`,JSON.stringify({app:'drive2earn',version:APP_VERSION,exported:new Date().toISOString(),data:dump},null,2),'application/json');toast('Backup exported')};
+if($('#importHistoryBtn'))$('#importHistoryBtn').onclick=()=>importHistoricalData();
 $('#importData').onclick=()=>$('#importFile').click();
 $('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const text=await f.text();const obj=JSON.parse(text);const data=obj&&obj.data?obj.data:obj;if(!data||typeof data!=='object')throw 0;confirmBox('Import backup','Replace all current data with this backup? This cannot be undone.',()=>{Object.entries(data).forEach(([k,v])=>{try{localStorage.setItem(k,typeof v==='string'?v:JSON.stringify(v))}catch{}});toast('Backup imported - reloading');setTimeout(()=>location.reload(),600)})}catch{toast('Invalid backup file')}finally{e.target.value=''}};
 async function saveReceiptFile(file,shiftReceipt,date=localDateStr(new Date())){try{const data=await prepMedia(file); if(!data)return; const rec={id:uid(),fileName:file.name,fileData:data,fileType:file.type,savedAt:new Date().toISOString(),shiftReceipt}; state.receipts[date]=state.receipts[date]||[]; state.receipts[date].push(rec); save(KEYS.receipts,state.receipts); toast('Receipt saved to Docs')}catch{toast('Could not save receipt')}}
